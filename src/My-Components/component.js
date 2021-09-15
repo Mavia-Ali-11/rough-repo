@@ -6,7 +6,7 @@ function Section(props){
           <h1>
             { props.heading }
           </h1>
-          <img src={ props.image } alt="" />
+          <img src={ props.image } />
           <p>
             { props.story }
           </p>
