@@ -13,10 +13,10 @@ function SignIn() {
         <div>
             <h2>Sign in to continue...</h2>
 
-            Email:<br />
+            Email<br />
             <input type="text" value={email} onChange={(e) => { handleEmail(e.target.value) }} /><br />
 
-            Password:<br />
+            Password<br />
             <input type="password" value={password} onChange={(e) => { handlePassword(e.target.value) }} />
             <br /><br />
 
@@ -30,8 +30,10 @@ function SignIn() {
                                 password: password,
                                 role: state.users[x].role
                             }
+                            
                             dispatch({ type: "AUTH_USER", payload: authUser });
                             alert("Sign In Successfully");
+                            
                             if(authUser.role == "trainer") {
                                 history.push("/add-students-data");
                             } else {

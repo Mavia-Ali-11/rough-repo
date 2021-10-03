@@ -15,16 +15,16 @@ function SignUp() {
         <div>
             <h2>Sign up to continue...</h2>
 
-            Username:<br />
+            Username<br />
             <input type="text" value={username} onChange={(e) => { handleUsername(e.target.value) }} /><br />
 
-            Email:<br />
+            Email<br />
             <input type="text" value={email} onChange={(e) => { handleEmail(e.target.value) }} /><br />
 
-            Password:<br />
+            Password<br />
             <input type="password" value={password} onChange={(e) => { handlePassword(e.target.value) }} /><br />
 
-            Role:<br />
+            Role<br />
             <select onChange={(e) => { handleRole(e.target.value) }}>
                 <option>Trainer</option>
                 <option>Student</option>
@@ -40,8 +40,11 @@ function SignUp() {
                             password: password,
                             role: role.toLowerCase()
                         }
+
                         dispatch({ type: "SAVE_USER", payload: newUser });
+                        dispatch({ type: "AUTH_USER", payload: newUser });
                         alert("Sign Up Successfully");
+                        
                         if(role == "Trainer") {
                             history.push("/add-students-data");
                         } else {

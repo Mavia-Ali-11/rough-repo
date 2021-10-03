@@ -19,36 +19,21 @@ function AllStudents() {
                         <th>Student Name</th>
                         <th>Roll Number</th>
                         <th>Total Marks</th>
-                        <th>Feedback</th>
                         <th>Grade</th>
+                        <th>Feedback</th>
                     </tr>
                 </thead>
                 <tbody>
                     {
                         state.studentsData.map((data, index) => {
-                            
-                            let grade;
-
-                            if(data.totalMarks >= 80) {
-                                grade = "A+";
-                            } else if (data.totalMarks >= 70) {
-                                grade = "A";
-                            } else if (data.totalMarks >= 60) {
-                                grade = "B";
-                            } else if (data.totalMarks >= 50) {
-                                grade = "C";
-                            } else {
-                                grade = "F";
-                            }
-
                             return (
                                 <tr key={index}>
                                     <td>{index + 1}</td>
-                                    <td>{data.stdName}</td>
-                                    <td>{data.rollNum}</td>
-                                    <td>{data.totalMarks}</td>
+                                    <td>{data.student_name}</td>
+                                    <td>{data.roll_num}</td>
+                                    <td>{data.total_marks}</td>
+                                    <td>{data.grade}</td>
                                     <td>{data.feedback}</td>
-                                    <td>{grade}</td>
                                 </tr>
                             )
                         })
@@ -56,13 +41,21 @@ function AllStudents() {
                 </tbody>
             </table>
 
-            <br/>
+            <br />
 
             <button onClick={
                 () => {
                     history.push("/add-students-data");
                 }
             }>Add results</button>
+
+            <br /><br />
+
+            <button onClick={
+                () => {
+                    history.push("/");
+                }
+            }>Sign out</button>
         </div>
     )
 }
