@@ -29,16 +29,6 @@ function Routes() {
                 
                 dispatch({ type: "CURRENT_USER", payload: fetchUser });
                 console.log(state.authUser);
-            
-                let tweetsCount;
-                let tweetsCounter = await getDocs(collection(db, 'tweets_counter'));
-                tweetsCounter.forEach((doc) => {
-                    tweetsCount = doc.data();
-                    return tweetsCount;
-                });
-                
-                dispatch({ type: "TWEETS_COUNT", payload: tweetsCount });
-                console.log(state.tweetsCount);
                 
             } else {
                 dispatch({ type: "CURRENT_USER", payload: {} });

@@ -30,7 +30,9 @@ textarea:focus {
 }
 
 .posts {
+  display: flex;
   margin-top: 50px;
+  flex-direction: column-reverse;
 }
 
 .posts > div {
