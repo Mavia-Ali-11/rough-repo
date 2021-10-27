@@ -1,12 +1,9 @@
-import React, { useContext } from 'react';
-import { GlobalContext } from '../context/context';
+import React from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { auth, signOut } from '../config/firebase';
 
-
 function Navbar() {
 
-    const { state, dispatch } = useContext(GlobalContext);
     const history = useHistory();
 
     return (

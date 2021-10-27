@@ -1,41 +1,41 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { useHistory } from "react-router-dom";
 import { GlobalContext } from '../context/context';
-import { db, doc, addDoc, setDoc, getDocs, collection, onSnapshot, query, orderBy } from '../config/firebase';
+import { db, doc, addDoc, setDoc, getDoc, collection, onSnapshot, query, orderBy } from '../config/firebase';
 
-function Home() {
+function MyTweets() {
 
-    const { state, dispatch } = useContext(GlobalContext);
+    const { state } = useContext(GlobalContext);
     const [tweet, handleTweet] = useState("");
     const [tweetChars, handleTweetChars] = useState("");
     let [fetchedTweets, handleFetchedTweets] = useState([]);
-    let [tweetsTracker, handleTweetsTracker] = useState({});
-    const history = useHistory();
-
+    let [isDisbaled, handleDisability] = useState(false);
 
     useEffect(async () => {
-        let tweetsClone = fetchedTweets.slice(0);
-        const q = query(collection(db, 'tweets'), orderBy("tweet_counter"));
-        onSnapshot(q, (snapshot) => {
-            snapshot.docChanges().forEach((change) => {
-                if (change.type == "added") {
-                    tweetsClone.push(change.doc.data());
-                    console.log(change.doc.data());
-                }
-            });
-            handleFetchedTweets(tweetsClone);
-        })
+        let tweetsClone = fetchedTweets.slice(0); 
+        let dataFetcher = () => {
+            const q = query(collection(db, "tweets"), orderBy("tweet_counter"));
+                onSnapshot(q, (snapshot) => {
+                    snapshot.docChanges().forEach((change) => {
+                        if (change.type == "added" && change.doc.data().uid == state.authUser.uid) {
+                            tweetsClone.push(change.doc.data());
+                        }
+                    });
+                    handleFetchedTweets(tweetsClone);
+                })
+        }
 
-
-        let tweetsCounter = await getDocs(collection(db, 'tweets_counter'));
-        tweetsCounter.forEach((doc) => {
-            handleTweetsTracker(doc.data())
-        });
-
-
-
+        if(state.authUser.uid == undefined) {
+            let detectData = setInterval(() => {
+                if (state.authUser.uid != undefined) {
+                    dataFetcher();
+                    clearInterval(detectData);
+                } 
+            }, 1000);
+        } else {
+            dataFetcher();
+        }
     }, [])
-    
+
     return (
         <div>
             <h2>Welcome to twitter - Home</h2>
@@ -45,10 +45,10 @@ function Home() {
                 rows="1" cols="35"
                 value={tweet}
                 onChange={(e) => {
-                    handleTweet(e.target.value)
+                    handleTweet(e.target.value);
                     e.target.style.height = "5px";
                     e.target.style.height = (e.target.scrollHeight) - 3.5 + "px";
-                    
+
                     if (e.target.value.length > 280) {
                         handleTweet(tweet);
                         handleTweetChars("Your tweet exceeds a maximum limit of 280 charaters");
@@ -63,39 +63,36 @@ function Home() {
 
             <button onClick={
                 async () => {
+                    handleDisability(true);
 
-
+                    const tweetsCounter = await getDoc(doc(db, "tweets_counter", "home_count"));
+                    console.log(tweetsCounter.data().counter + 1);
                     
-                    let updateState = {counter: tweetsTracker.counter + 1}
-                    handleTweetsTracker(updateState)
-                    
-                    await setDoc(doc(db, "tweets_counter", "home_count"), {
-                        counter: tweetsTracker.counter
-                    });
-                    
-                    console.log(tweetsTracker);
-
                     let dt = new Date();
                     let months = ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
                     let date = (months[dt.getMonth()]) + " " + dt.getDate() + ", " + dt.getFullYear();
                     let time = dt.getHours() + ":" + dt.getMinutes();
                     
-                    const docRef = await addDoc(collection(db, "tweets"), {
-                        uid: state.authUser.uid,
+                    await addDoc(collection(db, "tweets"), {
                         tweet_date: date,
                         tweet_time: time,
-                        tweet_by: state.authUser.username,
-                        tweet_from: state.authUser.email,
                         tweet_text: tweet,
-                        tweet_counter: tweetsTracker.counter
+                        uid: state.authUser.uid,
+                        tweet_from: state.authUser.email,
+                        tweet_by: state.authUser.username,
+                        tweet_counter: tweetsCounter.data().counter
+                    });
+
+                    await setDoc(doc(db, "tweets_counter", "home_count"), {
+                        counter: tweetsCounter.data().counter + 1
                     });
 
                     handleTweet("");
-                    
+                    handleDisability(false);
                 }
-            }>Tweet</button>
+            } disabled={isDisbaled}>Tweet</button>
 
-            <h2 style={{ textAlign: "center" }}>All tweets</h2>
+            <h2 style={{ textAlign: "center" }}>My tweets</h2>
 
             <div className="all-tweets posts">
                 {
@@ -127,9 +124,8 @@ function Home() {
                     })
                 }
             </div>
-
         </div>
     )
 }
 
-export default Home;
+export default MyTweets;

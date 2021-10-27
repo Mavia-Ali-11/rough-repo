@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, useHistory } from 'react-router-dom';
 import { GlobalContext } from '../context/context';
 import { auth, onAuthStateChanged } from './firebase';
 import { db, getDocs, collection, query, where } from '../config/firebase';
@@ -14,11 +14,11 @@ import MyTweets from '../screens/my-tweets';
 function Routes() {
 
     const { state, dispatch } = useContext(GlobalContext);
+    const history = useHistory();
 
     useEffect(() => {
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-
                 let fetchUser;
                 const q = query(collection(db, "users"), where("uid", "==", user.uid));
                 const querySnapshot = await getDocs(q);
@@ -26,13 +26,12 @@ function Routes() {
                     fetchUser = doc.data();
                     return fetchUser;
                 });
-                
                 dispatch({ type: "CURRENT_USER", payload: fetchUser });
                 console.log(state.authUser);
-                
-            } else {
+            } else if(!user && window.location.pathname != "/") {
                 dispatch({ type: "CURRENT_USER", payload: {} });
                 console.log(state.authUser);
+                window.location.replace("/")
             }
         })
     }, []);

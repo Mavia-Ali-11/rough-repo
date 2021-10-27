@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { useHistory } from "react-router-dom";
 import { GlobalContext } from '../context/context';
-import { db, doc, addDoc, setDoc, getDocs, collection, onSnapshot, query, orderBy } from '../config/firebase';
+import { db, doc, addDoc, setDoc, getDoc, collection, onSnapshot, query, orderBy } from '../config/firebase';
 
 function Home() {
 
@@ -10,12 +9,11 @@ function Home() {
     const [tweetChars, handleTweetChars] = useState("");
     let [fetchedTweets, handleFetchedTweets] = useState([]);
     let [tweetsTracker, handleTweetsTracker] = useState({});
-    const history = useHistory();
-
+    let [isDisbaled, handleDisability] = useState(false);
 
     useEffect(async () => {
         let tweetsClone = fetchedTweets.slice(0);
-        const q = query(collection(db, 'tweets'), orderBy("tweet_counter"));
+        const q = query(collection(db, "tweets"), orderBy("tweet_counter"));
         onSnapshot(q, (snapshot) => {
             snapshot.docChanges().forEach((change) => {
                 if (change.type == "added") {
@@ -25,14 +23,6 @@ function Home() {
             });
             handleFetchedTweets(tweetsClone);
         })
-
-
-        let tweetsCounter = await getDocs(collection(db, 'tweets_counter'));
-        tweetsCounter.forEach((doc) => {
-            handleTweetsTracker(doc.data())
-        });
-
-
 
     }, [])
     
@@ -45,7 +35,7 @@ function Home() {
                 rows="1" cols="35"
                 value={tweet}
                 onChange={(e) => {
-                    handleTweet(e.target.value)
+                    handleTweet(e.target.value);
                     e.target.style.height = "5px";
                     e.target.style.height = (e.target.scrollHeight) - 3.5 + "px";
                     
@@ -63,37 +53,34 @@ function Home() {
 
             <button onClick={
                 async () => {
+                    handleDisability(true);
 
-
+                    const tweetsCounter = await getDoc(doc(db, "tweets_counter", "home_count"));
+                    console.log(tweetsCounter.data());
                     
-                    let updateState = {counter: tweetsTracker.counter + 1}
-                    handleTweetsTracker(updateState)
-                    
-                    await setDoc(doc(db, "tweets_counter", "home_count"), {
-                        counter: tweetsTracker.counter
-                    });
-                    
-                    console.log(tweetsTracker);
-
                     let dt = new Date();
                     let months = ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
                     let date = (months[dt.getMonth()]) + " " + dt.getDate() + ", " + dt.getFullYear();
                     let time = dt.getHours() + ":" + dt.getMinutes();
                     
-                    const docRef = await addDoc(collection(db, "tweets"), {
-                        uid: state.authUser.uid,
+                    await addDoc(collection(db, "tweets"), {
                         tweet_date: date,
                         tweet_time: time,
-                        tweet_by: state.authUser.username,
-                        tweet_from: state.authUser.email,
                         tweet_text: tweet,
-                        tweet_counter: tweetsTracker.counter
+                        uid: state.authUser.uid,
+                        tweet_from: state.authUser.email,
+                        tweet_by: state.authUser.username,
+                        tweet_counter: tweetsCounter.data().counter
+                    });
+
+                    await setDoc(doc(db, "tweets_counter", "home_count"), {
+                        counter: tweetsCounter.data().counter + 1
                     });
 
                     handleTweet("");
-                    
+                    handleDisability(false);
                 }
-            }>Tweet</button>
+            } disabled={isDisbaled}>Tweet</button>
 
             <h2 style={{ textAlign: "center" }}>All tweets</h2>
 
@@ -127,7 +114,6 @@ function Home() {
                     })
                 }
             </div>
-
         </div>
     )
 }
