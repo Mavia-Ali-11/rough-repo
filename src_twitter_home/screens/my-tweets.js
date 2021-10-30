@@ -27,8 +27,8 @@ function MyTweets() {
         if(state.authUser.uid == undefined) {
             let detectData = setInterval(() => {
                 if (state.authUser.uid != undefined) {
-                    dataFetcher();
                     clearInterval(detectData);
+                    dataFetcher();
                 } 
             }, 1000);
         } else {

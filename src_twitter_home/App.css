@@ -69,7 +69,13 @@ textarea:focus {
   justify-content: space-around;
 }
 
-.posts .reactions > div {
+.posts .reactions div > button {
+  border: none;
   cursor: pointer;
-  font-size: 12px;
+  background-color: transparent;
 }
+
+.posts .reactions div > button.liked {
+  color: dodgerblue;
+}
+

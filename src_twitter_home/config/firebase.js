@@ -19,6 +19,7 @@ import {
     where,
     onSnapshot,
     orderBy,
+    arrayUnion
 } from "firebase/firestore";
 
 
@@ -53,4 +54,5 @@ export {
     where,
     onSnapshot,
     orderBy,
+    arrayUnion
 };
