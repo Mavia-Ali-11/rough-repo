@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { GlobalContext } from '../context/context';
-import { db, doc, addDoc, setDoc, getDoc, collection, onSnapshot, query, orderBy, arrayUnion } from '../config/firebase';
+import { db, doc, addDoc, setDoc, getDoc, getDocs, collection, onSnapshot, query, orderBy, where } from '../config/firebase';
 
 function Home() {
 
@@ -8,25 +8,35 @@ function Home() {
     const [tweet, handleTweet] = useState("");
     const [tweetChars, handleTweetChars] = useState("");
     let [fetchedTweets, handleFetchedTweets] = useState([]);
+    let [fetchedReactions, handleFetchedReactions] = useState([]);
     let [isDisbaled, handleDisability] = useState(false);
-    let [buttonClass, handleButtonClass] = useState("");
 
     useEffect(async () => {
         let tweetsClone = fetchedTweets.slice(0);
-
-        let dataFetcher = () => {
+        let dataFetcher = async () => {
             const q = query(collection(db, "tweets"), orderBy("tweet_counter"));
             onSnapshot(q, (snapshot) => {
                 snapshot.docChanges().forEach((change) => {
                     if (change.type == "added") {
                         let tweetData = change.doc.data();
-                        tweetData.tweetId = change.doc.id;
+                        tweetData.tweet_id = change.doc.id;
                         tweetsClone.push(tweetData);
                     }
                 });
                 handleFetchedTweets(tweetsClone);
             })
+
+            const reactions = await getDocs(collection(db, "reactions"));
+            let tweetsReactionsClone = fetchedReactions.slice(0);
+            reactions.forEach((doc) => {
+                let tweetsReaction = doc.data();
+                tweetsReaction.tweet_id = doc.id;
+                tweetsReactionsClone.push(tweetsReaction);
+            });
+            handleFetchedReactions(tweetsReactionsClone);
         }
+
+
 
         if (state.authUser.uid == undefined) {
             let detectData = setInterval(() => {
@@ -118,42 +128,55 @@ function Home() {
                                 </div>
 
                                 <p>{tweet.tweet_text}</p>
+                            
+                                {
 
-                                <div className="reactions">
-                                    <div key={index}>
-                                        {
-                                            tweet.tweet_reactions.map((react, index) => {
-                                                console.log(tweet.tweet_reactions)
-                                                if (react.uid == state.authUser.uid && react.status == true) {
-                                                    console.log(react)
-                                                    // return (
-                                                    //     <button key={index} className="liked" onClick={async () => {
-                                                    //         await setDoc(doc(db, "tweets", tweet.tweetId), {
-                                                    //             tweet_reactions: arrayUnion({ uid: state.authUser.uid, status: true })
-                                                    //         }, { merge: true });
-                                                    //     }}>Like</button>
-                                                    // )
-                                                } else if (react.uid != state.authUser.uid) {
-                                                    console.log(react)
-                                                    // return (
-                                                    //     <button key={index} onClick={async () => {
-                                                    //         await setDoc(doc(db, "tweets", tweet.tweetId), {
-                                                    //             tweet_reactions: arrayUnion({ uid: state.authUser.uid, status: true })
-                                                    //         }, { merge: true });
-                                                    //     }}>Like</button>
-                                                    // )
-                                                }
-                                            })
+                                    fetchedReactions.map((reaction, index) => {
+                                        if (tweet.tweet_id == reaction.tweet_id && reaction[state.authUser.uid] == "liked") {
+                                            console.log(reaction)
+                                            return (
+                                                <div key={index} className="reactions">
+                                                    <div>
+                                                        {
+                                                            <button onClick={() => {
+                                                                setDoc(doc(db, "reactions", tweet.tweet_id), {
+                                                                    [state.authUser.uid]: "liked"
+                                                                });
+                                                            }} style={{ color: "blue" }}>Like</button>
+                                                        }
+                                                    </div>
+                                                    <div>Dislike</div>
+                                                    <div>Retweet</div>
+                                                    <div>Share</div>
+                                                </div>
+                                            )
+                                        } else {
+                                            return (
+                                                <div key={index} className="reactions">
+                                                    <div>
+                                                        {
+                                                            <button onClick={() => {
+                                                                setDoc(doc(db, "reactions", tweet.tweet_id), {
+                                                                    [state.authUser.uid]: "liked"
+                                                                });
+                                                            }} style={{ color: "gray" }}>Like</button>
+                                                        }
+                                                    </div>
+                                                    <div>Dislike</div>
+                                                    <div>Retweet</div>
+                                                    <div>Share</div>
+                                                </div>
+                                            )
                                         }
-                                    </div>
-                                    <div>Dislike</div>
-                                    <div>Retweet</div>
-                                    <div>Share</div>
-                                </div>
+                                    })
+                                }
+
                             </div>
                         )
                     })
+
                 }
+
             </div>
         </div>
     )

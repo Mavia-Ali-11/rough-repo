@@ -29,7 +29,7 @@ function MyTweets() {
                 if (state.authUser.uid != undefined) {
                     clearInterval(detectData);
                     dataFetcher();
-                } 
+                }
             }, 1000);
         } else {
             dataFetcher();
