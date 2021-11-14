@@ -11,6 +11,43 @@ function Home() {
     let [fetchedReactions, handleFetchedReactions] = useState([]);
     let [isDisbaled, handleDisability] = useState(false);
 
+    let decider = (final, id) => {
+        if (final.includes(true)) {
+            return (
+                <div className="reactions">
+                    <div>
+                        {
+                            <button onClick={(e) => {;
+                                e.target.className = "neutral";
+                            }} className="liked">Like</button>
+                        }
+                    </div>
+                    <div>Dislike</div>
+                    <div>Retweet</div>
+                    <div>Share</div>
+                </div>
+            )
+        } else if (!final.includes(true)) {
+            return (
+                <div className="reactions">
+                    <div>
+                        {
+                            <button onClick={(e) => {
+                                setDoc(doc(db, "reactions", id), {
+                                    [state.authUser.uid]: "liked"
+                                }, { merge: true });
+                                e.target.className = "liked";
+                            }} className="neutral">Like</button>
+                        }
+                    </div>
+                    <div>Dislike</div>
+                    <div>Retweet</div>
+                    <div>Share</div>
+                </div>
+            )
+        }
+    }
+
     useEffect(async () => {
         let tweetsClone = fetchedTweets.slice(0);
         let dataFetcher = async () => {
@@ -35,8 +72,6 @@ function Home() {
             });
             handleFetchedReactions(tweetsReactionsClone);
         }
-
-
 
         if (state.authUser.uid == undefined) {
             let detectData = setInterval(() => {
@@ -113,6 +148,7 @@ function Home() {
             <div className="all-tweets posts">
                 {
                     fetchedTweets.map((tweet, index) => {
+                        let final = [];
                         return (
                             <div key={index}>
                                 <div className="postDetails">
@@ -128,48 +164,23 @@ function Home() {
                                 </div>
 
                                 <p>{tweet.tweet_text}</p>
-                            
-                                {
 
+                                {
                                     fetchedReactions.map((reaction, index) => {
                                         if (tweet.tweet_id == reaction.tweet_id && reaction[state.authUser.uid] == "liked") {
-                                            console.log(reaction)
-                                            return (
-                                                <div key={index} className="reactions">
-                                                    <div>
-                                                        {
-                                                            <button onClick={() => {
-                                                                setDoc(doc(db, "reactions", tweet.tweet_id), {
-                                                                    [state.authUser.uid]: "liked"
-                                                                });
-                                                            }} style={{ color: "blue" }}>Like</button>
-                                                        }
-                                                    </div>
-                                                    <div>Dislike</div>
-                                                    <div>Retweet</div>
-                                                    <div>Share</div>
-                                                </div>
-                                            )
+                                            final.push(true);
+                                            console.log(reaction);
                                         } else {
-                                            return (
-                                                <div key={index} className="reactions">
-                                                    <div>
-                                                        {
-                                                            <button onClick={() => {
-                                                                setDoc(doc(db, "reactions", tweet.tweet_id), {
-                                                                    [state.authUser.uid]: "liked"
-                                                                });
-                                                            }} style={{ color: "gray" }}>Like</button>
-                                                        }
-                                                    </div>
-                                                    <div>Dislike</div>
-                                                    <div>Retweet</div>
-                                                    <div>Share</div>
-                                                </div>
-                                            )
+                                            final.push(false);
+                                            console.log(reaction);
                                         }
                                     })
                                 }
+
+                                {
+                                    decider(final, tweet.tweet_id)
+                                }
+
 
                             </div>
                         )

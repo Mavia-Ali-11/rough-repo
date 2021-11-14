@@ -79,3 +79,6 @@ textarea:focus {
   color: dodgerblue;
 }
 
+.posts .reactions div > button.neutral {
+  color: gray;
+}
