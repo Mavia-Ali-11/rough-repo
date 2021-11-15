@@ -79,6 +79,10 @@ textarea:focus {
   color: dodgerblue;
 }
 
+.posts .reactions div > button.liked {
+  color: red;
+}
+
 .posts .reactions div > button.neutral {
   color: gray;
 }

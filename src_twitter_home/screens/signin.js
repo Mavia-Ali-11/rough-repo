@@ -22,9 +22,9 @@ function SignIn() {
 
             <button onClick={
                 () => {
-                    if(email != "" && password != "") {
+                    if (email != "" && password != "") {
                         signInWithEmailAndPassword(auth, email, password)
-                            .then((userCredential) => {
+                            .then(() => {
                                 handleEmail("");
                                 handlePassword("");
                                 history.push("/home");

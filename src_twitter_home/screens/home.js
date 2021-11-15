@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { GlobalContext } from '../context/context';
-import { db, doc, addDoc, setDoc, getDoc, getDocs, collection, onSnapshot, query, orderBy, where } from '../config/firebase';
+import { db, doc, addDoc, setDoc, getDoc, getDocs, updateDoc, collection, onSnapshot, query, orderBy, deleteField } from '../config/firebase';
 
 function Home() {
 
@@ -17,12 +17,40 @@ function Home() {
                 <div className="reactions">
                     <div>
                         {
-                            <button onClick={(e) => {;
-                                e.target.className = "neutral";
+                            <button onClick={(e) => {
+                                if (e.target.className == "liked") {
+                                    const docRef = doc(db, 'reactions', id);
+                                    updateDoc(docRef, {
+                                        [state.authUser.uid]: deleteField()
+                                    });
+                                    e.target.className = "neutral";
+                                } else {
+                                    setDoc(doc(db, "reactions", id), {
+                                        [state.authUser.uid]: "liked"
+                                    }, { merge: true });
+                                    e.target.className = "liked";
+                                }
                             }} className="liked">Like</button>
                         }
                     </div>
-                    <div>Dislike</div>
+                    <div>
+                        {
+                            <button onClick={(e) => {
+                                if (e.target.className == "disliked") {
+                                    const docRef = doc(db, 'reactions', id);
+                                    updateDoc(docRef, {
+                                        [state.authUser.uid]: deleteField()
+                                    });
+                                    e.target.className = "neutral";
+                                } else {
+                                    setDoc(doc(db, "reactions", id), {
+                                        [state.authUser.uid]: "disliked"
+                                    }, { merge: true });
+                                    e.target.className = "disliked";
+                                }
+                            }} className="disliked">Dislike</button>
+                        }
+                    </div>
                     <div>Retweet</div>
                     <div>Share</div>
                 </div>
@@ -33,14 +61,39 @@ function Home() {
                     <div>
                         {
                             <button onClick={(e) => {
-                                setDoc(doc(db, "reactions", id), {
-                                    [state.authUser.uid]: "liked"
-                                }, { merge: true });
-                                e.target.className = "liked";
+                                if (e.target.className == "liked") {
+                                    const docRef = doc(db, 'reactions', id);
+                                    updateDoc(docRef, {
+                                        [state.authUser.uid]: deleteField()
+                                    });
+                                    e.target.className = "neutral";
+                                } else {
+                                    setDoc(doc(db, "reactions", id), {
+                                        [state.authUser.uid]: "liked"
+                                    }, { merge: true });
+                                    e.target.className = "liked";
+                                }
                             }} className="neutral">Like</button>
                         }
                     </div>
-                    <div>Dislike</div>
+                    <div>
+                        {
+                            <button onClick={(e) => {
+                                if (e.target.className == "disliked") {
+                                    const docRef = doc(db, 'reactions', id);
+                                    updateDoc(docRef, {
+                                        [state.authUser.uid]: deleteField()
+                                    });
+                                    e.target.className = "neutral";
+                                } else {
+                                    setDoc(doc(db, "reactions", id), {
+                                        [state.authUser.uid]: "disliked"
+                                    }, { merge: true });
+                                    e.target.className = "disliked";
+                                }
+                            }} className="neutral">Dislike</button>
+                        }
+                    </div>
                     <div>Retweet</div>
                     <div>Share</div>
                 </div>
@@ -149,6 +202,7 @@ function Home() {
                 {
                     fetchedTweets.map((tweet, index) => {
                         let final = [];
+                        let final2 = [];
                         return (
                             <div key={index}>
                                 <div className="postDetails">
@@ -166,13 +220,13 @@ function Home() {
                                 <p>{tweet.tweet_text}</p>
 
                                 {
-                                    fetchedReactions.map((reaction, index) => {
+                                    fetchedReactions.map((reaction) => {
                                         if (tweet.tweet_id == reaction.tweet_id && reaction[state.authUser.uid] == "liked") {
                                             final.push(true);
-                                            console.log(reaction);
+                                        }  else if (tweet.tweet_id == reaction.tweet_id && reaction[state.authUser.uid] == "disliked") {
+                                            final2.push(true);
                                         } else {
                                             final.push(false);
-                                            console.log(reaction);
                                         }
                                     })
                                 }
@@ -180,7 +234,6 @@ function Home() {
                                 {
                                     decider(final, tweet.tweet_id)
                                 }
-
 
                             </div>
                         )

@@ -19,7 +19,8 @@ import {
     where,
     onSnapshot,
     orderBy,
-    arrayUnion
+    updateDoc, 
+    deleteField
 } from "firebase/firestore";
 
 
@@ -54,5 +55,6 @@ export {
     where,
     onSnapshot,
     orderBy,
-    arrayUnion
+    updateDoc,
+    deleteField
 };
