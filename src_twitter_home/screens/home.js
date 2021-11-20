@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { GlobalContext } from '../context/context';
-import { db, doc, addDoc, setDoc, getDoc, getDocs, updateDoc, collection, onSnapshot, query, orderBy, deleteField } from '../config/firebase';
+import { db, doc, addDoc, setDoc, getDoc, getDocs, updateDoc, collection, onSnapshot, query, orderBy, deleteField, FieldValue, increment } from '../config/firebase';
 
 function Home() {
 
@@ -10,96 +10,6 @@ function Home() {
     let [fetchedTweets, handleFetchedTweets] = useState([]);
     let [fetchedReactions, handleFetchedReactions] = useState([]);
     let [isDisbaled, handleDisability] = useState(false);
-
-    let decider = (final, id) => {
-        if (final.includes(true)) {
-            return (
-                <div className="reactions">
-                    <div>
-                        {
-                            <button onClick={(e) => {
-                                if (e.target.className == "liked") {
-                                    const docRef = doc(db, 'reactions', id);
-                                    updateDoc(docRef, {
-                                        [state.authUser.uid]: deleteField()
-                                    });
-                                    e.target.className = "neutral";
-                                } else {
-                                    setDoc(doc(db, "reactions", id), {
-                                        [state.authUser.uid]: "liked"
-                                    }, { merge: true });
-                                    e.target.className = "liked";
-                                }
-                            }} className="liked">Like</button>
-                        }
-                    </div>
-                    <div>
-                        {
-                            <button onClick={(e) => {
-                                if (e.target.className == "disliked") {
-                                    const docRef = doc(db, 'reactions', id);
-                                    updateDoc(docRef, {
-                                        [state.authUser.uid]: deleteField()
-                                    });
-                                    e.target.className = "neutral";
-                                } else {
-                                    setDoc(doc(db, "reactions", id), {
-                                        [state.authUser.uid]: "disliked"
-                                    }, { merge: true });
-                                    e.target.className = "disliked";
-                                }
-                            }} className="disliked">Dislike</button>
-                        }
-                    </div>
-                    <div>Retweet</div>
-                    <div>Share</div>
-                </div>
-            )
-        } else if (!final.includes(true)) {
-            return (
-                <div className="reactions">
-                    <div>
-                        {
-                            <button onClick={(e) => {
-                                if (e.target.className == "liked") {
-                                    const docRef = doc(db, 'reactions', id);
-                                    updateDoc(docRef, {
-                                        [state.authUser.uid]: deleteField()
-                                    });
-                                    e.target.className = "neutral";
-                                } else {
-                                    setDoc(doc(db, "reactions", id), {
-                                        [state.authUser.uid]: "liked"
-                                    }, { merge: true });
-                                    e.target.className = "liked";
-                                }
-                            }} className="neutral">Like</button>
-                        }
-                    </div>
-                    <div>
-                        {
-                            <button onClick={(e) => {
-                                if (e.target.className == "disliked") {
-                                    const docRef = doc(db, 'reactions', id);
-                                    updateDoc(docRef, {
-                                        [state.authUser.uid]: deleteField()
-                                    });
-                                    e.target.className = "neutral";
-                                } else {
-                                    setDoc(doc(db, "reactions", id), {
-                                        [state.authUser.uid]: "disliked"
-                                    }, { merge: true });
-                                    e.target.className = "disliked";
-                                }
-                            }} className="neutral">Dislike</button>
-                        }
-                    </div>
-                    <div>Retweet</div>
-                    <div>Share</div>
-                </div>
-            )
-        }
-    }
 
     useEffect(async () => {
         let tweetsClone = fetchedTweets.slice(0);
@@ -136,8 +46,153 @@ function Home() {
         } else {
             dataFetcher();
         }
-
     }, [])
+
+    let decider = (likedData, dislikedData, id) => {
+        if (likedData.includes(true)) {
+            return (
+                <div className="reactions">
+                    <div>
+                        {
+                            <button onClick={(e) => {
+                                if (e.target.className == "liked") {
+                                    deleteReaction(id, "like");
+                                    e.target.className = "neutral";
+                                } else {
+                                    addLike(id);
+                                    e.target.className = "liked";
+                                }
+                            }} className="liked" id={id + "liked"}>Like</button>
+                        }
+                    </div>
+                    <div>
+                        {
+                            <button onClick={(e) => {
+                                if (e.target.className == "disliked") {
+                                    deleteReaction(id, "dislike");
+                                    e.target.className = "neutral";
+                                } else {
+                                    addDislike(id);
+                                    e.target.className = "disliked";
+                                }
+                            }} className="neutral" id={id + "disliked"}>Dislike</button>
+                        }
+                    </div>
+                    <div>Retweet</div>
+                    <div>Share</div>
+                </div>
+            )
+        } else if (dislikedData.includes(true)) {
+            return (
+                <div className="reactions">
+                    <div>
+                        {
+                            <button onClick={(e) => {
+                                if (e.target.className == "liked") {
+                                    deleteReaction(id, "like");
+                                    e.target.className = "neutral";
+                                } else {
+                                    addLike(id);
+                                    e.target.className = "liked";
+                                }
+                            }} className="neutral" id={id + "liked"}>Like</button>
+                        }
+                    </div>
+                    <div>
+                        {
+                            <button onClick={(e) => {
+                                if (e.target.className == "disliked") {
+                                    deleteReaction(id, "dislike");
+                                    e.target.className = "neutral";
+                                } else {
+                                    addDislike(id);
+                                    e.target.className = "disliked";
+                                }
+                            }} className="disliked" id={id + "disliked"}>Dislike</button>
+                        }
+                    </div>
+                    <div>Retweet</div>
+                    <div>Share</div>
+                </div>
+            )
+        } else if (!likedData.includes(true)) {
+            return (
+                <div className="reactions">
+                    <div>
+                        {
+                            <button onClick={(e) => {
+                                if (e.target.className == "liked") {
+                                    deleteReaction(id, "like");
+                                    e.target.className = "neutral";
+                                } else {
+                                    addLike(id);
+                                    e.target.className = "liked";
+                                }
+                            }} className="neutral" id={id + "liked"}>Like</button>
+                        }
+                    </div>
+                    <div>
+                        {
+                            <button onClick={(e) => {
+                                if (e.target.className == "disliked") {
+                                    deleteReaction(id, "dislike");
+                                    e.target.className = "neutral";
+                                } else {
+                                    addDislike(id);
+                                    e.target.className = "disliked";
+                                }
+                            }} className="neutral" id={id + "disliked"}>Dislike</button>
+                        }
+                    </div>
+                    <div>Retweet</div>
+                    <div>Share</div>
+                </div>
+            )
+        }
+    }
+
+    let addLike = (id) => {
+        let oppositeReaction = document.getElementById(id + "disliked");
+        let decideDecrement;
+
+        if(oppositeReaction.className == "disliked") {
+            decideDecrement = -1;
+        } else {
+            decideDecrement = 0;
+        }
+
+        setDoc(doc(db, "reactions", id), {
+            [state.authUser.uid]: "liked",
+            likes_count: increment(1),
+            dislikes_count: increment(decideDecrement)
+        }, { merge: true });
+
+        oppositeReaction.className = "neutral";
+    }
+
+    let addDislike = (id) => {
+        setDoc(doc(db, "reactions", id), {
+            [state.authUser.uid]: "disliked",
+            dislikes_count: increment(1)
+        }, { merge: true });
+
+        document.getElementById(id + "liked").className = "neutral";
+    }
+
+    let deleteReaction = (id, action) => {
+        let toDecrement;
+        if(action == "like") {
+            toDecrement = "likes_count";
+        } else {
+            toDecrement = "dislikes_count";
+        }
+
+        updateDoc(doc(db, 'reactions', id), {
+            [state.authUser.uid]: deleteField(),
+            [toDecrement]: increment(-1)
+        });
+
+    }
 
     return (
         <div>
@@ -169,7 +224,6 @@ function Home() {
                     handleDisability(true);
 
                     const tweetsCounter = await getDoc(doc(db, "tweets_counter", "home_count"));
-                    console.log(tweetsCounter.data());
 
                     let dt = new Date();
                     let months = ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -201,8 +255,8 @@ function Home() {
             <div className="all-tweets posts">
                 {
                     fetchedTweets.map((tweet, index) => {
-                        let final = [];
-                        let final2 = [];
+                        let likedData = [];
+                        let dislikedData = [];
                         return (
                             <div key={index}>
                                 <div className="postDetails">
@@ -222,17 +276,17 @@ function Home() {
                                 {
                                     fetchedReactions.map((reaction) => {
                                         if (tweet.tweet_id == reaction.tweet_id && reaction[state.authUser.uid] == "liked") {
-                                            final.push(true);
-                                        }  else if (tweet.tweet_id == reaction.tweet_id && reaction[state.authUser.uid] == "disliked") {
-                                            final2.push(true);
+                                            likedData.push(true);
+                                        } else if (tweet.tweet_id == reaction.tweet_id && reaction[state.authUser.uid] == "disliked") {
+                                            dislikedData.push(true);
                                         } else {
-                                            final.push(false);
+                                            likedData.push(false);
                                         }
                                     })
                                 }
 
                                 {
-                                    decider(final, tweet.tweet_id)
+                                    decider(likedData, dislikedData, tweet.tweet_id)
                                 }
 
                             </div>

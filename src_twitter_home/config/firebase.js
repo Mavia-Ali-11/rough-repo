@@ -20,7 +20,9 @@ import {
     onSnapshot,
     orderBy,
     updateDoc, 
-    deleteField
+    deleteField,
+    FieldValue,
+    increment,
 } from "firebase/firestore";
 
 
@@ -56,5 +58,7 @@ export {
     onSnapshot,
     orderBy,
     updateDoc,
-    deleteField
+    deleteField,
+    FieldValue,
+    increment
 };
