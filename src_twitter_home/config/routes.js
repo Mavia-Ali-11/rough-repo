@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from 'react';
-import { BrowserRouter as Router, Switch, Route, useHistory } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { GlobalContext } from '../context/context';
 import { auth, onAuthStateChanged } from './firebase';
 import { db, getDocs, collection, query, where } from '../config/firebase';
@@ -10,11 +10,11 @@ import SignUp from '../screens/signup';
 import SignIn from '../screens/signin';
 import Home from '../screens/home';
 import MyTweets from '../screens/my-tweets';
+import Profile from '../screens/profile';
 
 function Routes() {
 
     const { state, dispatch } = useContext(GlobalContext);
-    const history = useHistory();
 
     useEffect(() => {
         onAuthStateChanged(auth, async (user) => {
@@ -54,6 +54,10 @@ function Routes() {
                 <Route path="/my-tweets">
                     <NavbarAuth />
                     <MyTweets />
+                </Route>
+                <Route path="/profile">
+                    <NavbarAuth />
+                    <Profile />
                 </Route>
             </Switch>
         </Router>

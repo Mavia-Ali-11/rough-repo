@@ -16,7 +16,7 @@ function Navbar() {
                     signOut(auth).then(() => {
                         history.push("/");
                       }).catch((error) => {
-                          console.log(error);
+                          console.log(error.message);
                       });
                 }}>Sign out</Link></li>
             </ul>

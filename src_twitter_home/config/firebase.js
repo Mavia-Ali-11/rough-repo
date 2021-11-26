@@ -4,7 +4,10 @@ import {
     createUserWithEmailAndPassword, 
     signInWithEmailAndPassword, 
     signOut, 
-    onAuthStateChanged 
+    onAuthStateChanged,
+    updateEmail,
+    sendEmailVerification,
+    updatePassword
 } from "firebase/auth";
 
 import { 
@@ -21,7 +24,6 @@ import {
     orderBy,
     updateDoc, 
     deleteField,
-    FieldValue,
     increment,
 } from "firebase/firestore";
 
@@ -40,11 +42,14 @@ const auth = getAuth();
 const db = getFirestore();
 
 export { 
-    auth, 
+    auth,
     createUserWithEmailAndPassword, 
     signInWithEmailAndPassword, 
     signOut, 
     onAuthStateChanged,
+    updateEmail,
+    sendEmailVerification,
+    updatePassword,
 
     db,
     doc,
@@ -59,6 +64,5 @@ export {
     orderBy,
     updateDoc,
     deleteField,
-    FieldValue,
     increment
 };
