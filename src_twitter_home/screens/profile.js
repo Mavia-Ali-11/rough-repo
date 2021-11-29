@@ -3,16 +3,18 @@ import { GlobalContext } from "../context/context";
 import { useHistory } from 'react-router-dom';
 import { auth, updateEmail, sendEmailVerification, updatePassword, signOut, db, doc, updateDoc } from '../config/firebase';
 
+import userImg from "../images/user.png";
+
 function Profile() {
 
     const { state } = useContext(GlobalContext);
     const [crrUser, handleCrrUser] = useState({});
     const [crrEmail, handleCrrEmail] = useState("");
     const [crrPassword, handleCrrPassword] = useState("");
-    const [passwordVerifier1, handlePasswordVerifier1] = useState({display: "none"});
-    const [passwordVerifier2, handlePasswordVerifier2] = useState({display: "none"});
-    const [emailChanger, handleEmailChanger] = useState({display: "none"});
-    const [passwordChanger, handlepPasswordChanger] = useState({display: "none"});
+    const [passwordVerifier1, handlePasswordVerifier1] = useState({ display: "none" });
+    const [passwordVerifier2, handlePasswordVerifier2] = useState({ display: "none" });
+    const [emailChanger, handleEmailChanger] = useState({ display: "none" });
+    const [passwordChanger, handlepPasswordChanger] = useState({ display: "none" });
     const [errMsg, handleErrMsg] = useState("");
 
     const history = useHistory();
@@ -34,12 +36,20 @@ function Profile() {
         } else {
             dataFetcher();
         }
-    }, [crrUser])
+    }, [crrUser]);
+
 
     return (
         <div>
 
             <h2>Your Profile</h2>
+
+            <img id="profileImage" src={userImg} onClick={() => {
+                document.getElementById("imageUpload").click();
+            }} />
+            <input type="file" accept='image/*' id="imageUpload" onChange={(e) => {
+                console.log(e.target.files.name)
+            }} />
 
             {
                 (() => {
@@ -51,17 +61,17 @@ function Profile() {
                                 {/* Email Changer */}
 
                                 <p>Email: {crrEmail} <button onClick={() => {
-                                    handlePasswordVerifier1({display: "block"});
-                                    handlePasswordVerifier2({display: "none"});
-                                    handlepPasswordChanger({display: "none"});
+                                    handlePasswordVerifier1({ display: "block" });
+                                    handlePasswordVerifier2({ display: "none" });
+                                    handlepPasswordChanger({ display: "none" });
                                 }}>Change email</button></p>
 
                                 <div id="passwordVerifier" style={passwordVerifier1}>
                                     <input type="password" id="verifyPsw" placeholder="Confirm password" />&nbsp;
                                     <button onClick={() => {
                                         if (document.getElementById("verifyPsw").value == crrPassword) {
-                                            handleEmailChanger({display: "block"});
-                                            handlePasswordVerifier1({display: "none"});
+                                            handleEmailChanger({ display: "block" });
+                                            handlePasswordVerifier1({ display: "none" });
                                         } else {
                                             handleErrMsg("Password didn't match!");
                                         }
@@ -73,7 +83,7 @@ function Profile() {
                                     &nbsp;
                                     <button onClick={() => {
                                         let newEmail = document.getElementById("newEmail");
-                                        
+
                                         if (newEmail.value == crrEmail) {
                                             handleErrMsg("This is your current email. Please try different one to change!");
                                         } else if (newEmail.value == "") {
@@ -94,7 +104,7 @@ function Profile() {
 
                                                     handleCrrEmail(newEmail.value);
                                                     newEmail.value = "";
-                                                    handleEmailChanger({display: "none"});
+                                                    handleEmailChanger({ display: "none" });
                                                     handleErrMsg("");
                                                 }).catch((error) => {
                                                     handleErrMsg(error.message);
@@ -110,9 +120,9 @@ function Profile() {
 
                                 <p>Password: <input type="password" value={crrPassword} disabled={true} />&nbsp;
                                     <button onClick={() => {
-                                        handlePasswordVerifier1({display: "none"});
-                                        handlePasswordVerifier2({display: "block"});
-                                        handleEmailChanger({display: "none"});
+                                        handlePasswordVerifier1({ display: "none" });
+                                        handlePasswordVerifier2({ display: "block" });
+                                        handleEmailChanger({ display: "none" });
                                     }}>Change password?</button>
                                 </p>
 
@@ -120,8 +130,8 @@ function Profile() {
                                     <input type="password" id="verifyPsw2" placeholder="Confirm password" />&nbsp;
                                     <button onClick={() => {
                                         if (document.getElementById("verifyPsw2").value == crrPassword) {
-                                            handlePasswordVerifier2({display: "none"});
-                                            handlepPasswordChanger({display: "block"});
+                                            handlePasswordVerifier2({ display: "none" });
+                                            handlepPasswordChanger({ display: "block" });
                                         } else {
                                             handleErrMsg("Password didn't match!");
                                         }
@@ -132,13 +142,13 @@ function Profile() {
                                     <input type="password" id="newPassword" placeholder="New password" />&nbsp;
                                     <button onClick={async () => {
                                         let newPassword = document.getElementById("newPassword");
-                                        
+
                                         if (newPassword.value == crrPassword) {
                                             handleErrMsg("This is your current password. Please try different one to change!");
                                         } else if (newPassword.value == "") {
                                             handleErrMsg("Passowrd can't be empty!");
                                         } else {
-                                             updatePassword(auth.currentUser, newPassword.value).then(async() => {
+                                            updatePassword(auth.currentUser, newPassword.value).then(async () => {
                                                 console.log("Password updated");
 
                                                 await updateDoc(doc(db, "users", crrUser.uid), {
@@ -147,7 +157,7 @@ function Profile() {
 
                                                 handleCrrPassword(newPassword.value);
                                                 newPassword.value = "";
-                                                handlepPasswordChanger({display: "none"});
+                                                handlepPasswordChanger({ display: "none" });
 
                                                 await signOut(auth).then(() => {
                                                     history.push("/");

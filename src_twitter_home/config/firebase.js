@@ -27,6 +27,8 @@ import {
     increment,
 } from "firebase/firestore";
 
+import { getStorage, ref } from "firebase/storage";
+
 
 const firebaseApp = initializeApp({
     apiKey: "AIzaSyB2rnxV-caNnUAb3l2FRPQYCDd094FxOBA",
@@ -40,6 +42,7 @@ const firebaseApp = initializeApp({
 
 const auth = getAuth();
 const db = getFirestore();
+const storage = getStorage();
 
 export { 
     auth,

@@ -1,9 +1,163 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap');
+
 body {
   margin: 0px;
   padding: 0px;
-  padding: 0px 20px;
-  font-family: Calibri;
+  font-family: Lato;
 }
+
+.signin .row {
+  height: 100vh;
+  display: flex;
+  overflow: hidden;
+}
+
+.signin .row > div:first-child {
+  padding: 0px;
+  height: 100%;
+  display: flex;
+  max-width: 54%;
+  align-items: center;
+  background-size: cover;
+  justify-content: center;
+  background-position: center;
+  background-color: #1d9bf0;
+  background-repeat: no-repeat;
+  background-image: url(images/loginimg.png);
+}
+
+.signin .row > div:first-child svg {
+  color: #fff;
+  max-width: 42%;
+  filter: invert(1);
+}
+
+.signin .row > div:last-child {
+  display: flex;
+  overflow: auto;
+  max-width: 46%;
+  max-height: 100vh;
+  padding: 0 0 0 40px;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.signin .row > div:last-child
+> div:first-child svg {
+  font-size: 50px;
+  margin-top: 35px;
+  color: #1d9bf0;
+}
+
+.signin .row h2 {
+  font-size: 70px;
+  font-weight: 900;
+  margin: 50px 0px;
+}
+
+.signin .row h4 {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.signin #authBtn,
+.signin #gotoBtn {
+  width: 350px;
+  font-size: 16px;
+  box-shadow: none;
+  margin-top: 20px;
+  font-weight: 700;
+  font-family: Lato;
+  border-radius: 30px;
+  text-transform: none;
+  background-color: #1d9bf0;
+}
+
+.signin #authBtn:hover {
+  background-color: rgba(26, 140, 216);
+}
+
+.signin #tc {
+  font-size: 11px;
+  max-width: 350px;
+  color: #536471;
+  margin: 10px 0px 50px 0px;
+}
+
+.signin #tc Link {
+  color: #1d9bf0;
+}
+
+.signin h6 {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 5px 0 15px 0;
+}
+
+.signin #gotoBtn {
+  color: #000;
+  margin: 0 0 50px 0;
+  border-color: #cfd9de;
+  background-color: #fff;
+}
+
+.signin #gotoBtn:hover {
+  background-color: rgba(29, 155, 240, 0.1);
+}
+ 
+.signin #errorMsg {
+  max-width: 350px;
+}
+
+.Toastify {
+  font-size: 14px;
+}
+
+@media only screen and (max-width: 992px) {
+  .signin .row {
+    height: auto;
+    flex-direction: column-reverse;
+  }
+  .signin .row > div {
+    height: auto !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+  }
+  .signin .row > div:last-child {
+    margin: auto;
+    padding: 0px;
+    max-width: 80% !important;
+  }
+  .signin .row > div:first-child svg {
+    padding: 70px 0px;
+  }
+}
+
+@media only screen and (max-width: 450px) {
+  .signin .row h2 {
+    font-size: 45px;
+  }
+  .signin .row h4 {
+    font-size: 24px;
+  }
+  .MuiFormControl-root, .MuiButton-root {
+    max-width: 100%;
+  }
+}
+
+#imageUpload {
+  display: none;
+}
+
+#profileImage {
+  width: 80px;
+  cursor: pointer;
+}
+
+
+
+
 
 nav ul {
   padding: 0px;

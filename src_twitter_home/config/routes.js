@@ -28,10 +28,10 @@ function Routes() {
                 });
                 dispatch({ type: "CURRENT_USER", payload: fetchUser });
                 console.log(state.authUser);
-            } else if(!user && window.location.pathname != "/") {
+            } else if(!user && (window.location.pathname != "/" && window.location.pathname != "/signup")) {
                 dispatch({ type: "CURRENT_USER", payload: {} });
                 console.log(state.authUser);
-                window.location.replace("/")
+                window.location.replace("/");
             }
         })
     }, []);
@@ -40,11 +40,11 @@ function Routes() {
         <Router>
             <Switch>
                 <Route path="/" exact>
-                    <Navbar />
+                    {/* <Navbar /> */}
                     <SignIn />
                 </Route>
                 <Route path="/signup">
-                    <Navbar />
+                    {/* <Navbar /> */}
                     <SignUp />
                 </Route>
                 <Route path="/home">
