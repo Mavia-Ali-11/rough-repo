@@ -1,9 +1,10 @@
 import React, { useContext, useState, useEffect } from "react";
 import { GlobalContext } from "../context/context";
 import { useHistory } from 'react-router-dom';
-import { auth, updateEmail, sendEmailVerification, updatePassword, signOut, db, doc, updateDoc } from '../config/firebase';
+import { auth, updateEmail, sendEmailVerification, updatePassword, signOut, db, doc, updateDoc, setDoc, storage, ref, uploadBytes, getDownloadURL } from '../config/firebase';
 
-import userImg from "../images/user.png";
+// import avatar from "../images/img_avatar.png";
+import CameraIcon from '@mui/icons-material/CameraAlt';
 
 function Profile() {
 
@@ -16,6 +17,7 @@ function Profile() {
     const [emailChanger, handleEmailChanger] = useState({ display: "none" });
     const [passwordChanger, handlepPasswordChanger] = useState({ display: "none" });
     const [errMsg, handleErrMsg] = useState("");
+    const [saveAvatarBtn, handleSaveAvatarBtn] = useState(true);
 
     const history = useHistory();
 
@@ -25,6 +27,8 @@ function Profile() {
             handleCrrEmail(state.authUser.email);
             handleCrrPassword(state.authUser.password);
         }
+
+        console.log("tracking use effect");
 
         if (state.authUser.uid == undefined) {
             let detectData = setInterval(() => {
@@ -36,26 +40,53 @@ function Profile() {
         } else {
             dataFetcher();
         }
-    }, [crrUser]);
+    }, []);
 
 
     return (
         <div>
-
             <h2>Your Profile</h2>
-
-            <img id="profileImage" src={userImg} onClick={() => {
-                document.getElementById("imageUpload").click();
-            }} />
-            <input type="file" accept='image/*' id="imageUpload" onChange={(e) => {
-                console.log(e.target.files.name)
-            }} />
 
             {
                 (() => {
                     if (crrUser.uid != undefined) {
                         return (
                             <>
+                                {/* Avatar */}
+
+                                <div className="user-avatar" onClick={() => {
+                                    document.getElementById("imageUpload").click();
+                                }}>
+                                    <img src={crrUser.avatar} id="profileImg" alt="avatar" />
+                                    <div className="middle"><CameraIcon /></div>
+                                </div>
+
+                                <input type="file" accept='image/*' id="imageUpload" onChange={(e) => {
+                                    if (e.target.files[0] != undefined) {
+                                        document.getElementById("profileImg").src = URL.createObjectURL(e.target.files[0]);
+                                        handleSaveAvatarBtn(false);
+                                    }
+                                }} />
+
+                                <p>
+                                    <button id="saveAvatar" disabled={saveAvatarBtn} onClick={() => {
+                                        handleSaveAvatarBtn(true);
+                                        let selectedImg = document.getElementById("imageUpload").files[0];
+                                        let imageRef = ref(storage, `images/avatars/${crrUser.uid}`)
+                                        uploadBytes(imageRef, selectedImg).then(async () => {
+                                            await getDownloadURL(imageRef)
+                                                .then(async (url) => {
+                                                    let dataRef = doc(db, "users", crrUser.uid)
+                                                    await setDoc(dataRef, {
+                                                        avatar: url
+                                                    }, { merge: true });
+                                                })
+                                        });
+                                    }}>Save</button>
+                                </p>
+
+                                {/* Username */}
+
                                 <p>Username: {crrUser.username}</p>
 
                                 {/* Email Changer */}
@@ -112,9 +143,6 @@ function Profile() {
                                         }
                                     }}>Confirm</button>
                                 </div>
-
-                                <h6 style={{ color: "red" }}>{errMsg}</h6>
-
 
                                 {/* Password Changer */}
 
@@ -173,6 +201,8 @@ function Profile() {
                                         }
                                     }}>Confirm</button>
                                 </div>
+                                
+                                <h6 style={{ color: "red" }}>{errMsg}</h6>
                             </>
                         )
                     }

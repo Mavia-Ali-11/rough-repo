@@ -146,14 +146,55 @@ body {
   }
 }
 
+
+
+
+.user-avatar {
+  position: relative;
+  margin: 30px 0px 15px;
+  max-width: fit-content;
+}
+
+.user-avatar #profileImg {
+  opacity: 1;
+  width: 85px;
+  height: 85px;
+  display: block;
+  cursor: pointer;
+  border-radius: 100%;
+  transition: .3s ease;
+}
+
+.user-avatar .middle {
+  top: 50%;
+  left: 50%;
+  opacity: 0;
+  cursor: pointer;
+  position: absolute;
+  width: fit-content;
+  text-align: center;
+  transition: .3s ease;
+  transform: translate(-50%, -50%);
+}
+
+.user-avatar .middle svg {
+  color: #fff;
+}
+
+.user-avatar:hover #profileImg {
+  filter: brightness(0.6);
+}
+
+.user-avatar:hover .middle {
+  opacity: 1;
+}
+
 #imageUpload {
   display: none;
 }
 
-#profileImage {
-  width: 80px;
-  cursor: pointer;
-}
+
+
 
 
 

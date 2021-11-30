@@ -1,4 +1,5 @@
 import { initializeApp } from "firebase/app";
+
 import { 
     getAuth, 
     createUserWithEmailAndPassword, 
@@ -27,8 +28,7 @@ import {
     increment,
 } from "firebase/firestore";
 
-import { getStorage, ref } from "firebase/storage";
-
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const firebaseApp = initializeApp({
     apiKey: "AIzaSyB2rnxV-caNnUAb3l2FRPQYCDd094FxOBA",
@@ -67,5 +67,10 @@ export {
     orderBy,
     updateDoc,
     deleteField,
-    increment
+    increment,
+
+    storage,
+    ref,
+    uploadBytes,
+    getDownloadURL,
 };

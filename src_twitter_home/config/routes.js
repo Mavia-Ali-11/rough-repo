@@ -27,10 +27,8 @@ function Routes() {
                     return fetchUser;
                 });
                 dispatch({ type: "CURRENT_USER", payload: fetchUser });
-                console.log(state.authUser);
             } else if(!user && (window.location.pathname != "/" && window.location.pathname != "/signup")) {
                 dispatch({ type: "CURRENT_USER", payload: {} });
-                console.log(state.authUser);
                 window.location.replace("/");
             }
         })
