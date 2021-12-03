@@ -2,9 +2,9 @@ import React, { useContext, useState, useEffect } from "react";
 import { GlobalContext } from "../context/context";
 import { useHistory } from 'react-router-dom';
 import { auth, updateEmail, sendEmailVerification, updatePassword, signOut, db, doc, updateDoc, setDoc, storage, ref, uploadBytes, getDownloadURL } from '../config/firebase';
-
-// import avatar from "../images/img_avatar.png";
 import CameraIcon from '@mui/icons-material/CameraAlt';
+
+import Sidebar from "../components/sidebar";
 
 function Profile() {
 
@@ -15,7 +15,7 @@ function Profile() {
     const [passwordVerifier1, handlePasswordVerifier1] = useState({ display: "none" });
     const [passwordVerifier2, handlePasswordVerifier2] = useState({ display: "none" });
     const [emailChanger, handleEmailChanger] = useState({ display: "none" });
-    const [passwordChanger, handlepPasswordChanger] = useState({ display: "none" });
+    const [passwordChanger, handlePasswordChanger] = useState({ display: "none" });
     const [errMsg, handleErrMsg] = useState("");
     const [saveAvatarBtn, handleSaveAvatarBtn] = useState(true);
 
@@ -27,8 +27,6 @@ function Profile() {
             handleCrrEmail(state.authUser.email);
             handleCrrPassword(state.authUser.password);
         }
-
-        console.log("tracking use effect");
 
         if (state.authUser.uid == undefined) {
             let detectData = setInterval(() => {
@@ -42,9 +40,9 @@ function Profile() {
         }
     }, []);
 
-
     return (
         <div>
+            {/* <Sidebar/> */}
             <h2>Your Profile</h2>
 
             {
@@ -76,7 +74,8 @@ function Profile() {
                                         uploadBytes(imageRef, selectedImg).then(async () => {
                                             await getDownloadURL(imageRef)
                                                 .then(async (url) => {
-                                                    let dataRef = doc(db, "users", crrUser.uid)
+                                                    let dataRef = doc(db, "users", crrUser.uid);
+                                                    state.authUser.avatar = url;
                                                     await setDoc(dataRef, {
                                                         avatar: url
                                                     }, { merge: true });
@@ -94,7 +93,7 @@ function Profile() {
                                 <p>Email: {crrEmail} <button onClick={() => {
                                     handlePasswordVerifier1({ display: "block" });
                                     handlePasswordVerifier2({ display: "none" });
-                                    handlepPasswordChanger({ display: "none" });
+                                    handlePasswordChanger({ display: "none" });
                                 }}>Change email</button></p>
 
                                 <div id="passwordVerifier" style={passwordVerifier1}>
@@ -134,6 +133,7 @@ function Profile() {
                                                         })
 
                                                     handleCrrEmail(newEmail.value);
+                                                    state.authUser.email = newEmail.value;
                                                     newEmail.value = "";
                                                     handleEmailChanger({ display: "none" });
                                                     handleErrMsg("");
@@ -159,7 +159,7 @@ function Profile() {
                                     <button onClick={() => {
                                         if (document.getElementById("verifyPsw2").value == crrPassword) {
                                             handlePasswordVerifier2({ display: "none" });
-                                            handlepPasswordChanger({ display: "block" });
+                                            handlePasswordChanger({ display: "block" });
                                         } else {
                                             handleErrMsg("Password didn't match!");
                                         }
@@ -185,7 +185,7 @@ function Profile() {
 
                                                 handleCrrPassword(newPassword.value);
                                                 newPassword.value = "";
-                                                handlepPasswordChanger({ display: "none" });
+                                                handlePasswordChanger({ display: "none" });
 
                                                 await signOut(auth).then(() => {
                                                     history.push("/");

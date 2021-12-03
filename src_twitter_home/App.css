@@ -196,11 +196,80 @@ body {
 
 
 
+/* Sidebar */
+
+.sidebar {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.sidebar > div > a svg {
+  margin: 10px;
+  padding: 10px;
+  font-size: 50px;
+  color: #1d9bf0;
+  border-radius: 100%;
+}
+
+.sidebar > div > a svg:hover {
+  cursor: pointer;
+  background-color: rgba(29, 155, 240, 0.1);
+}
+
+.sidebar ul a > div {
+  margin-bottom: 7px;
+  border-radius: 25px;
+  max-width: fit-content;
+  padding: 8px 25px 8px 12px;
+}
+
+.sidebar ul a > div:hover {
+  background-color: rgba(15, 20, 25, 0.1);
+}
+
+.sidebar ul svg {
+  color: #000;
+  font-size: 30px;
+}
+
+.sidebar ul a {
+  color: #000;
+  text-decoration: none;
+}
+
+.sidebar ul a span {
+  font-size: 18px;
+  font-family: Poppins;
+}
+
+.mainSidebar > nav > div > div {
+  width: 260px !important;
+}
+
+.sidebar .tweetSidebar {
+  width: 85%;
+  font-size: 16px;
+  box-shadow: none;
+  margin-top: 20px;
+  font-weight: 900;
+  padding: 14px 0px;
+  border-radius: 30px;
+  text-transform: none;
+  background-color: #1d9bf0;
+}
+
+.sidebar .tweetSidebar:hover {
+  box-shadow: none;
+  background-color: rgba(26, 140, 216);
+}
 
 
 
 
-nav ul {
+
+/* nav ul {
   padding: 0px;
   display: flex;
   margin-bottom: 30px;
@@ -280,4 +349,4 @@ textarea:focus {
 
 .posts .reactions div > button.neutral {
   color: gray;
-}
+} */

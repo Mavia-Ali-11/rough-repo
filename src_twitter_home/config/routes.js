@@ -4,13 +4,13 @@ import { GlobalContext } from '../context/context';
 import { auth, onAuthStateChanged } from './firebase';
 import { db, getDocs, collection, query, where } from '../config/firebase';
 
-import Navbar from '../components/navbar';
 import NavbarAuth from '../components/navbar-auth';
 import SignUp from '../screens/signup';
 import SignIn from '../screens/signin';
 import Home from '../screens/home';
 import MyTweets from '../screens/my-tweets';
 import Profile from '../screens/profile';
+import ResponsiveDrawer from '../components/sidebar';
 
 function Routes() {
 
@@ -38,11 +38,9 @@ function Routes() {
         <Router>
             <Switch>
                 <Route path="/" exact>
-                    {/* <Navbar /> */}
                     <SignIn />
                 </Route>
                 <Route path="/signup">
-                    {/* <Navbar /> */}
                     <SignUp />
                 </Route>
                 <Route path="/home">
@@ -56,6 +54,9 @@ function Routes() {
                 <Route path="/profile">
                     <NavbarAuth />
                     <Profile />
+                </Route>
+                <Route path="/sidebar">
+                    <ResponsiveDrawer />
                 </Route>
             </Switch>
         </Router>

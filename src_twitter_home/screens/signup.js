@@ -98,7 +98,8 @@ function SignUp() {
                                                     uid: userCredential.user.uid,
                                                     username: username,
                                                     email: email,
-                                                    password: password
+                                                    password: password,
+                                                    avatar: "https://firebasestorage.googleapis.com/v0/b/react-firebase-4ea86.appspot.com/o/images%2Favatars%2Fdefault-avatar.jpg?alt=media&token=d15fcd1f-ff5c-4cd5-a2b4-bc254b5e7c33"
                                                 });
 
                                                 handleUsername("");
