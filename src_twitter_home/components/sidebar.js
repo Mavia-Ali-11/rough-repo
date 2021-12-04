@@ -6,13 +6,17 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Drawer from '@mui/material/Drawer';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import HomeIcon from '@mui/icons-material/Home';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
+import MailIcon from '@mui/icons-material/Mail';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+import PersonIcon from '@mui/icons-material/Person';
 import TagIcon from '@mui/icons-material/Tag';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
 import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
+import CheckIcon from '@mui/icons-material/Check';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
@@ -30,8 +34,9 @@ import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 
 const drawerWidth = 240;
 
-function ResponsiveDrawer(props) {
-
+function Sidebar(props) {
+    
+    console.log(props)
     const { state } = useContext(GlobalContext);
     const [crrUser, handleCrrUser] = useState({});
 
@@ -61,43 +66,63 @@ function ResponsiveDrawer(props) {
 
     const icons = [HomeOutlinedIcon, MailOutlineIcon, PersonOutlineOutlinedIcon, TagIcon,
         NotificationsNoneIcon, BookmarkBorderOutlinedIcon, ArticleOutlinedIcon, MoreHorizOutlinedIcon];
-    const screens = ["/home", "/my-tweets", "profile", "", "", "", "", ""];
-
+    const active_icons = [HomeIcon, MailIcon, PersonIcon];
+    const screens = ["/home", "/my-tweets", "profile", "#", "#", "#", "#", "#"];
+    
     const drawer = (
         <div className="sidebar">
             <div>
                 <Link to="/home"><TwitterIcon /></Link>
                 <List>
                     {['Home', 'My tweets', 'Profile', 'Explore', 'Notifications', 'Bookmarks', 'Lists', 'More'].map((text, index) => (
-                        <Link to={screens[index]}>
-                            <ListItem button key={text}>
+                        <Link key={index} to={screens[index]}>
+                            <ListItem button>
                                 <ListItemIcon>
                                     {
                                         (() => {
-                                            let Icon = icons[index];
-                                            return (<Icon />)
+                                            if(props.scrIndex != index) {
+                                                let Icon = icons[index];
+                                                return (<Icon />)
+                                            } else {
+                                                let Icon = active_icons[index];
+                                                return (<Icon />)
+                                            }
                                         })()
                                     }
                                 </ListItemIcon>
                                 <ListItemText primary={text} />
+                                {
+                                        (() => {
+                                            if(props.scrIndex != index) {
+                                                let Icon = icons[index];
+                                                return (<Icon />)
+                                            } else {
+                                                let Icon = active_icons[index];
+                                                return (<Icon />)
+                                            }
+                                        })()
+                                    }
                             </ListItem>
                         </Link>
                     ))}
                     <Button variant="contained" className="tweetSidebar">Tweet</Button>
                 </List>
             </div>
-            <div>
+            <div className="signOut">
                 <PopupState variant="popover" popupId="demo-popup-popover">
                     {(popupState) => (
                         <div>
                             <Button variant="contained" {...bindTrigger(popupState)}>
-                                <div>
+                                <div className="accDetails">
                                     <div>
-                                        <img src={crrUser.avatar} width="50" />
+                                        <img src={crrUser.avatar} width="40" />
                                     </div>
                                     <div>
-                                        {crrUser.username}
-                                        {crrUser.email}
+                                        <h6>{crrUser.username}</h6>
+                                        <p>{crrUser.email}</p>
+                                    </div>
+                                    <div>
+                                        <MoreHorizOutlinedIcon />
                                     </div>
                                 </div>
                             </Button>
@@ -111,8 +136,29 @@ function ResponsiveDrawer(props) {
                                     vertical: 'bottom',
                                     horizontal: 'center',
                                 }}
+
+                                className="popup"
                             >
-                                <Typography sx={{ p: 2 }}>The content of the Popover.</Typography>
+                                <Typography>
+                                    <div className="accDetails onPopover">
+                                        <div>
+                                            <img src={crrUser.avatar} width="40" />
+                                        </div>
+                                        <div>
+                                            <h6>{crrUser.username}</h6>
+                                            <p>{crrUser.email}</p>
+                                        </div>
+                                        <div>
+                                            <CheckIcon />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <span>Add an existing account</span>
+                                    </div>
+                                    <div>
+                                        <span>Log out {crrUser.email}</span>
+                                    </div>
+                                </Typography>
                             </Popover>
                         </div>
                     )}
@@ -172,68 +218,11 @@ function ResponsiveDrawer(props) {
                     {drawer}
                 </Drawer>
             </Box>
-
-            {/* <Box
-                component="main"
-                sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
-            >
-                <AppBar
-                    position="fixed"
-                    sx={{
-                        width: { sm: `calc(100% - ${drawerWidth}px)` },
-                        ml: { sm: `${drawerWidth}px` },
-                    }}
-                >
-                    <Toolbar>
-                        <IconButton
-                            color="inherit"
-                            aria-label="open drawer"
-                            edge="start"
-                            onClick={handleDrawerToggle}
-                            sx={{ mr: 2, display: { sm: 'none' } }}
-                        >
-                            <MenuIcon />
-                        </IconButton>
-                        <Typography variant="h6" noWrap component="div">
-                            Responsive drawer
-                        </Typography>
-                    </Toolbar>
-                </AppBar>
-
-                <Toolbar />
-                <Typography paragraph>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                    tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non
-                    enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus
-                    imperdiet. Semper risus in hendrerit gravida rutrum quisque non tellus.
-                    Convallis convallis tellus id interdum velit laoreet id donec ultrices.
-                    Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-                    adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra
-                    nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum
-                    leo. Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis
-                    feugiat vivamus at augue. At augue eget arcu dictum varius duis at
-                    consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa
-                    sapien faucibus et molestie ac.
-                </Typography>
-                <Typography paragraph>
-                    Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper
-                    eget nulla facilisi etiam dignissim diam. Pulvinar elementum integer enim
-                    neque volutpat ac tincidunt. Ornare suspendisse sed nisi lacus sed viverra
-                    tellus. Purus sit amet volutpat consequat mauris. Elementum eu facilisis
-                    sed odio morbi. Euismod lacinia at quis risus sed vulputate odio. Morbi
-                    tincidunt ornare massa eget egestas purus viverra accumsan in. In hendrerit
-                    gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem
-                    et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis
-                    tristique sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
-                    eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
-                    posuere sollicitudin aliquam ultrices sagittis orci a.
-                </Typography>
-            </Box> */}
         </Box>
     );
 }
 
-ResponsiveDrawer.propTypes = {
+Sidebar.propTypes = {
     /**
      * Injected by the documentation to work in an iframe.
      * You won't need it on your project.
@@ -241,4 +230,5 @@ ResponsiveDrawer.propTypes = {
     window: PropTypes.func,
 };
 
-export default ResponsiveDrawer;
+
+export default Sidebar;

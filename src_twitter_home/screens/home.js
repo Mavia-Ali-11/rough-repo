@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { GlobalContext } from '../context/context';
 import { db, doc, addDoc, setDoc, getDoc, updateDoc, collection, onSnapshot, query, orderBy, deleteField, increment } from '../config/firebase';
+import Sidebar from "../components/sidebar";
 
 function Home() {
 
@@ -9,8 +10,6 @@ function Home() {
     const [tweetChars, handleTweetChars] = useState("");
     let [fetchedTweets, handleFetchedTweets] = useState([]);
     let [fetchedReactions, handleFetchedReactions] = useState([]);
-    let [lc1, hlc1] = useState(0);
-    let [dc1, hdc1] = useState(0);
     let [isDisbaled, handleDisability] = useState(false);
 
     useEffect(async () => {
@@ -176,7 +175,7 @@ function Home() {
                     <div>Share</div>
                 </div>
             )
-        } 
+        }
         // else {
         //     let thisTweet = {likes_count: 0, dislikes_count: 0}
         //     return (
@@ -270,105 +269,108 @@ function Home() {
     }
 
     return (
-        <div>
-            <h2>Welcome to twitter - Home</h2>
+        <div className="mainHome">
+            <div>
+                <Sidebar scrIndex="0" />
+            </div>
+            <div>
+                <textarea
+                    placeholder="What's happening?"
+                    rows="1" cols="35"
+                    value={tweet}
+                    onChange={(e) => {
+                        handleTweet(e.target.value);
+                        e.target.style.height = "5px";
+                        e.target.style.height = (e.target.scrollHeight) - 3.5 + "px";
 
-            <textarea
-                placeholder="What's happening?"
-                rows="1" cols="35"
-                value={tweet}
-                onChange={(e) => {
-                    handleTweet(e.target.value);
-                    e.target.style.height = "5px";
-                    e.target.style.height = (e.target.scrollHeight) - 3.5 + "px";
+                        if (e.target.value.length > 280) {
+                            handleTweet(tweet);
+                            handleTweetChars("Your tweet exceeds a maximum limit of 280 charaters");
+                        } else {
+                            handleTweetChars("");
+                        }
+                    }} />
 
-                    if (e.target.value.length > 280) {
-                        handleTweet(tweet);
-                        handleTweetChars("Your tweet exceeds a maximum limit of 280 charaters");
-                    } else {
-                        handleTweetChars("");
+                <br />
+
+                <p style={{ color: "red" }}>{tweetChars}</p>
+
+                <button onClick={
+                    async () => {
+                        handleDisability(true);
+
+                        const tweetsCounter = await getDoc(doc(db, "tweets_counter", "home_count"));
+
+                        let dt = new Date();
+                        let months = ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                        let date = (months[dt.getMonth()]) + " " + dt.getDate() + ", " + dt.getFullYear();
+                        let time = dt.getHours() + ":" + dt.getMinutes();
+
+                        let new_tweet = await addDoc(collection(db, "tweets"), {
+                            tweet_date: date,
+                            tweet_time: time,
+                            tweet_text: tweet,
+                            uid: state.authUser.uid,
+                            tweet_from: state.authUser.email,
+                            tweet_by: state.authUser.username,
+                            tweet_counter: tweetsCounter.data().counter,
+                        });
+
+                        await setDoc(doc(db, "tweets_counter", "home_count"), {
+                            counter: tweetsCounter.data().counter + 1
+                        });
+
+                        handleTweet("");
+                        handleDisability(false);
                     }
-                }} />
+                } disabled={isDisbaled}>Tweet</button>
 
-            <br />
+                <h2 style={{ textAlign: "center" }}>All tweets</h2>
 
-            <p style={{ color: "red" }}>{tweetChars}</p>
-
-            <button onClick={
-                async () => {
-                    handleDisability(true);
-
-                    const tweetsCounter = await getDoc(doc(db, "tweets_counter", "home_count"));
-
-                    let dt = new Date();
-                    let months = ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
-                    let date = (months[dt.getMonth()]) + " " + dt.getDate() + ", " + dt.getFullYear();
-                    let time = dt.getHours() + ":" + dt.getMinutes();
-
-                    let new_tweet = await addDoc(collection(db, "tweets"), {
-                        tweet_date: date,
-                        tweet_time: time,
-                        tweet_text: tweet,
-                        uid: state.authUser.uid,
-                        tweet_from: state.authUser.email,
-                        tweet_by: state.authUser.username,
-                        tweet_counter: tweetsCounter.data().counter,
-                    });
-
-                    await setDoc(doc(db, "tweets_counter", "home_count"), {
-                        counter: tweetsCounter.data().counter + 1
-                    });
-
-                    handleTweet("");
-                    handleDisability(false);
-                }
-            } disabled={isDisbaled}>Tweet</button>
-
-            <h2 style={{ textAlign: "center" }}>All tweets</h2>
-
-            <div className="all-tweets posts">
-                {
-                    fetchedTweets.map((tweet, index) => {
-                        let likedData = [];
-                        let dislikedData = [];
-                        return (
-                            <div key={index}>
-                                <div className="postDetails">
-                                    <div>
-                                        <h4>{tweet.tweet_by}</h4>
-                                        <p>{tweet.tweet_from}</p>
+                <div className="all-tweets posts">
+                    {
+                        fetchedTweets.map((tweet, index) => {
+                            let likedData = [];
+                            let dislikedData = [];
+                            return (
+                                <div key={index}>
+                                    <div className="postDetails">
+                                        <div>
+                                            <h4>{tweet.tweet_by}</h4>
+                                            <p>{tweet.tweet_from}</p>
+                                        </div>
+                                        <div>
+                                            <p>{tweet.tweet_date}</p>
+                                            <p>{tweet.tweet_time}</p>
+                                            <p>{tweet.timestamp}</p>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <p>{tweet.tweet_date}</p>
-                                        <p>{tweet.tweet_time}</p>
-                                        <p>{tweet.timestamp}</p>
-                                    </div>
+
+                                    <p>{tweet.tweet_text}</p>
+
+                                    {
+                                        fetchedReactions.map((reaction) => {
+                                            if (tweet.tweet_id == reaction.tweet_id && reaction[state.authUser.uid] == "liked") {
+                                                likedData.push(true);
+                                            } else if (tweet.tweet_id == reaction.tweet_id && reaction[state.authUser.uid] == "disliked") {
+                                                dislikedData.push(true);
+                                            } else {
+                                                likedData.push(false);
+                                            }
+                                        })
+                                    }
+
+                                    {decider(likedData, dislikedData, tweet.tweet_id)}
                                 </div>
+                            )
+                        })
 
-                                <p>{tweet.tweet_text}</p>
+                    }
 
-                                {
-                                    fetchedReactions.map((reaction) => {
-                                        if (tweet.tweet_id == reaction.tweet_id && reaction[state.authUser.uid] == "liked") {
-                                            likedData.push(true);
-                                        } else if (tweet.tweet_id == reaction.tweet_id && reaction[state.authUser.uid] == "disliked") {
-                                            dislikedData.push(true);
-                                        } else {
-                                            likedData.push(false);
-                                        }
-                                    })
-                                }
-
-                                {
-                                    decider(likedData, dislikedData, tweet.tweet_id)
-                                }
-
-                            </div>
-                        )
-                    })
-
-                }
-
+                </div>
+            </div>
+            <div>
+                World
             </div>
         </div>
     )

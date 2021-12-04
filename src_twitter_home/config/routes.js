@@ -10,7 +10,7 @@ import SignIn from '../screens/signin';
 import Home from '../screens/home';
 import MyTweets from '../screens/my-tweets';
 import Profile from '../screens/profile';
-import ResponsiveDrawer from '../components/sidebar';
+import Sidebar from '../components/sidebar';
 
 function Routes() {
 
@@ -44,19 +44,19 @@ function Routes() {
                     <SignUp />
                 </Route>
                 <Route path="/home">
-                    <NavbarAuth />
+                    {/* <NavbarAuth /> */}
                     <Home />
                 </Route>
                 <Route path="/my-tweets">
-                    <NavbarAuth />
+                    {/* <NavbarAuth /> */}
                     <MyTweets />
                 </Route>
                 <Route path="/profile">
-                    <NavbarAuth />
+                    {/* <NavbarAuth /> */}
                     <Profile />
                 </Route>
                 <Route path="/sidebar">
-                    <ResponsiveDrawer />
+                    <Sidebar />
                 </Route>
             </Switch>
         </Router>
