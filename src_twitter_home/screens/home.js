@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { GlobalContext } from '../context/context';
 import { db, doc, addDoc, setDoc, getDoc, updateDoc, collection, onSnapshot, query, orderBy, deleteField, increment } from '../config/firebase';
 import Sidebar from "../components/sidebar";
+import Widgets from "../components/widgets";
 
 function Home() {
 
@@ -271,7 +272,7 @@ function Home() {
     return (
         <div className="mainHome">
             <div>
-                <Sidebar scrIndex="0" />
+                <Sidebar scrIndex="0" scrName="Home" />
             </div>
             <div>
                 <textarea
@@ -370,7 +371,7 @@ function Home() {
                 </div>
             </div>
             <div>
-                World
+                <Widgets />
             </div>
         </div>
     )

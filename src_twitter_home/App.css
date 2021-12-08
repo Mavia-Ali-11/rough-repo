@@ -1,10 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@200;300;400;500;600;700;800;900&display=swap');
 
 body {
   margin: 0px;
   padding: 0px;
-  font-family: Lato;
+  font-family: Roboto;
 }
 
 .signin .row {
@@ -68,7 +68,7 @@ body {
   box-shadow: none;
   margin-top: 20px;
   font-weight: 700;
-  font-family: Lato;
+  font-family: Roboto;
   border-radius: 30px;
   text-transform: none;
   background-color: #1d9bf0;
@@ -199,7 +199,7 @@ body {
 /* Sidebar */
 
 .sidebar {
-  height: 100%;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -219,9 +219,10 @@ body {
 }
 
 .sidebar ul a > div {
+  width: fit-content;
   border-radius: 25px;
-  max-width: fit-content;
-  padding: 8px 18px 8px 12px;
+  margin-bottom: 5px;
+  padding: 7px 18px 7px 12px;
 }
 
 .sidebar ul a > div:hover {
@@ -239,13 +240,17 @@ body {
 }
 
 .sidebar ul a span {
-  font-size: 18px;
-  font-family: Lato;
+  font-size: 20px;
+  font-weight: 400;
+  font-family: Roboto;
+}
+
+.sidebar ul div.activeScr span {
+  font-weight: 700;
 }
 
 .mainSidebar > nav > div > div {
   max-height: 100vh;
-  width: 260px !important;
 }
 
 .mainSidebar > nav > div > div::-webkit-scrollbar {
@@ -264,8 +269,8 @@ body {
   width: 85%;
   font-size: 16px;
   box-shadow: none;
-  font-weight: 900;
-  padding: 14px 0px;
+  font-weight: 700;
+  padding: 12px 0px;
   border-radius: 30px;
   text-transform: none;
   margin: 10px 0px 30px;
@@ -277,13 +282,11 @@ body {
   background-color: rgba(26, 140, 216);
 }
 
-
-
 .sidebar .signOut button {
   width: 95%;
   padding: 12px;
   box-shadow: none;
-  font-family: Lato;
+  font-family: Roboto;
   border-radius: 30px;
   margin-bottom: 20px;
   background-color: transparent;
@@ -320,7 +323,7 @@ body {
 .accDetails h6 {
   color: #000;
   font-size: 16px;
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .accDetails svg {
@@ -347,26 +350,264 @@ body {
   color: #1d9bf0;
 }
 
-.accDetails.onPopover ~ div {
+.accDetails.onPopover ~ div,
+.accDetails.onPopover ~ a > div {
   cursor: pointer;
   transition: 0.3s;
   padding: 16px 20px;
 }
 
-.accDetails.onPopover ~ div:hover {
+.accDetails.onPopover ~ div:hover,
+.accDetails.onPopover ~ a > div:hover {
   transition: 0.3s;
   background-color: #f7f9f9;
 }
 
-.accDetails.onPopover ~ div span {
+.accDetails.onPopover ~ a {
+  color: #000;
   font-size: 16px;
-  font-family: Lato;
+  font-family: Roboto;
+  text-decoration: none;
 }
+
+#screenTitle {
+  font-weight: 700;
+  font-family: Roboto;
+}
+
+.widgets {
+  width: 350px;
+  padding: 0px 5px;
+  border: 1px solid #eee;
+}
+
+.widgets > div:first-child {
+  top: 0px;
+  padding: 5px 0px;
+  position: sticky;
+  background-color: #fff;
+}
+
+.searchBar > div:first-child {
+  left: 3px;
+  z-index: 1;
+}
+
+.searchBar > div svg {
+  width: 20px;
+  fill: #536471;
+}
+
+.searchBar > div:last-child {
+  width: 100%;
+}
+
+.searchBar input {
+  width: 100%;
+  border-radius: 30px;
+  background-color: #f7f9f9;
+  border: 1px solid #f7f9f9;
+  padding: 10px 25px 10px 55px !important;
+}
+
+.searchBar input::placeholder {
+  opacity: 1;
+  color: #536471;
+}
+
+.widgets > div:last-child {
+  height: 100%;
+  overflow: scroll;
+}
+
+.widgets > div:last-child::-webkit-scrollbar {
+  width: 0px;
+}
+
+.widgets .widget {
+  width: 100%;
+  margin-top: 15px;
+  border-radius: 16px;
+  background-color: #f7f9f9;
+}
+
+.widgets .widget h4 {
+  font-size: 20px;
+  font-weight: 900;
+  margin-bottom: 0;
+  padding: 12px 16px;
+}
+
+.widgets .widget .news {
+  display: flex;
+  cursor: pointer;
+  padding: 12px 16px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.widgets .widget .news:hover,
+.widgets .widget .profiles > div:hover {
+  background-color: #eff1f1;
+}
+
+.widgets .widget .news > div:first-child {
+  width: 75%;
+  margin-top: -5px;
+  padding-right: 5px;
+}
+
+.widgets .widget .news > div span {
+  font-size: 12px;
+  color: #536471;
+}
+
+.widgets .widget .news > div p {
+  margin: 3px 0 0;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.widgets .widget .news > div:first-child a {
+  color: #1d9bf0;
+  text-decoration: none;
+}
+
+.widgets .widget .news > div:first-child a:hover {
+  text-decoration: underline;
+}
+
+.widgets .widget .news > div svg {
+  width: 18px;
+}
+
+.widgets .widget .news > div:last-child img {
+  width: 75px;
+  height: 75px;
+  border-radius: 10px;
+}
+
+.widgets .widget .trend > div:last-child svg {
+  width: 35px;
+  height: 35px;
+  padding: 6px;
+  cursor: pointer;
+  fill: #536471;
+}
+
+.widgets .widget .trend > div:last-child svg:hover {
+  fill: #1d9bf0;
+  border-radius: 100%;
+  background-color: rgba(29, 155, 240, 0.1);
+}
+
+.widgets .widget .news > div:first-child span svg {
+  fill: #1d9bf0;
+}
+
+.widgets .widget .news > div:first-child span span {
+  color: #000;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.widgets .widget .show-more {
+  padding: 16px;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+}
+
+.widgets .widget .show-more a:hover {
+  text-decoration: none !important;
+}
+
+.widgets .profiles > div {
+  display: flex;
+  cursor: pointer;
+  padding: 12px 16px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.widgets .profiles > div img {
+  width: 50px;
+  border-radius: 100%;
+}
+
+.widgets .profiles > div span {
+  color: #536471;
+}
+
+.widgets .profiles > div p {
+  margin: 0px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.widgets .profiles > div p:hover {
+  text-decoration: underline;
+}
+
+.widgets .profiles > div p svg {
+  width: 18px;
+  fill: #1d9bf0;
+  margin-top: -3px;
+  margin-left: 3px;
+}
+
+.widgets .profiles > div > div:last-child {
+  width: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.widgets .profiles > div button {
+  color: #fff;
+  border: none;
+  font-size: 15px;
+  border-radius: 30px;
+  padding: 0px 16px;
+  min-height: 32px;
+  font-weight: 700;
+  background-color: #0f1419;
+}
+
+.widgets .profiles button {
+  background-color:#272c30;
+}
+
+
+
+
+
+
 
 
 
 .mainHome {
   display: flex;
+  overflow: hidden;
+  max-height: 100vh;
+  justify-content: center;
+}
+
+.mainHome > div:nth-child(2) {
+  width: 40%;
+  padding-top: 70px;
+  text-align: center;
+  overflow: scroll;
+}
+
+.mainSidebar > div {
+  right: 65%;
+  position: absolute;
+}
+
+.mainSidebar nav > div > div {
+  position: unset;
+  min-height: 100vh;
 }
 
 /* nav ul {

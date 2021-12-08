@@ -40,7 +40,7 @@ function MyTweets() {
     return (
         <div>
             <div>
-                <Sidebar scrIndex="1" />
+                <Sidebar scrIndex="1" scrName="My Tweets" />
             </div>
 
             <div>

@@ -42,7 +42,7 @@ function Profile() {
     return (
         <div>
             <div>
-                <Sidebar scrIndex="2" />
+                <Sidebar scrIndex="2" scrName="Profile" />
             </div>
             <div>
                 <h2>Your Profile</h2>
