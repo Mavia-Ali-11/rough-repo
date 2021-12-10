@@ -114,11 +114,39 @@ function Sidebar(props) {
                             <Button variant="contained" {...bindTrigger(popupState)}>
                                 <div className="accDetails">
                                     <div>
-                                        <img src={crrUser.avatar} width="40" />
-                                    </div>
-                                    <div>
-                                        <h6>{crrUser.username}</h6>
-                                        <p>{crrUser.email}</p>
+                                        <div>
+                                            <img src={crrUser.avatar} width="40" />
+                                        </div>
+                                        <div>
+                                            {(() => {
+                                                if (crrUser.username != undefined) {
+                                                    if (crrUser.username.length > 14) {
+                                                        let crrUsername = crrUser.username.slice(0, 14) + "...";
+                                                        return (<h6>{crrUsername}</h6>)
+                                                    }
+                                                    else {
+                                                        return (<h6>{crrUser.username}</h6>)
+                                                    }
+                                                }
+
+                                                return null;
+                                            })()}
+
+                                            {(() => {
+                                                if (crrUser.username != undefined) {
+                                                    if (crrUser.username.length > 14) {
+                                                        let crrUsername = crrUser.username.slice(0, 14) + "...";
+                                                        return (<h6>{crrUsername}</h6>)
+                                                    }
+                                                    else {
+                                                        return (<h6>{crrUser.username}</h6>)
+                                                    }
+                                                }
+
+                                                return null;
+                                            })()}
+                                            <p>{crrUser.email}</p>
+                                        </div>
                                     </div>
                                     <div>
                                         <MoreHorizOutlinedIcon />
@@ -141,11 +169,27 @@ function Sidebar(props) {
                                 <Typography>
                                     <div className="accDetails onPopover">
                                         <div>
-                                            <img src={crrUser.avatar} width="40" />
-                                        </div>
-                                        <div>
-                                            <h6>{crrUser.username}</h6>
-                                            <p>{crrUser.email}</p>
+                                            <div>
+                                                <img src={crrUser.avatar} width="40" />
+                                            </div>
+                                            <div style={{ flex: 1 }}>
+                                                {(() => {
+                                                    if (crrUser.username != undefined) {
+                                                        if (crrUser.username.length > 18) {
+                                                            let crrUsername = crrUser.username.slice(0, 18) + "...";
+                                                            return (
+                                                                <h6>{crrUsername}</h6>
+                                                            )
+                                                        }
+                                                        else {
+                                                            return (<h6>{crrUser.username}</h6>)
+                                                        }
+                                                    }
+
+                                                    return null;
+                                                })()}
+                                                <p>{crrUser.email}</p>
+                                            </div>
                                         </div>
                                         <div>
                                             <CheckIcon />

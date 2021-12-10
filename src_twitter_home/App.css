@@ -303,8 +303,13 @@ body {
   justify-content: space-between;
 }
 
-.accDetails div:nth-child(2) {
-  margin-left: -30px;
+.accDetails > div:first-child {
+  width: 100%;
+  display: flex;
+}
+
+.accDetails > div div:nth-child(2) {
+  margin-left: 12px;
 }
 
 .accDetails img {
@@ -317,6 +322,7 @@ body {
   font-size: 12px;
   text-align: left;
   color: #536471;
+  letter-spacing: 0.2px;
   text-transform: initial;
 }
 
@@ -340,10 +346,6 @@ body {
 .accDetails.onPopover {
   padding: 0px 20px 20px;
   border-bottom: 1px solid #f1f1f1;
-}
-
-.accDetails.onPopover > div:nth-child(2) {
-  margin-left: -75px;
 }
 
 .accDetails.onPopover > div svg {
