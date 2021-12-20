@@ -138,9 +138,7 @@ function Widgets() {
                     </div>
 
                     <div className="news show-more">
-                        <div>
-                            <Link to="#">Show more</Link>
-                        </div>
+                        <Link to="#">Show more</Link>
                     </div>
                 </div>
 
@@ -187,16 +185,24 @@ function Widgets() {
                                 </div>
                             </div>
                         </div>
-
-
                     </div>
 
                     <div className="news show-more">
-                        <div>
-                            <Link to="#">Show more</Link>
-                        </div>
+                        <Link to="#">Show more</Link>
                     </div>
                 </div>
+
+
+
+                <div className='footer'>
+                    <div><p>Terms of Service</p></div>
+                    <div><p>Privacy Policy</p></div>
+                    <div><p>Cookie Policy</p></div>
+                    <div><p>Ads info</p></div>
+                    <div><p>More</p> <span>...</span></div>
+                    <div><p>&copy; 2021 Twitter, Inc.</p></div>
+                </div>
+
             </div>
         </div>
     )

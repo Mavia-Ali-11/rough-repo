@@ -4,17 +4,6 @@ import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import Drawer from '@mui/material/Drawer';
 import TwitterIcon from '@mui/icons-material/Twitter';
-import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
-import HomeIcon from '@mui/icons-material/Home';
-import MailOutlineIcon from '@mui/icons-material/MailOutline';
-import MailIcon from '@mui/icons-material/Mail';
-import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
-import PersonIcon from '@mui/icons-material/Person';
-import TagOutlinedIcon from '@mui/icons-material/TagOutlined';
-import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
-import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
-import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
-import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import CheckIcon from '@mui/icons-material/Check';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
@@ -31,6 +20,9 @@ import { Link, useHistory } from 'react-router-dom';
 import { auth, signOut } from '../config/firebase';
 import Popover from '@mui/material/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHome, faEnvelope, faUser, faHashtag, faBell, faBookmark, faAlignLeft, faEllipsisH } from '@fortawesome/free-solid-svg-icons';
 
 const drawerWidth = 260;
 
@@ -64,9 +56,7 @@ function Sidebar(props) {
         setMobileOpen(!mobileOpen);
     };
 
-    const icons = [HomeOutlinedIcon, MailOutlineIcon, PersonOutlineOutlinedIcon, TagOutlinedIcon,
-        NotificationsNoneOutlinedIcon, BookmarkBorderOutlinedIcon, ArticleOutlinedIcon, MoreHorizOutlinedIcon];
-    const active_icons = [HomeIcon, MailIcon, PersonIcon];
+    const icons = [faHome, faEnvelope, faUser, faHashtag, faBell, faBookmark, faAlignLeft, faEllipsisH];
     const screens = ["/home", "/my-tweets", "/profile", "#", "#", "#", "#", "#"];
 
     const drawer = (
@@ -81,11 +71,10 @@ function Sidebar(props) {
                                     {
                                         (() => {
                                             if (props.scrIndex != index) {
-                                                let Icon = icons[index];
-                                                return (<Icon />)
+                                                return(<FontAwesomeIcon icon={icons[index]} />)
                                             } else {
-                                                let Icon = active_icons[index];
-                                                return (<Icon />)
+                                                return(<FontAwesomeIcon icon={icons[index]} className="activeIcons" />)
+
                                             }
                                         })()
                                     }
@@ -93,10 +82,8 @@ function Sidebar(props) {
                                 {
                                     (() => {
                                         if (props.scrIndex != index) {
-                                            let Icon = icons[index];
                                             return (<ListItemText primary={text} />)
                                         } else {
-                                            let Icon = active_icons[index];
                                             return (<ListItemText className="activeScr" primary={text} />)
                                         }
                                     })()
@@ -120,9 +107,9 @@ function Sidebar(props) {
                                         <div>
                                             {(() => {
                                                 if (crrUser.username != undefined) {
-                                                    if (crrUser.username.length > 14) {
-                                                        let crrUsername = crrUser.username.slice(0, 14) + "...";
-                                                        return (<h6>{crrUsername}</h6>)
+                                                    if (crrUser.username.length > 12) {
+                                                        let crrUsername = crrUser.username.slice(0, 12) + "...";
+                                                        return (<h6 title={crrUser.username}>{crrUsername}</h6>)
                                                     }
                                                     else {
                                                         return (<h6>{crrUser.username}</h6>)
@@ -133,23 +120,22 @@ function Sidebar(props) {
                                             })()}
 
                                             {(() => {
-                                                if (crrUser.username != undefined) {
-                                                    if (crrUser.username.length > 14) {
-                                                        let crrUsername = crrUser.username.slice(0, 14) + "...";
-                                                        return (<h6>{crrUsername}</h6>)
+                                                if (crrUser.email != undefined) {
+                                                    if (crrUser.email.length > 15) {
+                                                        let crrEmail = crrUser.email.slice(0, 15) + "...";
+                                                        return (<p title={crrUser.email}>{crrEmail}</p>)
                                                     }
                                                     else {
-                                                        return (<h6>{crrUser.username}</h6>)
+                                                        return (<p>{crrUser.email}</p>)
                                                     }
                                                 }
 
                                                 return null;
                                             })()}
-                                            <p>{crrUser.email}</p>
                                         </div>
                                     </div>
                                     <div>
-                                        <MoreHorizOutlinedIcon />
+                                        <FontAwesomeIcon icon={icons[7]} />
                                     </div>
                                 </div>
                             </Button>
@@ -178,7 +164,7 @@ function Sidebar(props) {
                                                         if (crrUser.username.length > 18) {
                                                             let crrUsername = crrUser.username.slice(0, 18) + "...";
                                                             return (
-                                                                <h6>{crrUsername}</h6>
+                                                                <h6 title={crrUser.username}>{crrUsername}</h6>
                                                             )
                                                         }
                                                         else {
@@ -188,7 +174,20 @@ function Sidebar(props) {
 
                                                     return null;
                                                 })()}
-                                                <p>{crrUser.email}</p>
+
+                                                {(() => {
+                                                    if (crrUser.email != undefined) {
+                                                        if (crrUser.email.length > 20) {
+                                                            let crrEmail = crrUser.email.slice(0, 20) + "...";
+                                                            return (<p title={crrUser.email}>{crrEmail}</p>)
+                                                        }
+                                                        else {
+                                                            return (<p>{crrUser.email}</p>)
+                                                        }
+                                                    }
+
+                                                    return null;
+                                                })()}
                                             </div>
                                         </div>
                                         <div>
@@ -204,9 +203,23 @@ function Sidebar(props) {
                                         }).catch((error) => {
                                             console.log(error.message);
                                         });
-                                    }}><div>
-                                            <span>Log out {crrUser.email}</span>
-                                        </div></Link>
+                                    }}>
+                                        <div>
+                                            {(() => {
+                                                if (crrUser.email != undefined) {
+                                                    if (crrUser.email.length > 18) {
+                                                        let crrEmail = crrUser.email.slice(0, 18) + "...";
+                                                        return (<span title={crrUser.email}>Log out {crrEmail}</span>)
+                                                    }
+                                                    else {
+                                                        return (<span>Log out {crrUser.email}</span>)
+                                                    }
+                                                }
+
+                                                return null;
+                                            })()}
+                                        </div>
+                                    </Link>
                                 </Typography>
                             </Popover>
                         </div>

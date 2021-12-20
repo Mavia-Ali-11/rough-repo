@@ -7,6 +7,50 @@ body {
   font-family: Roboto;
 }
 
+/* Home Screen */
+
+.mainHome {
+  display: flex;
+  overflow: hidden;
+  max-height: 100vh;
+  justify-content: center;
+}
+
+.mainHome > div:last-child {
+  width: 61%;
+  display: flex;
+  justify-content: center;
+}
+
+.mainHome > div:last-child > div:first-child {
+  width: 162%;
+  overflow: auto;
+}
+
+.mainHome > div:last-child > div:last-child {
+  overflow: auto;
+}
+
+.mainSidebar > nav > div > div::-webkit-scrollbar {
+  width: 2px;
+}
+
+.mainHome > div:last-child > div::-webkit-scrollbar {
+  width: 0px;
+}
+
+.mainSidebar > nav > div > div::-webkit-scrollbar-track,
+.mainHome > div:last-child > div::-webkit-scrollbar-track{
+  background-color: #fff; 
+}
+
+.mainSidebar > nav > div > div::-webkit-scrollbar-thumb,
+.mainHome > div:last-child > div::-webkit-scrollbar-thumb {
+  background-color: #cfd9de; 
+}
+
+/* Sign in / Sign up */
+
 .signin .row {
   height: 100vh;
   display: flex;
@@ -146,8 +190,7 @@ body {
   }
 }
 
-
-
+/* Profile */
 
 .user-avatar {
   position: relative;
@@ -193,9 +236,6 @@ body {
   display: none;
 }
 
-
-
-
 /* Sidebar */
 
 .sidebar {
@@ -206,9 +246,9 @@ body {
 }
 
 .sidebar > div > a svg {
-  margin: 10px;
+  margin: 6px 0;
   padding: 10px;
-  font-size: 50px;
+  font-size: 52px;
   color: #1d9bf0;
   border-radius: 100%;
 }
@@ -230,8 +270,18 @@ body {
 }
 
 .sidebar ul svg {
+  font-size: 26px;
+}
+
+.sidebar ul svg path {
+  color: #fff;
+  stroke: black;
+  stroke-width: 20px;
+}
+
+.sidebar ul svg.activeIcons path {
   color: #000;
-  font-size: 28px;
+  stroke-width: 0px;
 }
 
 .sidebar ul a {
@@ -253,16 +303,15 @@ body {
   max-height: 100vh;
 }
 
-.mainSidebar > nav > div > div::-webkit-scrollbar {
-  width: 2px;
+.mainSidebar > div {
+  display: none;
+  background-color: #fff;
+  border-bottom: 1px solid #eff3f4;
 }
 
-.mainSidebar > nav > div > div::-webkit-scrollbar-track {
-  background-color: #fff; 
-}
- 
-.mainSidebar > nav > div > div::-webkit-scrollbar-thumb {
-  background-color: #cfd9de; 
+.mainSidebar nav > div > div {
+  position: unset;
+  min-height: 100vh;
 }
 
 .sidebar .tweetSidebar {
@@ -374,20 +423,25 @@ body {
 
 #screenTitle {
   font-weight: 700;
-  font-family: Roboto;
 }
 
+/* Widgets */
+
 .widgets {
-  width: 350px;
-  padding: 0px 5px;
-  border: 1px solid #eee;
+  width: 100%;
+  padding-left: 30px;
+  border-left: 1px solid #eff3f4;
 }
 
 .widgets > div:first-child {
   top: 0px;
-  padding: 5px 0px;
   position: sticky;
+  padding: 4px 0px;
   background-color: #fff;
+}
+
+.searchBar {
+  width: 100% !important;
 }
 
 .searchBar > div:first-child {
@@ -415,15 +469,6 @@ body {
 .searchBar input::placeholder {
   opacity: 1;
   color: #536471;
-}
-
-.widgets > div:last-child {
-  height: 100%;
-  overflow: scroll;
-}
-
-.widgets > div:last-child::-webkit-scrollbar {
-  width: 0px;
 }
 
 .widgets .widget {
@@ -471,12 +516,13 @@ body {
   line-height: 20px;
 }
 
-.widgets .widget .news > div:first-child a {
+.widgets .widget .news a {
+  font-size: 12px;
   color: #1d9bf0;
   text-decoration: none;
 }
 
-.widgets .widget .news > div:first-child a:hover {
+.widgets .widget .news a:hover {
   text-decoration: underline;
 }
 
@@ -515,9 +561,14 @@ body {
 }
 
 .widgets .widget .show-more {
-  padding: 16px;
+  width: 100%;
+  padding: 16px 16px 14px;
   border-bottom-left-radius: 16px;
   border-bottom-right-radius: 16px;
+}
+
+.widgets .widget .show-more a {
+  font-size: 15px;
 }
 
 .widgets .widget .show-more a:hover {
@@ -538,13 +589,15 @@ body {
 }
 
 .widgets .profiles > div span {
+  font-size: 15px;
   color: #536471;
 }
 
 .widgets .profiles > div p {
   margin: 0px;
-  font-weight: 600;
-  line-height: 20px;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 18px;
 }
 
 .widgets .profiles > div p:hover {
@@ -566,13 +619,12 @@ body {
 }
 
 .widgets .profiles > div button {
-  color: #fff;
   border: none;
-  font-size: 15px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 6px 18px;
   border-radius: 30px;
-  padding: 0px 16px;
-  min-height: 32px;
-  font-weight: 700;
   background-color: #0f1419;
 }
 
@@ -580,61 +632,157 @@ body {
   background-color:#272c30;
 }
 
-
-
-
-
-
-
-
-
-.mainHome {
+.widgets .footer {
   display: flex;
-  overflow: hidden;
-  max-height: 100vh;
-  justify-content: center;
+  flex-wrap: wrap;
+  padding: 18px 16px;
 }
 
-.mainHome > div:nth-child(2) {
-  width: 40%;
-  padding-top: 70px;
-  text-align: center;
-  overflow: scroll;
-}
-
-.mainSidebar > div {
-  right: 65%;
-  position: absolute;
-}
-
-.mainSidebar nav > div > div {
-  position: unset;
-  min-height: 100vh;
-}
-
-/* nav ul {
-  padding: 0px;
+.widgets .footer div {
   display: flex;
-  margin-bottom: 30px;
-  list-style-type: none;
+  margin-right: 12px;
+  margin-bottom: 2px;
+  height: fit-content;
 }
 
-nav ul li {
-  display: flex;
-  margin-right: 20px;
-  list-style-type: none;
-} */
+.widgets .footer div p {
+  font-size: 12px;
+  cursor: pointer;
+  color: #536471;
+  width: fit-content;
+  margin-bottom: 0px;
+}
 
-textarea {
+.widgets .footer div span { 
+  top: -2px;
+  left: 3px;
+  font-size: 12px;
+  font-weight: 700;
+  position: relative;
+}
+
+.widgets .footer div p:hover {
+  text-decoration: underline !important;
+}
+
+.widgets .footer div:last-child p:hover {
+  text-decoration: none !important;
+}
+
+/* Feeds */
+
+.mainHome > div:last-child .feeds .header {
+  top: 0px;
+  height: 55px;
+  display: flex;
+  position: sticky;
+  padding: 0px 18px;
+  align-items: center;
+  background-color: #fff;
+}
+
+.mainHome > div:last-child .feeds .header h4 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 0px;
+}
+
+.tweet-maker {
+  display: flex;
+  padding: 10px 18px;
+  justify-content: space-between;
+}
+
+.tweet-maker > .avatar-feed img {
+  width: 50px;
+  cursor: pointer;
+  transition: 0.3s;
+  border-radius: 100%;
+}
+
+.tweet-maker > .avatar-feed img:hover {
+  transition: 0.3s;
+  filter: brightness(0.8);
+}
+
+.tweet-maker > .tweet-input {
+  width: 100%;
+  padding: 0px 12px;
+}
+
+.tweet-maker > div textarea {
+  width: 100%;
+  border: none;
   resize: none;
+  font-size: 20px;
+  font-weight: 400;
   overflow: hidden;
-  font-family: Calibri;
-  border: 1px solid #eee;
+  line-height: 26px;
+  padding: 10px 5px;
+  border-bottom: 1px solid transparent;
 }
 
-textarea:focus {
-  outline: none;
+.tweet-maker > div textarea::placeholder {
+  color: #536471;
 }
+
+.tweet-maker > div textarea:focus {
+  outline: none;
+  border-bottom: 1px solid #eff3f4 !important;
+}
+
+.tweet-maker > div .tweet-extras {
+  display: flex;
+  margin-left: -3px;
+  padding: 15px 0px;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.tweet-maker .tweet-extras > div:first-child > div {
+  width: 45px;
+  height: 45px;
+  padding: 10px;
+  display: inline;
+  text-align: center;
+  border-radius: 100%;
+}
+
+.tweet-maker .tweet-extras > div:first-child > div:hover {
+  cursor: pointer;
+  background-color: rgba(29, 155, 240, 0.1);
+}
+
+.tweet-maker .tweet-extras > div:first-child svg {
+  width: 20px;
+  fill: #1d9bf0;
+  margin-top: -2px;
+}
+
+.tweet-maker .tweet-extras > div:last-child button {
+  border: 0px;
+  opacity: 0.6;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 500;
+  min-height: 36px;
+  border-radius: 30px;
+  padding: 5px 20px 5px 18px;
+  background-color: #1d9bf0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .posts {
   display: flex;
@@ -647,8 +795,8 @@ textarea:focus {
   padding: 20px;
   min-width: 70%;
   max-width: 70%;
-  margin-bottom: 30px;
   border-radius: 5px;
+  margin-bottom: 30px;
   background-color: white;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
 }
