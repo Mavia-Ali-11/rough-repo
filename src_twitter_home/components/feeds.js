@@ -2,23 +2,24 @@ import React, { useContext, useState, useEffect } from 'react';
 import { GlobalContext } from '../context/context';
 import { Link } from 'react-router-dom';
 import { db, doc, addDoc, setDoc, getDoc, updateDoc, collection, onSnapshot, query, orderBy, deleteField, increment } from '../config/firebase';
-
-import CollectionsOutlinedIcon from '@mui/icons-material/CollectionsOutlined';
-import GifBoxOutlinedIcon from '@mui/icons-material/GifBoxOutlined';
-import PollOutlinedIcon from '@mui/icons-material/PollOutlined';
-import SentimentSatisfiedOutlinedIcon from '@mui/icons-material/SentimentSatisfiedOutlined';
-import EventNoteOutlinedIcon from '@mui/icons-material/EventNoteOutlined';
-import RoomOutlinedIcon from '@mui/icons-material/RoomOutlined';
-
+import Picker from 'emoji-picker-react';
 
 function Home(props) {
 
     const { state } = useContext(GlobalContext);
+    const [chosenEmoji, setChosenEmoji] = useState(null);
     const [tweet, handleTweet] = useState("");
     const [tweetChars, handleTweetChars] = useState("");
     let [fetchedTweets, handleFetchedTweets] = useState([]);
     let [fetchedReactions, handleFetchedReactions] = useState([]);
     let [isDisbaled, handleDisability] = useState(false);
+
+    const [showEmojis, setShowEmojis] = useState(true);
+
+    const onEmojiClick = (event, emojiObject) => {
+        setChosenEmoji(emojiObject);
+        handleTweet(tweet + emojiObject.emoji)
+    };
 
     useEffect(async () => {
         let tweetsClone = fetchedTweets.slice(0);
@@ -319,7 +320,21 @@ function Home(props) {
                                 <svg viewBox="0 0 24 24" aria-hidden="true"><g><path d="M20.222 9.16h-1.334c.015-.09.028-.182.028-.277V6.57c0-.98-.797-1.777-1.778-1.777H3.5V3.358c0-.414-.336-.75-.75-.75s-.75.336-.75.75V20.83c0 .415.336.75.75.75s.75-.335.75-.75v-1.434h10.556c.98 0 1.778-.797 1.778-1.777v-2.313c0-.095-.014-.187-.028-.278h4.417c.98 0 1.778-.798 1.778-1.778v-2.31c0-.983-.797-1.78-1.778-1.78zM17.14 6.293c.152 0 .277.124.277.277v2.31c0 .154-.125.28-.278.28H3.5V6.29h13.64zm-2.807 9.014v2.312c0 .153-.125.277-.278.277H3.5v-2.868h10.556c.153 0 .277.126.277.28zM20.5 13.25c0 .153-.125.277-.278.277H3.5V10.66h16.722c.153 0 .278.124.278.277v2.313z"></path></g></svg>
                             </div>
 
-                            <div>
+                            <span hidden={showEmojis}>
+                                {chosenEmoji ? (
+                                    <span>You chose: {chosenEmoji.emoji}</span>
+                                ) : (
+                                    <span>No emoji Chosen</span>
+                                )}
+
+                                
+                                <Picker onEmojiClick={onEmojiClick} />
+                            </span>
+
+                            <div onClick={() => {
+                                setShowEmojis(!showEmojis);
+                                document.getElementsByClassName("emoji-search")[0].setAttribute("placeholder", "Search emoji");
+                            }}>
                                 <svg viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 22.75C6.072 22.75 1.25 17.928 1.25 12S6.072 1.25 12 1.25 22.75 6.072 22.75 12 17.928 22.75 12 22.75zm0-20C6.9 2.75 2.75 6.9 2.75 12S6.9 21.25 12 21.25s9.25-4.15 9.25-9.25S17.1 2.75 12 2.75z"></path><path d="M12 17.115c-1.892 0-3.633-.95-4.656-2.544-.224-.348-.123-.81.226-1.035.348-.226.812-.124 1.036.226.747 1.162 2.016 1.855 3.395 1.855s2.648-.693 3.396-1.854c.224-.35.688-.45 1.036-.225.35.224.45.688.226 1.036-1.025 1.594-2.766 2.545-4.658 2.545z"></path><circle cx="14.738" cy="9.458" r="1.478"></circle><circle cx="9.262" cy="9.458" r="1.478"></circle></g></svg>
                             </div>
 

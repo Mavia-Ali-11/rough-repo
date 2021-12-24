@@ -31,7 +31,8 @@ body {
   overflow: auto;
 }
 
-.mainSidebar > nav > div > div::-webkit-scrollbar {
+.mainSidebar > nav > div > div::-webkit-scrollbar,
+.emoji-picker-react .emoji-scroll-wrapper::-webkit-scrollbar {
   width: 2px;
 }
 
@@ -40,12 +41,14 @@ body {
 }
 
 .mainSidebar > nav > div > div::-webkit-scrollbar-track,
-.mainHome > div:last-child > div::-webkit-scrollbar-track{
+.mainHome > div:last-child > div::-webkit-scrollbar-track,
+.emoji-picker-react .emoji-scroll-wrapper::-webkit-scrollbar-track {
   background-color: #fff; 
 }
 
 .mainSidebar > nav > div > div::-webkit-scrollbar-thumb,
-.mainHome > div:last-child > div::-webkit-scrollbar-thumb {
+.mainHome > div:last-child > div::-webkit-scrollbar-thumb,
+.emoji-picker-react .emoji-scroll-wrapper::-webkit-scrollbar-thumb {
   background-color: #cfd9de; 
 }
 
@@ -733,13 +736,14 @@ body {
 
 .tweet-maker > div .tweet-extras {
   display: flex;
-  margin-left: -3px;
   padding: 15px 0px;
+  margin-left: -3px;
+  position: relative;
   align-items: flex-end;
   justify-content: space-between;
 }
 
-.tweet-maker .tweet-extras > div:first-child > div {
+.tweet-extras > div:first-child > div {
   width: 45px;
   height: 45px;
   padding: 10px;
@@ -748,18 +752,24 @@ body {
   border-radius: 100%;
 }
 
-.tweet-maker .tweet-extras > div:first-child > div:hover {
+.tweet-extras > div:first-child > div:hover {
   cursor: pointer;
   background-color: rgba(29, 155, 240, 0.1);
 }
 
-.tweet-maker .tweet-extras > div:first-child svg {
+.tweet-extras > div:first-child > span {
+  left: 0%;
+  top: 80px;
+  position: absolute;
+}
+
+.tweet-extras > div:first-child svg {
   width: 20px;
   fill: #1d9bf0;
   margin-top: -2px;
 }
 
-.tweet-maker .tweet-extras > div:last-child button {
+.tweet-extras > div:last-child button {
   border: 0px;
   opacity: 0.6;
   color: #fff;
@@ -771,12 +781,48 @@ body {
   background-color: #1d9bf0;
 }
 
+aside.emoji-picker-react {
+  width: 320px;
+  height: 380px;
+  border: none;
+  font-family: Roboto;
+  border-radius: 20px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+}
 
+.emoji-picker-react .active-category-indicator-wrapper {
+  display: none;
+}
 
+.emoji-picker-react ul.skin-tones-list {
+  top: 18px;
+}
 
+.emoji-picker-react .emoji-categories button{
+  background-position: 8px 50%;
+}
 
+.emoji-picker-react .emoji-categories button {
+  width: 80%;
+  height: 35px;
+  margin: 10px 0px;
+  border-bottom: 2px solid #cfd9de;
+}
 
+.emoji-picker-react .emoji-categories button.active {
+  border-color: #1d9bf0;
+}
 
+.emoji-picker-react .emoji-group:before {
+  color: #000;
+  text-transform: capitalize;
+}
+
+aside.emoji-picker-react .content-wrapper:before {
+  right: 17px;
+  font-size: 12px;
+  max-width: 150px;
+}
 
 
 
