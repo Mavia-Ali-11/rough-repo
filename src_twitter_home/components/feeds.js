@@ -3,22 +3,21 @@ import { GlobalContext } from '../context/context';
 import { Link } from 'react-router-dom';
 import { db, doc, addDoc, setDoc, getDoc, updateDoc, collection, onSnapshot, query, orderBy, deleteField, increment } from '../config/firebase';
 import Picker from 'emoji-picker-react';
+import CircularStatic from '../components/tweet-length';
 
-function Home(props) {
-
+function Feeds(props) {
+    
     const { state } = useContext(GlobalContext);
-    const [chosenEmoji, setChosenEmoji] = useState(null);
     const [tweet, handleTweet] = useState("");
     const [tweetChars, handleTweetChars] = useState("");
-    let [fetchedTweets, handleFetchedTweets] = useState([]);
-    let [fetchedReactions, handleFetchedReactions] = useState([]);
-    let [isDisbaled, handleDisability] = useState(false);
-
+    const [fetchedTweets, handleFetchedTweets] = useState([]);
+    const [fetchedReactions, handleFetchedReactions] = useState([]);
+    const [isDisbaled, handleDisability] = useState(true);
+    const [btnAccess, handleBtnAccess] = useState(0.6);
     const [showEmojis, setShowEmojis] = useState(true);
 
     const onEmojiClick = (event, emojiObject) => {
-        setChosenEmoji(emojiObject);
-        handleTweet(tweet + emojiObject.emoji)
+        handleTweet(tweet + emojiObject.emoji);
     };
 
     useEffect(async () => {
@@ -34,7 +33,7 @@ function Home(props) {
                     }
                 });
                 handleFetchedTweets(tweetsClone);
-            })
+            });
 
             // const reactions = await getDocs(collection(db, "reactions"));
             // let tweetsReactionsClone = fetchedReactions.slice(0);
@@ -61,7 +60,7 @@ function Home(props) {
                     }
                 });
                 handleFetchedReactions(tweetsReactionsClone);
-            })
+            });
         }
 
         if (state.authUser.uid == undefined) {
@@ -185,43 +184,43 @@ function Home(props) {
                 </div>
             )
         }
-        // else {
-        //     let thisTweet = {likes_count: 0, dislikes_count: 0}
-        //     return (
-        //         <div className="reactions">
-        //             <div>
-        //                 {
-        //                     <button onClick={(e) => {
-        //                         if (e.target.className == "liked") {
-        //                             deleteReaction(id, "like", thisTweet);
-        //                             e.target.className = "neutral";
-        //                         } else {
-        //                             addLike(id, thisTweet);
-        //                             e.target.className = "liked";
-        //                         }
-        //                     }} className="neutral" id={id + "liked"}>Like</button>
-        //                 }
-        //                 <span>{lc1}</span>
-        //             </div>
-        //             <div>
-        //                 {
-        //                     <button onClick={(e) => {
-        //                         if (e.target.className == "disliked") {
-        //                             deleteReaction(id, "dislike", thisTweet);
-        //                             e.target.className = "neutral";
-        //                         } else {
-        //                             addDislike(id, thisTweet);
-        //                             e.target.className = "disliked";
-        //                         }
-        //                     }} className="neutral" id={id + "disliked"}>Dislike</button>
-        //                 }
-        //                 <span>{dc1}</span>
-        //             </div>
-        //             <div>Retweet</div>
-        //             <div>Share</div>
-        //         </div>
-        //     )
-        // }
+        else {
+            let thisTweet = { likes_count: 0, dislikes_count: 0 }
+            return (
+                <div className="reactions">
+                    <div>
+                        {
+                            <button onClick={(e) => {
+                                if (e.target.className == "liked") {
+                                    deleteReaction(id, "like", thisTweet);
+                                    e.target.className = "neutral";
+                                } else {
+                                    addLike(id, thisTweet);
+                                    e.target.className = "liked";
+                                }
+                            }} className="neutral" id={id + "liked"}>Like</button>
+                        }
+                        <span>0</span>
+                    </div>
+                    <div>
+                        {
+                            <button onClick={(e) => {
+                                if (e.target.className == "disliked") {
+                                    deleteReaction(id, "dislike", thisTweet);
+                                    e.target.className = "neutral";
+                                } else {
+                                    addDislike(id, thisTweet);
+                                    e.target.className = "disliked";
+                                }
+                            }} className="neutral" id={id + "disliked"}>Dislike</button>
+                        }
+                        <span>0</span>
+                    </div>
+                    <div>Retweet</div>
+                    <div>Share</div>
+                </div>
+            )
+        }
     }
 
     let addLike = (id) => {
@@ -278,6 +277,7 @@ function Home(props) {
 
     return (
         <div className='feeds'>
+            <div className='hiddenDOM' onClick={() => { setShowEmojis(true) }} hidden={showEmojis}></div>
 
             <div className='header'>
                 <h4>{props.scrName}</h4>
@@ -296,17 +296,24 @@ function Home(props) {
                         onChange={(e) => {
                             handleTweet(e.target.value);
                             e.target.style.height = "5px";
-                            e.target.style.height = (e.target.scrollHeight) + 0.5 + "px";
+                            e.target.style.height = (e.target.scrollHeight) + 1 + "px";
 
-                            if (e.target.value.length > 280) {
-                                handleTweet(tweet);
-                                handleTweetChars("Your tweet exceeds a maximum limit of 280 charaters");
+                            if (e.target.value.length != 0 && e.target.value.length < 280) {
+                                handleDisability(false);
+                                handleBtnAccess(1);
+                            } else if (e.target.value.length == 0 || e.target.value.length > 280) {
+                                handleBtnAccess(0.6);
+                                handleDisability(true);
+                                if (e.target.value.length > 280) {
+                                    handleTweet(tweet);
+                                    handleTweetChars("Your tweet exceeds a maximum limit of 280 charaters");
+                                }
                             } else {
                                 handleTweetChars("");
                             }
                         }} />
 
-                    <div className='tweet-extras'>
+                    <div className="tweet-extras">
                         <div>
                             <div>
                                 <svg viewBox="0 0 24 24" aria-hidden="true" ><g><path d="M19.75 2H4.25C3.01 2 2 3.01 2 4.25v15.5C2 20.99 3.01 22 4.25 22h15.5c1.24 0 2.25-1.01 2.25-2.25V4.25C22 3.01 20.99 2 19.75 2zM4.25 3.5h15.5c.413 0 .75.337.75.75v9.676l-3.858-3.858c-.14-.14-.33-.22-.53-.22h-.003c-.2 0-.393.08-.532.224l-4.317 4.384-1.813-1.806c-.14-.14-.33-.22-.53-.22-.193-.03-.395.08-.535.227L3.5 17.642V4.25c0-.413.337-.75.75-.75zm-.744 16.28l5.418-5.534 6.282 6.254H4.25c-.402 0-.727-.322-.744-.72zm16.244.72h-2.42l-5.007-4.987 3.792-3.85 4.385 4.384v3.703c0 .413-.337.75-.75.75z"></path><circle cx="8.868" cy="8.309" r="1.542"></circle></g></svg>
@@ -321,13 +328,6 @@ function Home(props) {
                             </div>
 
                             <span hidden={showEmojis}>
-                                {chosenEmoji ? (
-                                    <span>You chose: {chosenEmoji.emoji}</span>
-                                ) : (
-                                    <span>No emoji Chosen</span>
-                                )}
-
-                                
                                 <Picker onEmojiClick={onEmojiClick} />
                             </span>
 
@@ -347,7 +347,9 @@ function Home(props) {
                             </div>
                         </div>
 
-                        <div>
+                        <div className="tweetValidator">
+                            <CircularStatic chars={tweet} />
+
                             <button onClick={
                                 async () => {
                                     handleDisability(true);
@@ -376,11 +378,10 @@ function Home(props) {
                                     handleTweet("");
                                     handleDisability(false);
                                 }
-                            } disabled={isDisbaled}>Tweet</button>
+                            } disabled={isDisbaled} style={{ opacity: btnAccess }}>Tweet</button>
                         </div>
                     </div>
                 </div>
-
 
                 <p style={{ color: "red" }}>{tweetChars}</p>
             </div>
@@ -428,4 +429,4 @@ function Home(props) {
     )
 }
 
-export default Home;
+export default Feeds;

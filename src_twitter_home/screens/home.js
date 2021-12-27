@@ -4,7 +4,7 @@ import Widgets from "../components/widgets";
 import Feeds from "../components/feeds";
 
 function Home() {
-
+    
     return (
         <div className="mainHome">
                 <Sidebar scrIndex="0" scrName="Home" />
