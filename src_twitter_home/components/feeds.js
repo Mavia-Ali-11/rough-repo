@@ -6,7 +6,7 @@ import Picker from 'emoji-picker-react';
 import CircularStatic from '../components/tweet-length';
 
 function Feeds(props) {
-    
+
     const { state } = useContext(GlobalContext);
     const [tweet, handleTweet] = useState("");
     const [tweetChars, handleTweetChars] = useState("");
@@ -348,37 +348,55 @@ function Feeds(props) {
                         </div>
 
                         <div className="tweetValidator">
-                            <CircularStatic chars={tweet} />
-
-                            <button onClick={
-                                async () => {
-                                    handleDisability(true);
-
-                                    const tweetsCounter = await getDoc(doc(db, "tweets_counter", "home_count"));
-
-                                    let dt = new Date();
-                                    let months = ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
-                                    let date = (months[dt.getMonth()]) + " " + dt.getDate() + ", " + dt.getFullYear();
-                                    let time = dt.getHours() + ":" + dt.getMinutes();
-
-                                    await addDoc(collection(db, "tweets"), {
-                                        tweet_date: date,
-                                        tweet_time: time,
-                                        tweet_text: tweet,
-                                        uid: state.authUser.uid,
-                                        tweet_from: state.authUser.email,
-                                        tweet_by: state.authUser.username,
-                                        tweet_counter: tweetsCounter.data().counter,
-                                    });
-
-                                    await setDoc(doc(db, "tweets_counter", "home_count"), {
-                                        counter: tweetsCounter.data().counter + 1
-                                    });
-
-                                    handleTweet("");
-                                    handleDisability(false);
+                            <div>
+                                {
+                                    (() => {
+                                        if (tweet.length > 0) {
+                                            return (<CircularStatic chars={tweet} />);
+                                        }
+                                    })()
                                 }
-                            } disabled={isDisbaled} style={{ opacity: btnAccess }}>Tweet</button>
+                            </div>
+
+                            {
+                                (() => {
+                                    if (tweet.length > 0) {
+                                        return (<div className='seperator'></div>);
+                                    }
+                                })()
+                            }
+
+                            <div>
+                                <button onClick={
+                                    async () => {
+                                        handleDisability(true);
+
+                                        const tweetsCounter = await getDoc(doc(db, "tweets_counter", "home_count"));
+
+                                        let dt = new Date();
+                                        let months = ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                                        let date = (months[dt.getMonth()]) + " " + dt.getDate() + ", " + dt.getFullYear();
+                                        let time = dt.getHours() + ":" + dt.getMinutes();
+
+                                        await addDoc(collection(db, "tweets"), {
+                                            tweet_date: date,
+                                            tweet_time: time,
+                                            tweet_text: tweet,
+                                            uid: state.authUser.uid,
+                                            tweet_from: state.authUser.email,
+                                            tweet_by: state.authUser.username,
+                                            tweet_counter: tweetsCounter.data().counter,
+                                        });
+
+                                        await setDoc(doc(db, "tweets_counter", "home_count"), {
+                                            counter: tweetsCounter.data().counter + 1
+                                        });
+
+                                        handleTweet("");
+                                        handleDisability(false);
+                                    }
+                                } disabled={isDisbaled} style={{ opacity: btnAccess }}>Tweet</button>
+                            </div>
                         </div>
                     </div>
                 </div>
