@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="favicon.jpg">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="style.css">
+    <title>Welcome | Quiz App</title>
+</head>
+
+<body>
+    <div class="main">
+        <div class="container">
+            <h1 id="h1">QUIZ APP</h1>
+            <h4 id="about">Topic: HTML CSS & JAVASCRIPT</h4>
+            <div class="account-page">
+                <div class="container-2">
+                    <div class="row">
+                        <div class="col-2">
+                            <div class="form-container">
+                                <div class="form-btn">
+                                    <span onclick="login()">Login</span>
+                                    <span onclick="register()">Register</span>
+                                    <hr id="current">
+                                </div>
+
+                                <br>
+                                <form id='form1' action="javascript:void(0)">
+                                    <i class="fa fa-sign-in" aria-hidden="true"></i>
+                                    <input type="email" placeholder="Email" id="email-login">
+                                    <input type="password" placeholder="Password" id="password-login">
+                                    <button type="submit" class="btn" onclick="signin()">Login</button>
+                                    <a href="#">Forgot password?</a>
+                                    <p class="errorMsg" style="margin-top: 8px;"></p>
+                                    <p class="successMsg" style="margin-top: 8px;"></p>
+                                </form>
+
+                                <form id="form2" action="javascript:void(0)">
+                                    <i class="fa fa-user-plus" aria-hidden="true"></i>
+                                    <input type="text" placeholder="Username" id="username">
+                                    <input type="email" placeholder="Email" id="email">
+                                    <input type="password" placeholder="Password" id="password">
+                                    <button class="btn" onclick="signup()">Register</button>
+                                    <p class="errorMsg"></p>
+                                    <p class="successMsg"></p>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+
+    <script>
+        var firebaseConfig = {
+            apiKey: "AIzaSyCRek5DWCKx6xEyRZvVyIq5KKdSuQdzjnA",
+            authDomain: "saylani-smit.firebaseapp.com",
+            projectId: "saylani-smit",
+            storageBucket: "saylani-smit.appspot.com",
+            messagingSenderId: "357285230181",
+            appId: "1:357285230181:web:e630acab3e79eb335e388c",
+            measurementId: "G-BET4R37J04"
+        };
+        firebase.initializeApp(firebaseConfig);
+    </script>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="favicon.jpg">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="quiz.css">
+    <title>HTML CSS JS | Quiz App</title>
+</head>
+
+<body id="quiz" onload="startQuiz()">
+    
+    <div class="main">
+        <div class="container">
+            <div id="head">
+                <div id="quizName">
+                    <p>Quiz : HTML CSS & JavaScript</p>
+                </div>
+                <div id="quizDetails">
+                    <div id="examinee">
+                        <p id="examineeName"></p>
+                        <p>Total Points: 50</p>
+                    </div>
+                    <div id="timer">
+                        <p id="watch">03:00</p>
+                    </div>
+                </div>
+            </div>
+            <div id="quesNum"></div>
+            <div id="questions"></div>
+            <div id="navBtn"><button id="next"></button></div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+
+    <script>
+        var firebaseConfig = {
+            apiKey: "AIzaSyCRek5DWCKx6xEyRZvVyIq5KKdSuQdzjnA",
+            authDomain: "saylani-smit.firebaseapp.com",
+            projectId: "saylani-smit",
+            storageBucket: "saylani-smit.appspot.com",
+            messagingSenderId: "357285230181",
+            appId: "1:357285230181:web:e630acab3e79eb335e388c",
+            measurementId: "G-BET4R37J04"
+        };
+        firebase.initializeApp(firebaseConfig);
+    </script>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
