@@ -1,0 +1,947 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@200;300;400;500;600;700;800;900&display=swap');
+
+body {
+  margin: 0px;
+  padding: 0px;
+  font-family: Roboto;
+}
+
+/* Home Screen */
+
+.mainHome {
+  display: flex;
+  overflow: hidden;
+  max-height: 100vh;
+  justify-content: center;
+}
+
+.mainHome > div:last-child {
+  width: 61%;
+  display: flex;
+  justify-content: center;
+}
+
+.mainHome > div:last-child > div:first-child {
+  width: 162%;
+  overflow: auto;
+}
+
+.mainHome > div:last-child > div:last-child {
+  overflow: auto;
+}
+
+.mainSidebar > nav > div > div::-webkit-scrollbar,
+.emoji-picker-react .emoji-scroll-wrapper::-webkit-scrollbar {
+  width: 2px;
+}
+
+.mainHome > div:last-child > div::-webkit-scrollbar {
+  width: 0px;
+}
+
+.mainSidebar > nav > div > div::-webkit-scrollbar-track,
+.mainHome > div:last-child > div::-webkit-scrollbar-track,
+.emoji-picker-react .emoji-scroll-wrapper::-webkit-scrollbar-track {
+  background-color: #fff; 
+}
+
+.mainSidebar > nav > div > div::-webkit-scrollbar-thumb,
+.mainHome > div:last-child > div::-webkit-scrollbar-thumb,
+.emoji-picker-react .emoji-scroll-wrapper::-webkit-scrollbar-thumb {
+  background-color: #cfd9de; 
+}
+
+/* Sign in / Sign up */
+
+.signin .row {
+  height: 100vh;
+  display: flex;
+  overflow: hidden;
+}
+
+.signin .row > div:first-child {
+  padding: 0px;
+  height: 100%;
+  display: flex;
+  max-width: 54%;
+  align-items: center;
+  background-size: cover;
+  justify-content: center;
+  background-position: center;
+  background-color: #1d9bf0;
+  background-repeat: no-repeat;
+  background-image: url(images/loginimg.png);
+}
+
+.signin .row > div:first-child svg {
+  color: #fff;
+  max-width: 42%;
+  filter: invert(1);
+}
+
+.signin .row > div:last-child {
+  display: flex;
+  overflow: auto;
+  max-width: 46%;
+  max-height: 100vh;
+  padding: 0 0 0 40px;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.signin .row > div:last-child
+> div:first-child svg {
+  font-size: 50px;
+  margin-top: 35px;
+  color: #1d9bf0;
+}
+
+.signin .row h2 {
+  font-size: 70px;
+  font-weight: 900;
+  margin: 50px 0px;
+}
+
+.signin .row h4 {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.signin #authBtn,
+.signin #gotoBtn {
+  width: 350px;
+  font-size: 16px;
+  box-shadow: none;
+  margin-top: 20px;
+  font-weight: 700;
+  font-family: Roboto;
+  border-radius: 30px;
+  text-transform: none;
+  background-color: #1d9bf0;
+}
+
+.signin #authBtn:hover {
+  background-color: rgba(26, 140, 216);
+}
+
+.signin #tc {
+  font-size: 11px;
+  max-width: 350px;
+  color: #536471;
+  margin: 10px 0px 50px 0px;
+}
+
+.signin #tc Link {
+  color: #1d9bf0;
+}
+
+.signin h6 {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 5px 0 15px 0;
+}
+
+.signin #gotoBtn {
+  color: #000;
+  margin: 0 0 50px 0;
+  border-color: #cfd9de;
+  background-color: #fff;
+}
+
+.signin #gotoBtn:hover {
+  background-color: rgba(29, 155, 240, 0.1);
+}
+ 
+.signin #errorMsg {
+  max-width: 350px;
+}
+
+.Toastify {
+  font-size: 14px;
+}
+
+@media only screen and (max-width: 992px) {
+  .signin .row {
+    height: auto;
+    flex-direction: column-reverse;
+  }
+  .signin .row > div {
+    height: auto !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+  }
+  .signin .row > div:last-child {
+    margin: auto;
+    padding: 0px;
+    max-width: 80% !important;
+  }
+  .signin .row > div:first-child svg {
+    padding: 70px 0px;
+  }
+}
+
+@media only screen and (max-width: 450px) {
+  .signin .row h2 {
+    font-size: 45px;
+  }
+  .signin .row h4 {
+    font-size: 24px;
+  }
+  .MuiFormControl-root, .MuiButton-root {
+    max-width: 100%;
+  }
+}
+
+/* Profile */
+
+.user-avatar {
+  position: relative;
+  margin: 30px 0px 15px;
+  max-width: fit-content;
+}
+
+.user-avatar #profileImg {
+  opacity: 1;
+  width: 85px;
+  height: 85px;
+  display: block;
+  cursor: pointer;
+  border-radius: 100%;
+  transition: .3s ease;
+}
+
+.user-avatar .middle {
+  top: 50%;
+  left: 50%;
+  opacity: 0;
+  cursor: pointer;
+  position: absolute;
+  width: fit-content;
+  text-align: center;
+  transition: .3s ease;
+  transform: translate(-50%, -50%);
+}
+
+.user-avatar .middle svg {
+  color: #fff;
+}
+
+.user-avatar:hover #profileImg {
+  filter: brightness(0.6);
+}
+
+.user-avatar:hover .middle {
+  opacity: 1;
+}
+
+#imageUpload {
+  display: none;
+}
+
+/* Sidebar */
+
+.sidebar {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.sidebar > div > a svg {
+  padding: 10px;
+  margin: 6px 0px;
+  font-size: 52px;
+  color: #1d9bf0;
+  border-radius: 100%;
+}
+
+.sidebar > div > a svg:hover {
+  cursor: pointer;
+  background-color: rgba(29, 155, 240, 0.1);
+}
+
+.sidebar ul a > div {
+  width: fit-content;
+  margin-bottom: 5px;
+  border-radius: 25px;
+  padding: 6px 18px 6px 16px;
+}
+
+.sidebar ul a > div:hover {
+  background-color: rgba(15, 20, 25, 0.1);
+}
+
+.sidebar ul a > div > div:first-child {
+  min-width: 50px;
+}
+
+.sidebar ul svg {
+  font-size: 24px;
+}
+
+.sidebar ul svg path {
+  color: #fff;
+  stroke: #000;
+  stroke-width: 28px;
+}
+
+.sidebar ul svg.activeIcons path {
+  color: #000;
+  stroke-width: 0px;
+}
+
+.sidebar ul a {
+  color: #000;
+  text-decoration: none;
+}
+
+.sidebar ul a span {
+  font-size: 20px;
+  font-weight: 400;
+  font-family: Roboto;
+}
+
+.sidebar ul div.activeScr span {
+  font-weight: 700;
+}
+
+.mainSidebar > nav > div > div {
+  max-height: 100vh;
+}
+
+.mainSidebar > div {
+  display: none;
+  background-color: #fff;
+  border-bottom: 1px solid #eff3f4;
+}
+
+.mainSidebar nav > div > div {
+  position: unset;
+  min-height: 100vh;
+}
+
+.sidebar .tweetSidebar {
+  width: 85%;
+  font-size: 16px;
+  box-shadow: none;
+  font-weight: 700;
+  padding: 12px 0px;
+  border-radius: 30px;
+  text-transform: none;
+  margin: 10px 0px 30px;
+  background-color: #1d9bf0;
+}
+
+.sidebar .tweetSidebar:hover {
+  box-shadow: none;
+  background-color: rgba(26, 140, 216);
+}
+
+.sidebar .signOut button {
+  width: 95%;
+  padding: 12px;
+  box-shadow: none;
+  font-family: Roboto;
+  border-radius: 30px;
+  margin-bottom: 20px;
+  background-color: transparent;
+}
+
+.sidebar .signOut button:hover {
+  background-color: rgba(15, 20, 25, 0.1);
+}
+
+.accDetails {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.accDetails > div:first-child {
+  width: 100%;
+  display: flex;
+}
+
+.accDetails > div div:nth-child(2) {
+  margin-left: 12px;
+}
+
+.accDetails img {
+  border-radius: 100%;
+}
+
+.accDetails h6,
+.accDetails p {
+  margin: 0px;
+  font-size: 12px;
+  text-align: left;
+  color: #536471;
+  letter-spacing: 0.2px;
+  text-transform: initial;
+}
+
+.accDetails h6 {
+  color: #000;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.accDetails svg {
+  color: #000;
+}
+
+.popup > div:nth-child(3) {
+  width: 300px;
+  border-radius: 15px;
+  padding: 20px 0px 12px;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.accDetails.onPopover {
+  padding: 0px 20px 20px;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.accDetails.onPopover > div svg {
+  color: #1d9bf0;
+}
+
+.accDetails.onPopover ~ div,
+.accDetails.onPopover ~ a > div {
+  cursor: pointer;
+  transition: 0.3s;
+  padding: 16px 20px;
+}
+
+.accDetails.onPopover ~ div:hover,
+.accDetails.onPopover ~ a > div:hover {
+  transition: 0.3s;
+  background-color: #f7f9f9;
+}
+
+.accDetails.onPopover ~ a {
+  color: #000;
+  font-size: 16px;
+  font-family: Roboto;
+  text-decoration: none;
+}
+
+#screenTitle {
+  font-weight: 700;
+}
+
+/* Widgets */
+
+.widgets {
+  width: 100%;
+  padding-left: 30px;
+  border-left: 1px solid #eff3f4;
+}
+
+.widgets > div:first-child {
+  top: 0px;
+  position: sticky;
+  padding: 5px 0px;
+  background-color: #fff;
+}
+
+.searchBar {
+  width: 100% !important;
+}
+
+.searchBar > div:first-child {
+  left: 3px;
+  z-index: 1;
+}
+
+.searchBar > div svg {
+  width: 20px;
+  fill: #536471;
+}
+
+.searchBar > div:last-child {
+  width: 100%;
+}
+
+.searchBar input {
+  width: 100%;
+  border-radius: 30px;
+  background-color: #eff3f4;
+  border: 1px solid #eff3f4;
+  padding: 10px 25px 10px 55px !important;
+}
+
+.searchBar input:focus {
+  background-color: #fff;
+}
+
+.searchBar input::placeholder {
+  opacity: 1;
+  color: #536471;
+}
+
+.widgets .widget {
+  width: 100%;
+  margin-top: 15px;
+  border-radius: 16px;
+  background-color: #f7f9f9;
+}
+
+.widgets .widget h4 {
+  font-size: 20px;
+  font-weight: 900;
+  margin-bottom: 0;
+  padding: 12px 16px;
+}
+
+.widgets .widget .news {
+  display: flex;
+  cursor: pointer;
+  padding: 12px 16px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.widgets .widget .news:hover,
+.widgets .widget .profiles > div:hover {
+  background-color: #eff1f1;
+}
+
+.widgets .widget .news > div:first-child {
+  width: 75%;
+  margin-top: -5px;
+  padding-right: 5px;
+}
+
+.widgets .widget .news > div span {
+  font-size: 12px;
+  color: #536471;
+}
+
+.widgets .widget .news > div p {
+  margin: 3px 0 0;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.widgets .widget .news a {
+  font-size: 12px;
+  color: #1d9bf0;
+  text-decoration: none;
+}
+
+.widgets .widget .news a:hover {
+  text-decoration: underline;
+}
+
+.widgets .widget .news > div svg {
+  width: 18px;
+}
+
+.widgets .widget .news > div:last-child img {
+  width: 75px;
+  height: 75px;
+  border-radius: 10px;
+}
+
+.widgets .widget .trend > div:last-child svg {
+  width: 35px;
+  height: 35px;
+  padding: 6px;
+  cursor: pointer;
+  fill: #536471;
+}
+
+.widgets .widget .trend > div:last-child svg:hover {
+  fill: #1d9bf0;
+  border-radius: 100%;
+  background-color: rgba(29, 155, 240, 0.1);
+}
+
+.widgets .widget .news > div:first-child span svg {
+  fill: #1d9bf0;
+}
+
+.widgets .widget .news > div:first-child span span {
+  color: #000;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.widgets .widget .show-more {
+  width: 100%;
+  padding: 16px 16px 14px;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+}
+
+.widgets .widget .show-more a {
+  font-size: 15px;
+}
+
+.widgets .widget .show-more a:hover {
+  text-decoration: none !important;
+}
+
+.widgets .profiles > div {
+  display: flex;
+  cursor: pointer;
+  padding: 12px 16px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.widgets .profiles > div img {
+  width: 50px;
+  border-radius: 100%;
+}
+
+.widgets .profiles > div span {
+  font-size: 15px;
+  color: #536471;
+}
+
+.widgets .profiles > div p {
+  margin: 0px;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 18px;
+}
+
+.widgets .profiles > div p:hover {
+  text-decoration: underline;
+}
+
+.widgets .profiles > div p svg {
+  width: 18px;
+  fill: #1d9bf0;
+  margin-top: -3px;
+  margin-left: 3px;
+}
+
+.widgets .profiles > div > div:last-child {
+  width: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.widgets .profiles > div button {
+  border: none;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 6px 18px;
+  border-radius: 30px;
+  background-color: #0f1419;
+}
+
+.widgets .profiles button {
+  background-color:#272c30;
+}
+
+.widgets .footer {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 18px 16px;
+}
+
+.widgets .footer div {
+  display: flex;
+  margin-right: 12px;
+  margin-bottom: 2px;
+  height: fit-content;
+}
+
+.widgets .footer div p {
+  font-size: 12px;
+  cursor: pointer;
+  color: #536471;
+  width: fit-content;
+  margin-bottom: 0px;
+}
+
+.widgets .footer div span { 
+  top: -2px;
+  left: 3px;
+  font-size: 12px;
+  font-weight: 700;
+  position: relative;
+}
+
+.widgets .footer div p:hover {
+  text-decoration: underline !important;
+}
+
+.widgets .footer div:last-child p:hover {
+  text-decoration: none !important;
+}
+
+/* Feeds */
+
+.mainHome > div:last-child .feeds .header {
+  top: 0px;
+  height: 55px;
+  display: flex;
+  position: sticky;
+  padding: 0px 18px;
+  align-items: center;
+  background-color: #fff;
+}
+
+.mainHome > div:last-child .feeds .header h4 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 0px;
+}
+
+.tweet-maker {
+  display: flex;
+  padding: 10px 15px;
+  justify-content: space-between;
+  border-bottom: 1px solid #eff3f4;
+}
+
+.tweet-maker > .avatar-feed img {
+  width: 50px;
+  cursor: pointer;
+  transition: 0.3s;
+  border-radius: 100%;
+}
+
+.tweet-maker > .avatar-feed img:hover {
+  transition: 0.3s;
+  filter: brightness(0.8);
+}
+
+.tweet-maker > .tweet-input {
+  width: 100%;
+  padding: 0px 12px;
+}
+
+.tweet-maker > div textarea {
+  width: 100%;
+  border: none;
+  resize: none;
+  font-size: 20px;
+  font-weight: 400;
+  overflow: hidden;
+  line-height: 26px;
+  padding: 10px 5px;
+  border-bottom: 1px solid transparent;
+}
+
+.tweet-maker > div textarea::placeholder {
+  color: #536471;
+}
+
+.tweet-maker > div textarea:focus {
+  outline: none;
+  border-color: #eff3f4;
+}
+
+.tweet-maker > div .tweet-extras {
+  display: flex;
+  margin-left: -3px;
+  position: relative;
+  align-items: center;
+  padding: 14px 0px 3px;
+  justify-content: space-between;
+}
+
+.tweet-extras > div:first-child > div {
+  width: 45px;
+  height: 45px;
+  padding: 10px;
+  display: inline;
+  text-align: center;
+  border-radius: 100%;
+}
+
+.tweet-extras > div:first-child > div:hover {
+  cursor: pointer;
+  background-color: rgba(29, 155, 240, 0.1);
+}
+
+.tweet-extras > div:first-child > span {
+  left: 0%;
+  top: 73px;
+  z-index: 11;
+  position: absolute;
+}
+
+.tweet-extras > div:first-child svg {
+  width: 20px;
+  fill: #1d9bf0;
+  margin-top: -2px;
+}
+
+.tweet-extras > .tweetValidator {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tweet-extras > .tweetValidator button {
+  border: 0px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 500;
+  min-height: 36px;
+  border-radius: 30px;
+  padding: 5px 20px 5px 18px;
+  background-color: #1d9bf0;
+}
+
+aside.emoji-picker-react {
+  width: 320px;
+  height: 380px;
+  border: none;
+  font-family: Roboto;
+  border-radius: 20px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+}
+
+.emoji-picker-react .active-category-indicator-wrapper {
+  display: none;
+}
+
+.emoji-picker-react ul.skin-tones-list {
+  top: 18px;
+}
+
+.emoji-picker-react .emoji-categories button{
+  background-position: 8px 50%;
+}
+
+.emoji-picker-react .emoji-categories button {
+  width: 80%;
+  height: 35px;
+  margin: 10px 0px;
+  border-bottom: 2px solid #cfd9de;
+}
+
+.emoji-picker-react .emoji-categories button.active {
+  border-color: #1d9bf0;
+}
+
+.emoji-picker-react .emoji-group:before {
+  color: #000;
+  text-transform: capitalize;
+}
+
+aside.emoji-picker-react .content-wrapper:before {
+  right: 17px;
+  font-size: 12px;
+  max-width: 150px;
+}
+
+.hiddenDOM {
+  left: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+
+.tweetValidator > div:first-child {
+  height: 20px;
+}
+
+.tweetValidator > div:first-child > div:first-child {
+  transition: 0.3s;
+}
+
+.tweetValidator > .seperator {
+  width: 1px;
+  height: 31px;
+  margin: 0px 16px 0 14px;
+  background-color: #b9cad3;
+}
+
+.tweetValidator > div:first-child span {
+  color: #1d9bf0;
+  width: 20px !important;
+  height: 20px !important;
+  transform: rotate(-90deg);
+}
+
+.tweetValidator > div:first-child > div > div {
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  border-radius: 100%;
+  border: 2.2px solid #eff3f4;
+}
+
+.tweetValidator > div:first-child > div > div > div {
+  width: 100%;
+  font-size: 9px;
+  text-align: center;
+  font-family: Roboto;
+}
+
+
+
+
+
+.posts {
+  display: flex;
+  margin-top: 50px;
+  flex-direction: column-reverse;
+}
+
+.posts > div {
+  margin: auto;
+  padding: 20px;
+  min-width: 70%;
+  max-width: 70%;
+  border-radius: 5px;
+  margin-bottom: 30px;
+  background-color: white;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+}
+
+.posts .postDetails {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  justify-content: space-between;
+}
+
+.posts > div h4 {
+  margin: 0px;
+  font-size: 16px;
+}
+
+.posts > div p {
+  margin: 0px;
+  font-size: 12px;
+}
+
+.posts .reactions {
+  display: flex;
+  margin-top: 25px;
+  justify-content: space-around;
+}
+
+.posts .reactions div > button {
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+.posts .reactions div > button.liked {
+  color: dodgerblue;
+}
+
+.posts .reactions div > button.disliked {
+  color: red;
+}
+
+.posts .reactions div > button.neutral {
+  color: gray;
+}
