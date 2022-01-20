@@ -16,6 +16,26 @@ body {
   background-color: var(--neutral-light);
 }
 
+h2.secondary-heading {
+  margin: 0;
+  font-size: 2.3rem;
+  color: var(--purple-primary);
+}
+
+p {
+  line-height: 1.6rem;
+}
+
+.card-left p, .chart-right p,
+.message-left p {
+  color: var(--lavender-secondary);
+}
+
+.card-left, .chart-right,
+.message-left {
+  width: 50%;
+}
+
 .header {
   width: 100%;
   padding: 15px 0px;
@@ -27,10 +47,6 @@ body {
 
 .inner {
   padding: 0 10rem;
-}
-
-p {
-  line-height: 1.8rem;
 }
 
 .mainNav {
@@ -54,7 +70,7 @@ p {
 
 .header .header-content {
   display: flex;
-  margin-top: 4rem;
+  margin-top: 5rem;
   justify-content: space-between;
 }
 
@@ -76,7 +92,7 @@ p {
   color: inherit;
   cursor: pointer;
   font-size: inherit;
-  padding: .7rem 2rem;
+  padding: 1rem 2rem;
   border-radius: 20px;
   font-family: inherit;
   background-color: var(--accent-pink);
@@ -87,10 +103,6 @@ p {
   align-items: center;
   justify-content: space-between;
   background-color: var(--dark-primary);
-}
-
-.header-content .left-content button img {
-  padding-left: 0.9rem;
 }
 
 .header-content .left-content button img {
@@ -131,20 +143,6 @@ p {
   justify-content: space-between;
 }
 
-.card-left {
-  width: 50%;
-}
-
-.card-left .secondary-heading {
-  margin: 0;
-  font-size: 2.3rem;
-  color: var(--purple-primary);
-}
-
-.card-left p {
-  color: var(--lavender-secondary);
-}
-
 .card-right {
   width: 50%;
   display: flex;
@@ -160,16 +158,16 @@ p {
 .charts-sec .inner {
   display: flex;
   flex-wrap: wrap;
-  margin-top: 10rem;
+  margin-top: 14rem;
   justify-content: space-between;
 }
 
-.charts-sec .inner > div {
-  width: 50%;
+.chart-left {
+  width: 40%;
 }
 
 .charts-sec .stats {
-  width: 75%;
+  width: 400px;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -187,7 +185,7 @@ p {
 
 .charts-sec .stats > div h4 {
   margin: 0;
-  font-size: 2.2rem;
+  font-size: 2rem;
   color: var(--purple-primary);
 }
 
@@ -198,8 +196,142 @@ p {
   font-weight: bold;
 }
 
-.charts-sec img {
+.chart-left img {
   width: 100%;
   border-radius: 50px;
   box-shadow: 0 25px 50px rgba(22, 25, 79, 0.05);
+}
+
+.chart-right button {
+  border: none;
+  outline: none;
+  color: inherit;
+  display: flex;
+  cursor: pointer;
+  overflow: hidden;
+  margin-top: 30px;
+  position: relative;
+  font-size: inherit;
+  border-radius: 20px;
+  align-items: center;
+  padding: 0.9rem 2rem;
+  font-family: inherit;
+  justify-content: space-between;
+  background-color: var(--dark-primary);
+}
+
+.chart-right button img:nth-child(1) {
+  padding-left: 0.9rem;
+}
+
+.chart-right button .blob1 {
+  top: -2px;
+  right: 0px;
+  transition: 0.6s;
+  position: absolute;
+}
+
+.chart-right button .blob2 {
+  left: 0px;
+  bottom: -2px;
+  transition: 0.6s;
+  position: absolute;
+}
+
+.chart-right button:hover .blob1 {
+  transition: 0.6s;
+  transform: translateX(-100px);
+}
+
+.chart-right button:hover .blob2 {
+  transition: 0.6s;
+  transform: translateX(130px);
+}
+
+
+/* Messaging section */
+
+.message-sec .inner {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 14rem;
+  justify-content: space-between;
+}
+
+.message-right {
+  width: 40%;
+  position: relative;
+}
+
+.message-left {
+  position: relative;
+}
+
+.message-left .users {
+  display: flex;
+  margin-top: 25px;
+}
+
+.message-left .users img {
+  cursor: pointer;
+  transition: 0.3s;
+  margin-right: -22px;
+}
+
+.message-left .users img:hover {
+  transform: scale(1.2);
+}
+
+.message-left .users p {
+  margin-left: 35px;
+}
+
+.message-right .bgTexture {
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  position: absolute;
+}
+
+.message-left .bgTexture {
+  top: -40px;
+  left: -50px;
+  z-index: -1;
+  position: absolute;
+}
+
+/* Packages */
+
+.packages {
+  margin: 14rem 0;
+}
+
+.title h3 {
+  margin: 0;
+  font-size: 2.5rem;
+  text-align: center;
+  color: var(--accent-pink);
+}
+
+.title h3 span {
+  color: var(--purple-primary);
+}
+
+.title p {
+  margin: 5px 0;
+  font-weight: 500;
+  text-align: center;
+  color: var(--lavender-secondary);
+}
+
+.cards {
+  display: flex;
+  justify-content: center;
+}
+
+.cards > div {
+  width: 35%;
+  text-align: center;
+  background-color: #fff;
+  color: var(--dark-primary);
 }

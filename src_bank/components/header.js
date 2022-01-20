@@ -14,7 +14,7 @@ function Header() {
                     <Navigation />
                     <div className='header-content'>
                         <div className='left-content'>
-                                <h1>Smart Banking for freelancers</h1>
+                                <h1>Smart Banking for Freelancers</h1>
                                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
                                     labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
                                 <button>Register Now <img src={arrow} /></button>
@@ -26,7 +26,6 @@ function Header() {
                             <img className='gr3' src={gr3} />
                         </div>
                     </div>
-
                 </div>
             </div>
         </>
