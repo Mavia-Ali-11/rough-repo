@@ -884,10 +884,6 @@ aside.emoji-picker-react .content-wrapper:before {
   font-family: Roboto;
 }
 
-
-
-
-
 .posts {
   display: flex;
   margin-top: 50px;
@@ -895,21 +891,33 @@ aside.emoji-picker-react .content-wrapper:before {
 }
 
 .posts > div {
+  width: 100%;
   margin: auto;
   padding: 20px;
-  min-width: 70%;
-  max-width: 70%;
-  border-radius: 5px;
   margin-bottom: 30px;
-  background-color: white;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+  border-bottom: 1px solid #eff3f4;
 }
 
-.posts .postDetails {
+.posts .postData {
+  width: 100%;
   display: flex;
-  align-items: center;
-  margin-bottom: 15px;
-  justify-content: space-between;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.postData > div:last-child {
+  width: 100%;
+  margin-left: 12px;
+}
+
+.postData img {
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
+}
+
+.postData .tweetMeta {
+
 }
 
 .posts > div h4 {
@@ -944,4 +952,10 @@ aside.emoji-picker-react .content-wrapper:before {
 
 .posts .reactions div > button.neutral {
   color: gray;
+}
+
+@media screen and (max-width: 1400px) {
+  .mainHome > div:last-child {
+    width: 72%;
+  }
 }

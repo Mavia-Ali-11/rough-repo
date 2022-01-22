@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { db, doc, addDoc, setDoc, getDoc, updateDoc, collection, onSnapshot, query, orderBy, deleteField, increment } from '../config/firebase';
 import Picker from 'emoji-picker-react';
 import CircularStatic from '../components/tweet-length';
+import { unstable_createMuiStrictModeTheme } from '@mui/material';
 
 function Feeds(props) {
 
@@ -29,7 +30,7 @@ function Feeds(props) {
                         let tweetData = change.doc.data();
                         tweetData.tweet_id = change.doc.id;
                         tweetsClone.push(tweetData);
-                    } else if(change.type == "added" && change.doc.data().uid == state.authUser.uid) {
+                    } else if (change.type == "added" && change.doc.data().uid == state.authUser.uid) {
                         let tweetData = change.doc.data();
                         tweetData.tweet_id = change.doc.id;
                         tweetsClone.push(tweetData);
@@ -383,6 +384,7 @@ function Feeds(props) {
                                             tweet_time: time,
                                             tweet_text: tweet,
                                             uid: state.authUser.uid,
+                                            tweet_avatar: state.authUser.avatar, 
                                             tweet_from: state.authUser.email,
                                             tweet_by: state.authUser.username,
                                             tweet_counter: tweetsCounter.data().counter,
@@ -409,19 +411,24 @@ function Feeds(props) {
                         let dislikedData = [];
                         return (
                             <div key={index}>
-                                <div className="postDetails">
+                                <div className="postData">
                                     <div>
-                                        <h4>{tweet.tweet_by}</h4>
-                                        <p>{tweet.tweet_from}</p>
+                                        <img src={tweet.tweet_avatar} />
                                     </div>
                                     <div>
-                                        <p>{tweet.tweet_date}</p>
-                                        <p>{tweet.tweet_time}</p>
-                                        <p>{tweet.timestamp}</p>
+                                        <div className='tweetMeta'>
+                                            <h4>{tweet.tweet_by}</h4>
+                                            <p>{tweet.tweet_from}</p>
+                                            <p>{tweet.tweet_date}</p>
+                                            <p>{tweet.tweet_time}</p>
+                                            <p>{tweet.timestamp}</p>
+                                        </div>
+                                        <div>
+                                            <p>{tweet.tweet_text}</p>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <p>{tweet.tweet_text}</p>
 
                                 {
                                     fetchedReactions.map((reaction) => {
