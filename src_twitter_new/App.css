@@ -4,7 +4,8 @@
 body {
   margin: 0px;
   padding: 0px;
-  font-family: Roboto;
+  font-family: "Roboto";
+  scroll-behavior: smooth;
 }
 
 /* Home Screen */
@@ -22,9 +23,10 @@ body {
   justify-content: center;
 }
 
-.mainHome > div:last-child > div:first-child {
+.mainHome .feeds {
   width: 162%;
   overflow: auto;
+  scroll-behavior: smooth;
 }
 
 .mainHome > div:last-child > div:last-child {
@@ -250,7 +252,7 @@ body {
 
 .sidebar > div > a svg {
   padding: 10px;
-  margin: 6px 0px;
+  margin: 2px 0px;
   font-size: 52px;
   color: #1d9bf0;
   border-radius: 100%;
@@ -263,7 +265,6 @@ body {
 
 .sidebar ul a > div {
   width: fit-content;
-  margin-bottom: 5px;
   border-radius: 25px;
   padding: 6px 18px 6px 16px;
 }
@@ -281,9 +282,9 @@ body {
 }
 
 .sidebar ul svg path {
-  color: #fff;
   stroke: #000;
   stroke-width: 28px;
+  color: transparent;
 }
 
 .sidebar ul svg.activeIcons path {
@@ -308,6 +309,7 @@ body {
 
 .mainSidebar > nav > div > div {
   max-height: 100vh;
+  border-color: #eff3f4;
 }
 
 .mainSidebar > div {
@@ -324,13 +326,13 @@ body {
 .sidebar .tweetSidebar {
   width: 85%;
   font-size: 16px;
-  box-shadow: none;
   font-weight: 700;
   padding: 12px 0px;
   border-radius: 30px;
   text-transform: none;
-  margin: 10px 0px 30px;
+  margin: 8px 0px 30px;
   background-color: #1d9bf0;
+  box-shadow: rgb(0 0 0 / 8%) 0px 8px 28px;
 }
 
 .sidebar .tweetSidebar:hover {
@@ -547,7 +549,8 @@ body {
   border-radius: 10px;
 }
 
-.widgets .widget .trend > div:last-child svg {
+.widgets .widget .trend > div:last-child svg,
+.tweet-meta > div svg {
   width: 35px;
   height: 35px;
   padding: 6px;
@@ -555,7 +558,8 @@ body {
   fill: #536471;
 }
 
-.widgets .widget .trend > div:last-child svg:hover {
+.widgets .widget .trend > div:last-child svg:hover,
+.tweet-meta > div svg:hover {
   fill: #1d9bf0;
   border-radius: 100%;
   background-color: rgba(29, 155, 240, 0.1);
@@ -684,23 +688,47 @@ body {
 
 .mainHome > div:last-child .feeds .header {
   top: 0px;
-  height: 55px;
+  z-index: 1;
+  height: 53px;
   display: flex;
+  cursor: pointer;
   position: sticky;
-  padding: 0px 18px;
   align-items: center;
-  background-color: #fff;
+  padding: 0 8px 0 16px;
+  backdrop-filter: blur(12px);
+  justify-content: space-between;
+  background-color: rgba(255, 255, 255, 0.85);
 }
 
-.mainHome > div:last-child .feeds .header h4 {
+.feeds .header h4 {
   font-size: 20px;
   font-weight: 700;
   margin-bottom: 0px;
 }
 
+.feeds .header div {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  transition: 0.3s;
+  align-items: center;
+  border-radius: 100%;
+  justify-content: center;
+}
+
+.feeds .header div:hover {
+  transition: 0.3s;
+  background-color: rgba(15, 20, 25, 0.1);
+}
+
+.feeds .header svg {
+  width: 20px;
+  height: 20px;
+}
+
 .tweet-maker {
   display: flex;
-  padding: 10px 15px;
+  padding: 10px 16px;
   justify-content: space-between;
   border-bottom: 1px solid #eff3f4;
 }
@@ -719,7 +747,7 @@ body {
 
 .tweet-maker > .tweet-input {
   width: 100%;
-  padding: 0px 12px;
+  padding-left: 12px;
 }
 
 .tweet-maker > div textarea {
@@ -730,7 +758,8 @@ body {
   font-weight: 400;
   overflow: hidden;
   line-height: 26px;
-  padding: 10px 5px;
+  padding: 10px 6px;
+  font-family: Roboto;
   border-bottom: 1px solid transparent;
 }
 
@@ -755,7 +784,7 @@ body {
 .tweet-extras > div:first-child > div {
   width: 45px;
   height: 45px;
-  padding: 10px;
+  padding: 8px;
   display: inline;
   text-align: center;
   border-radius: 100%;
@@ -792,7 +821,7 @@ body {
   font-weight: 500;
   min-height: 36px;
   border-radius: 30px;
-  padding: 5px 20px 5px 18px;
+  padding: 6px 18px 6px 16px;
   background-color: #1d9bf0;
 }
 
@@ -886,71 +915,75 @@ aside.emoji-picker-react .content-wrapper:before {
 
 .posts {
   display: flex;
-  margin-top: 50px;
   flex-direction: column-reverse;
 }
 
 .posts > div {
   width: 100%;
   margin: auto;
-  padding: 20px;
-  margin-bottom: 30px;
+  padding: 18px;
   border-bottom: 1px solid #eff3f4;
 }
 
-.posts .postData {
+.posts .post-data {
   width: 100%;
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
 }
 
-.postData > div:last-child {
+.post-data > div:last-child {
   width: 100%;
   margin-left: 12px;
 }
 
-.postData img {
+.post-data img {
   width: 50px;
   height: 50px;
   border-radius: 100%;
 }
 
-.postData .tweetMeta {
-
+.post-data .tweet-meta {
+  display: flex;
+  justify-content: space-between;
 }
 
-.posts > div h4 {
+.tweet-meta > div:first-child {
+  display: flex;
+  margin-top: -5px;
+  align-items: center;
+}
+
+.tweet-meta h4 {
   margin: 0px;
   font-size: 16px;
 }
 
-.posts > div p {
+.tweet-meta p {
   margin: 0px;
   font-size: 12px;
 }
 
-.posts .reactions {
+.post-data .reactions {
   display: flex;
-  margin-top: 25px;
-  justify-content: space-around;
+  justify-content: space-between;
 }
 
-.posts .reactions div > button {
+.reactions div > button {
   border: none;
   cursor: pointer;
   background-color: transparent;
 }
 
-.posts .reactions div > button.liked {
+.reactions div > button.liked {
   color: dodgerblue;
 }
 
-.posts .reactions div > button.disliked {
+.reactions div > button.disliked {
   color: red;
 }
 
-.posts .reactions div > button.neutral {
+.reactions div > button.neutral {
   color: gray;
 }
 
