@@ -5,7 +5,9 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
 function CircularProgressWithLabel(props) {
+
   let percentage = {value: 100 - (({...props}.value / 280) * 100)};
+
   return (
     <Box sx={{ position: 'relative', display: 'inline-flex' }}>
       <CircularProgress variant="determinate" {...percentage} thickness={3.5} />
@@ -55,7 +57,7 @@ export default function CircularStatic(props) {
   const [progress, setProgress] = React.useState(280);
   
   React.useEffect(() => {
-    setProgress(280 - props.chars.length);
+      setProgress(280 - props.chars.length);
   });
 
   return <CircularProgressWithLabel value={progress} />;

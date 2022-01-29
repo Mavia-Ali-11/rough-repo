@@ -108,10 +108,10 @@ function Sidebar(props) {
                                                 if (crrUser.username != undefined) {
                                                     if (crrUser.username.length > 12) {
                                                         let crrUsername = crrUser.username.slice(0, 12) + "...";
-                                                        return (<h6 title={crrUser.username}>{crrUsername}</h6>)
+                                                        return (<h6 title={crrUser.username}>{crrUsername}</h6>);
                                                     }
                                                     else {
-                                                        return (<h6>{crrUser.username}</h6>)
+                                                        return (<h6>{crrUser.username}</h6>);
                                                     }
                                                 }
 

@@ -117,7 +117,7 @@ function SignUp() {
                                         toast.error("Username can't be empty.");
                                     } else if (email == "") {
                                         toast.error("Email address can't be empty.");
-                                    } else if (email == "") {
+                                    } else if (password == "") {
                                         toast.error("Password can't be empty.");
                                     }
                                 }

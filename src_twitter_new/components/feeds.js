@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { db, doc, addDoc, setDoc, getDoc, updateDoc, collection, onSnapshot, query, orderBy, deleteField, increment } from '../config/firebase';
 import Picker from 'emoji-picker-react';
 import CircularStatic from '../components/tweet-length';
-import { unstable_createMuiStrictModeTheme } from '@mui/material';
 
 function Feeds(props) {
 
@@ -15,6 +14,8 @@ function Feeds(props) {
     const [isDisbaled, handleDisability] = useState(true);
     const [btnAccess, handleBtnAccess] = useState(0.5);
     const [showEmojis, setShowEmojis] = useState(true);
+
+    let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
     const onEmojiClick = (event, emojiObject) => {
         handleTweet(tweet + emojiObject.emoji);
@@ -38,15 +39,6 @@ function Feeds(props) {
                 });
                 handleFetchedTweets(tweetsClone);
             });
-
-            // const reactions = await getDocs(collection(db, "reactions"));
-            // let tweetsReactionsClone = fetchedReactions.slice(0);
-            // reactions.forEach((doc) => {
-            //     let tweetsReaction = doc.data();
-            //     tweetsReaction.tweet_id = doc.id;
-            //     tweetsReactionsClone.push(tweetsReaction);
-            // });
-            // handleFetchedReactions(tweetsReactionsClone);
 
             let tweetsReactionsClone = fetchedReactions.slice(0);
             const qr = query(collection(db, "reactions"));
@@ -79,211 +71,127 @@ function Feeds(props) {
         }
     }, []);
 
-    let decider = (likedData, dislikedData, id) => {
+    let decider = (likedData, id) => {
         let thisTweet = fetchedReactions.find(element => element.tweet_id == id);
         if (likedData.includes(true)) {
-            let abc = thisTweet.likes_count
             return (
                 <div className="reactions">
                     <div>
-                        {
-                            <button onClick={(e) => {
-                                if (e.target.className == "liked") {
-                                    deleteReaction(id, "like");
-                                    e.target.className = "neutral";
-                                } else {
-                                    addLike(id);
-                                    e.target.className = "liked";
-                                }
-                            }} className="liked" id={id + "liked"}>Like</button>
-                        }
-                        <span>{abc}</span>
+                        <div className="comment">
+                            <div className="com-icon">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><g><path d="M14.046 2.242l-4.148-.01h-.002c-4.374 0-7.8 3.427-7.8 7.802 0 4.098 3.186 7.206 7.465 7.37v3.828c0 .108.044.286.12.403.142.225.384.347.632.347.138 0 .277-.038.402-.118.264-.168 6.473-4.14 8.088-5.506 1.902-1.61 3.04-3.97 3.043-6.312v-.017c-.006-4.367-3.43-7.787-7.8-7.788zm3.787 12.972c-1.134.96-4.862 3.405-6.772 4.643V16.67c0-.414-.335-.75-.75-.75h-.396c-3.66 0-6.318-2.476-6.318-5.886 0-3.534 2.768-6.302 6.3-6.302l4.147.01h.002c3.532 0 6.3 2.766 6.302 6.296-.003 1.91-.942 3.844-2.514 5.176z"></path></g></svg>
+                            </div>
+                            <span className="com-count">0</span>
+                        </div>
                     </div>
                     <div>
-                        {
-                            <button onClick={(e) => {
-                                if (e.target.className == "disliked") {
-                                    deleteReaction(id, "dislike");
-                                    e.target.className = "neutral";
-                                } else {
-                                    addDislike(id, thisTweet);
-                                    e.target.className = "disliked";
-                                }
-                            }} className="neutral" id={id + "disliked"}>Dislike</button>
-                        }
-                        <span>{thisTweet.dislikes_count}</span>
+                        <div className="retweet">
+                            <div className="rt-icon">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><g><path d="M23.77 15.67c-.292-.293-.767-.293-1.06 0l-2.22 2.22V7.65c0-2.068-1.683-3.75-3.75-3.75h-5.85c-.414 0-.75.336-.75.75s.336.75.75.75h5.85c1.24 0 2.25 1.01 2.25 2.25v10.24l-2.22-2.22c-.293-.293-.768-.293-1.06 0s-.294.768 0 1.06l3.5 3.5c.145.147.337.22.53.22s.383-.072.53-.22l3.5-3.5c.294-.292.294-.767 0-1.06zm-10.66 3.28H7.26c-1.24 0-2.25-1.01-2.25-2.25V6.46l2.22 2.22c.148.147.34.22.532.22s.384-.073.53-.22c.293-.293.293-.768 0-1.06l-3.5-3.5c-.293-.294-.768-.294-1.06 0l-3.5 3.5c-.294.292-.294.767 0 1.06s.767.293 1.06 0l2.22-2.22V16.7c0 2.068 1.683 3.75 3.75 3.75h5.85c.414 0 .75-.336.75-.75s-.337-.75-.75-.75z"></path></g></svg>
+                            </div>
+                            <span className="rt-count">0</span>
+                        </div>
                     </div>
-                    <div>Retweet</div>
-                    <div>Share</div>
+                    <div>
+                        <div className="likes liked" id={id} onClick={() => {
+                            let tweetID = document.getElementById(id);
+                            if (tweetID.classList.contains("liked")) {
+                                deleteReaction(id);
+                                tweetID.classList.add("neutral");
+                                tweetID.classList.remove("liked");
+                            } else {
+                                addLike(id);
+                                tweetID.classList.add("liked");
+                                tweetID.classList.remove("neutral");
+                            }
+                        }}>
+                            <div className="like-icon">
+                                {/* <svg id="neutral" style={{display: "none"}} viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 21.638h-.014C9.403 21.59 1.95 14.856 1.95 8.478c0-3.064 2.525-5.754 5.403-5.754 2.29 0 3.83 1.58 4.646 2.73.814-1.148 2.354-2.73 4.645-2.73 2.88 0 5.404 2.69 5.404 5.755 0 6.376-7.454 13.11-10.037 13.157H12zM7.354 4.225c-2.08 0-3.903 1.988-3.903 4.255 0 5.74 7.034 11.596 8.55 11.658 1.518-.062 8.55-5.917 8.55-11.658 0-2.267-1.823-4.255-3.903-4.255-2.528 0-3.94 2.936-3.952 2.965-.23.562-1.156.562-1.387 0-.014-.03-1.425-2.965-3.954-2.965z"></path></g></svg> */}
+                                <svg id="liked" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 21.638h-.014C9.403 21.59 1.95 14.856 1.95 8.478c0-3.064 2.525-5.754 5.403-5.754 2.29 0 3.83 1.58 4.646 2.73.814-1.148 2.354-2.73 4.645-2.73 2.88 0 5.404 2.69 5.404 5.755 0 6.376-7.454 13.11-10.037 13.157H12z"></path></g></svg>
+                            </div>
+                            <span className="like-count">{thisTweet.likes_count}</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div className="share">
+                            <div className="share-icon">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><g><path d="M17.53 7.47l-5-5c-.293-.293-.768-.293-1.06 0l-5 5c-.294.293-.294.768 0 1.06s.767.294 1.06 0l3.72-3.72V15c0 .414.336.75.75.75s.75-.336.75-.75V4.81l3.72 3.72c.146.147.338.22.53.22s.384-.072.53-.22c.293-.293.293-.767 0-1.06z"></path><path d="M19.708 21.944H4.292C3.028 21.944 2 20.916 2 19.652V14c0-.414.336-.75.75-.75s.75.336.75.75v5.652c0 .437.355.792.792.792h15.416c.437 0 .792-.355.792-.792V14c0-.414.336-.75.75-.75s.75.336.75.75v5.652c0 1.264-1.028 2.292-2.292 2.292z"></path></g></svg>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             )
-        } else if (dislikedData.includes(true)) {
+        } else {
+            let thisTweet = { likes_count: 0 }
             return (
                 <div className="reactions">
                     <div>
-                        {
-                            <button onClick={(e) => {
-                                if (e.target.className == "liked") {
-                                    deleteReaction(id, "like");
-                                    e.target.className = "neutral";
-                                } else {
-                                    addLike(id, thisTweet);
-                                    e.target.className = "liked";
-                                }
-                            }} className="neutral" id={id + "liked"}>Like</button>
-                        }
-                        <span>{thisTweet.likes_count}</span>
+                        <div className="comment">
+                            <div className="com-icon">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><g><path d="M14.046 2.242l-4.148-.01h-.002c-4.374 0-7.8 3.427-7.8 7.802 0 4.098 3.186 7.206 7.465 7.37v3.828c0 .108.044.286.12.403.142.225.384.347.632.347.138 0 .277-.038.402-.118.264-.168 6.473-4.14 8.088-5.506 1.902-1.61 3.04-3.97 3.043-6.312v-.017c-.006-4.367-3.43-7.787-7.8-7.788zm3.787 12.972c-1.134.96-4.862 3.405-6.772 4.643V16.67c0-.414-.335-.75-.75-.75h-.396c-3.66 0-6.318-2.476-6.318-5.886 0-3.534 2.768-6.302 6.3-6.302l4.147.01h.002c3.532 0 6.3 2.766 6.302 6.296-.003 1.91-.942 3.844-2.514 5.176z"></path></g></svg>
+                            </div>
+                            <span className="com-count">0</span>
+                        </div>
                     </div>
                     <div>
-                        {
-                            <button onClick={(e) => {
-                                if (e.target.className == "disliked") {
-                                    deleteReaction(id, "dislike");
-                                    e.target.className = "neutral";
-                                } else {
-                                    addDislike(id);
-                                    e.target.className = "disliked";
-                                }
-                            }} className="disliked" id={id + "disliked"}>Dislike</button>
-                        }
-                        <span>{thisTweet.dislikes_count}</span>
-                    </div>
-                    <div>Retweet</div>
-                    <div>Share</div>
-                </div>
-            )
-        } else if (!likedData.includes(true) && thisTweet != undefined) {
-            return (
-                <div className="reactions">
-                    <div>
-                        {
-                            <button onClick={(e) => {
-                                if (e.target.className == "liked") {
-                                    deleteReaction(id, "like");
-                                    e.target.className = "neutral";
-                                } else {
-                                    addLike(id);
-                                    e.target.className = "liked";
-                                }
-                            }} className="neutral" id={id + "liked"}>Like</button>
-                        }
-                        <span>{thisTweet.likes_count}</span>
+                        <div className="retweet">
+                            <div className="rt-icon">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><g><path d="M23.77 15.67c-.292-.293-.767-.293-1.06 0l-2.22 2.22V7.65c0-2.068-1.683-3.75-3.75-3.75h-5.85c-.414 0-.75.336-.75.75s.336.75.75.75h5.85c1.24 0 2.25 1.01 2.25 2.25v10.24l-2.22-2.22c-.293-.293-.768-.293-1.06 0s-.294.768 0 1.06l3.5 3.5c.145.147.337.22.53.22s.383-.072.53-.22l3.5-3.5c.294-.292.294-.767 0-1.06zm-10.66 3.28H7.26c-1.24 0-2.25-1.01-2.25-2.25V6.46l2.22 2.22c.148.147.34.22.532.22s.384-.073.53-.22c.293-.293.293-.768 0-1.06l-3.5-3.5c-.293-.294-.768-.294-1.06 0l-3.5 3.5c-.294.292-.294.767 0 1.06s.767.293 1.06 0l2.22-2.22V16.7c0 2.068 1.683 3.75 3.75 3.75h5.85c.414 0 .75-.336.75-.75s-.337-.75-.75-.75z"></path></g></svg>
+                            </div>
+                            <span className="rt-count">0</span>
+                        </div>
                     </div>
                     <div>
-                        {
-                            <button onClick={(e) => {
-                                if (e.target.className == "disliked") {
-                                    deleteReaction(id, "dislike");
-                                    e.target.className = "neutral";
-                                } else {
-                                    addDislike(id);
-                                    e.target.className = "disliked";
-                                }
-                            }} className="neutral" id={id + "disliked"}>Dislike</button>
-                        }
-                        <span>{thisTweet.dislikes_count}</span>
-                    </div>
-                    <div>Retweet</div>
-                    <div>Share</div>
-                </div>
-            )
-        }
-        else {
-            let thisTweet = { likes_count: 0, dislikes_count: 0 }
-            return (
-                <div className="reactions">
-                    <div>
-                        {
-                            <button onClick={(e) => {
-                                if (e.target.className == "liked") {
-                                    deleteReaction(id, "like", thisTweet);
-                                    e.target.className = "neutral";
-                                } else {
-                                    addLike(id, thisTweet);
-                                    e.target.className = "liked";
-                                }
-                            }} className="neutral" id={id + "liked"}>Like</button>
-                        }
-                        <span>0</span>
+                        <div className="likes" id={id} onClick={() => {
+                            let tweetID = document.getElementById(id);
+                            if (tweetID.classList.contains("liked")) {
+                                deleteReaction(id);
+                                tweetID.classList.add("neutral");
+                                tweetID.classList.remove("liked");
+                            } else {
+                                addLike(id);
+                                tweetID.classList.add("liked");
+                                tweetID.classList.remove("neutral");
+                            }
+                        }}>
+                            <div className="like-icon">
+                                <svg id="neutral" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 21.638h-.014C9.403 21.59 1.95 14.856 1.95 8.478c0-3.064 2.525-5.754 5.403-5.754 2.29 0 3.83 1.58 4.646 2.73.814-1.148 2.354-2.73 4.645-2.73 2.88 0 5.404 2.69 5.404 5.755 0 6.376-7.454 13.11-10.037 13.157H12zM7.354 4.225c-2.08 0-3.903 1.988-3.903 4.255 0 5.74 7.034 11.596 8.55 11.658 1.518-.062 8.55-5.917 8.55-11.658 0-2.267-1.823-4.255-3.903-4.255-2.528 0-3.94 2.936-3.952 2.965-.23.562-1.156.562-1.387 0-.014-.03-1.425-2.965-3.954-2.965z"></path></g></svg>
+                                {/* <svg id="liked" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 21.638h-.014C9.403 21.59 1.95 14.856 1.95 8.478c0-3.064 2.525-5.754 5.403-5.754 2.29 0 3.83 1.58 4.646 2.73.814-1.148 2.354-2.73 4.645-2.73 2.88 0 5.404 2.69 5.404 5.755 0 6.376-7.454 13.11-10.037 13.157H12z"></path></g></svg> */}
+                            </div>
+                            <span className="like-count">0</span>
+                        </div>
                     </div>
                     <div>
-                        {
-                            <button onClick={(e) => {
-                                if (e.target.className == "disliked") {
-                                    deleteReaction(id, "dislike", thisTweet);
-                                    e.target.className = "neutral";
-                                } else {
-                                    addDislike(id, thisTweet);
-                                    e.target.className = "disliked";
-                                }
-                            }} className="neutral" id={id + "disliked"}>Dislike</button>
-                        }
-                        <span>0</span>
+                        <div className="share">
+                            <div className="share-icon">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><g><path d="M17.53 7.47l-5-5c-.293-.293-.768-.293-1.06 0l-5 5c-.294.293-.294.768 0 1.06s.767.294 1.06 0l3.72-3.72V15c0 .414.336.75.75.75s.75-.336.75-.75V4.81l3.72 3.72c.146.147.338.22.53.22s.384-.072.53-.22c.293-.293.293-.767 0-1.06z"></path><path d="M19.708 21.944H4.292C3.028 21.944 2 20.916 2 19.652V14c0-.414.336-.75.75-.75s.75.336.75.75v5.652c0 .437.355.792.792.792h15.416c.437 0 .792-.355.792-.792V14c0-.414.336-.75.75-.75s.75.336.75.75v5.652c0 1.264-1.028 2.292-2.292 2.292z"></path></g></svg>
+                            </div>
+                        </div>
                     </div>
-                    <div>Retweet</div>
-                    <div>Share</div>
                 </div>
             )
         }
     }
 
     let addLike = (id) => {
-        let oppositeReaction = document.getElementById(id + "disliked");
-        let decideDecrement;
-
-        if (oppositeReaction.className == "disliked") {
-            decideDecrement = -1;
-        } else {
-            decideDecrement = 0;
-        }
-
         setDoc(doc(db, "reactions", id), {
             [state.authUser.uid]: "liked",
             likes_count: increment(1),
-            dislikes_count: increment(decideDecrement)
         }, { merge: true });
-
-        oppositeReaction.className = "neutral";
     }
 
-    let addDislike = (id) => {
-        let oppositeReaction = document.getElementById(id + "liked");
-        let decideDecrement;
-
-        if (oppositeReaction.className == "liked") {
-            decideDecrement = -1;
-        } else {
-            decideDecrement = 0;
-        }
-
-        setDoc(doc(db, "reactions", id), {
-            [state.authUser.uid]: "disliked",
-            likes_count: increment(decideDecrement),
-            dislikes_count: increment(1)
-        }, { merge: true });
-
-        document.getElementById(id + "liked").className = "neutral";
-    }
-
-    let deleteReaction = (id, action) => {
-        let toDecrement;
-        if (action == "like") {
-            toDecrement = "likes_count";
-        } else {
-            toDecrement = "dislikes_count";
-        }
-
+    let deleteReaction = (id) => {
         updateDoc(doc(db, 'reactions', id), {
             [state.authUser.uid]: deleteField(),
-            [toDecrement]: increment(-1)
+            likes_count: increment(-1)
         });
     }
 
     return (
         <div className='feeds'>
-            <div className='hiddenDOM' onScroll={() => { setShowEmojis(true) }} hidden={showEmojis}></div>
+            <div className='hiddenDOM' onClick={() => { setShowEmojis(true) }} hidden={showEmojis}></div>
 
-            <div className='header' onClick={()=>{document.getElementsByClassName('feeds')[0].scrollTop = 0}}>
+            <div className='header' onClick={() => { document.getElementsByClassName('feeds')[0].scrollTop = 0 }}>
                 <h4>{props.scrName}</h4>
                 <div>
                     <svg viewBox="0 0 24 24" aria-hidden="true"><g><path d="M22.772 10.506l-5.618-2.192-2.16-6.5c-.102-.307-.39-.514-.712-.514s-.61.207-.712.513l-2.16 6.5-5.62 2.192c-.287.112-.477.39-.477.7s.19.585.478.698l5.62 2.192 2.16 6.5c.102.306.39.513.712.513s.61-.207.712-.513l2.16-6.5 5.62-2.192c.287-.112.477-.39.477-.7s-.19-.585-.478-.697zm-6.49 2.32c-.208.08-.37.25-.44.46l-1.56 4.695-1.56-4.693c-.07-.21-.23-.38-.438-.462l-4.155-1.62 4.154-1.622c.208-.08.37-.25.44-.462l1.56-4.693 1.56 4.694c.07.212.23.382.438.463l4.155 1.62-4.155 1.622zM6.663 3.812h-1.88V2.05c0-.414-.337-.75-.75-.75s-.75.336-.75.75v1.762H1.5c-.414 0-.75.336-.75.75s.336.75.75.75h1.782v1.762c0 .414.336.75.75.75s.75-.336.75-.75V5.312h1.88c.415 0 .75-.336.75-.75s-.335-.75-.75-.75zm2.535 15.622h-1.1v-1.016c0-.414-.335-.75-.75-.75s-.75.336-.75.75v1.016H5.57c-.414 0-.75.336-.75.75s.336.75.75.75H6.6v1.016c0 .414.335.75.75.75s.75-.336.75-.75v-1.016h1.098c.414 0 .75-.336.75-.75s-.336-.75-.75-.75z"></path></g></svg>
@@ -305,10 +213,10 @@ function Feeds(props) {
                             e.target.style.height = "5px";
                             e.target.style.height = (e.target.scrollHeight) + 1 + "px";
 
-                            if (e.target.value.length != 0 && e.target.value.length < 280) {
+                            if (e.target.value.length != 0 && e.target.value.trim().length != 0 && e.target.value.length < 280) {
                                 handleDisability(false);
                                 handleBtnAccess(1);
-                            } else if (e.target.value.length == 0 || e.target.value.length > 280) {
+                            } else if (e.target.value.length == 0 || e.target.value.trim().length == 0 || e.target.value.length > 280) {
                                 handleBtnAccess(0.5);
                                 handleDisability(true);
                                 if (e.target.value.length > 280) {
@@ -374,6 +282,7 @@ function Feeds(props) {
                                 <button onClick={
                                     async () => {
                                         handleDisability(true);
+                                        handleBtnAccess(0.5);
 
                                         const tweetsCounter = await getDoc(doc(db, "tweets_counter", "home_count"));
 
@@ -398,7 +307,6 @@ function Feeds(props) {
                                         });
 
                                         handleTweet("");
-                                        handleDisability(false);
                                     }
                                 } disabled={isDisbaled} style={{ opacity: btnAccess }}>Tweet</button>
                             </div>
@@ -421,37 +329,40 @@ function Feeds(props) {
                                     <div>
                                         <div className='tweet-meta'>
                                             <div>
-                                                <h4>{tweet.tweet_by}</h4>
-                                                <p>{tweet.tweet_from}</p>
-                                                <p>{tweet.tweet_date}</p>
-                                                <p>{tweet.tweet_time}</p>
-                                                <p>{tweet.timestamp}</p>
+                                                <h6>{tweet.tweet_by}</h6>
+                                                <p>{"@" + tweet.tweet_from.slice(0, tweet.tweet_from.indexOf("@"))}</p>
+                                                <span>.</span>
+
+                                                {(() => {
+                                                    let dt = new Date();
+                                                    let date = (months[dt.getMonth()]) + " " + dt.getDate() + ", " + dt.getFullYear();
+                                                    if (tweet.tweet_date == date) {
+                                                        return (<p>{tweet.tweet_time}</p>)
+                                                    } else if (tweet.tweet_date.slice(tweet.tweet_date.indexOf(",") + 2) == dt.getFullYear()) {
+                                                        return (<p>{tweet.tweet_date.slice(0, tweet.tweet_date.indexOf(","))}</p>)
+                                                    } else {
+                                                        return (<p>{tweet.tweet_date}</p>)
+                                                    }
+                                                })()}
+
                                             </div>
                                             <div>
                                                 <svg focusable="false" viewBox="0 0 24 24" aria-hidden="true" data-testid="MoreHorizIcon"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path></svg>
                                             </div>
                                         </div>
-                                        <div>
+                                        <div className="text">
                                             <p>{tweet.tweet_text}</p>
                                         </div>
-                                        <div>
-                                            {fetchedReactions.map((reaction) => {
-                                                if (tweet.tweet_id == reaction.tweet_id && reaction[state.authUser.uid] == "liked") {
-                                                    likedData.push(true);
-                                                } else if (tweet.tweet_id == reaction.tweet_id && reaction[state.authUser.uid] == "disliked") {
-                                                    dislikedData.push(true);
-                                                } else {
-                                                    likedData.push(false);
-                                                }
-                                            })}
-                                            {decider(likedData, dislikedData, tweet.tweet_id)}
-                                        </div>
+                                        {fetchedReactions.map((reaction) => {
+                                            if (tweet.tweet_id == reaction.tweet_id && reaction[state.authUser.uid] == "liked") {
+                                                likedData.push(true);
+                                            } else {
+                                                likedData.push(false);
+                                            }
+                                        })}
+                                        {decider(likedData, tweet.tweet_id)}
                                     </div>
                                 </div>
-
-
-
-
                             </div>
                         )
                     })
