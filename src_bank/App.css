@@ -12,7 +12,7 @@ body {
   padding: 0px;
   color: #fff;
   font-size: 1.2rem;
-  font-family: Nunito;
+  font-family: Roboto;
   background-color: var(--neutral-light);
 }
 
@@ -248,13 +248,12 @@ p {
   transform: translateX(130px);
 }
 
-
 /* Messaging section */
 
 .message-sec .inner {
   display: flex;
   flex-wrap: wrap;
-  margin-top: 14rem;
+  margin: 14rem 0rem;
   justify-content: space-between;
 }
 
@@ -302,10 +301,6 @@ p {
 
 /* Packages */
 
-.packages {
-  margin: 14rem 0;
-}
-
 .title h3 {
   margin: 0;
   font-size: 2.5rem;
@@ -318,20 +313,161 @@ p {
 }
 
 .title p {
-  margin: 5px 0;
-  font-weight: 500;
+  margin: 10px auto;
   text-align: center;
   color: var(--lavender-secondary);
 }
 
 .cards {
   display: flex;
-  justify-content: center;
+  margin-top: 100px;
+  justify-content: space-between;
 }
 
 .cards > div {
-  width: 35%;
+  width: 300px;
   text-align: center;
+  border-radius: 35px;
+  padding: 60px 30px 30px;
   background-color: #fff;
   color: var(--dark-primary);
+  border: 1px solid var(--border-colour);
+  box-shadow: 0 25px 50px rgba(22, 25, 79, 0.05);
+}
+
+.cards > div:nth-child(2) {
+  transform: scale(1.06);
+  border: 1px solid var(--purple-primary);
+}
+
+.cards > div h4 {
+  font-size: 32px;
+  margin: 0 0 50px 0;
+  color: var(--accent-pink);
+}
+
+.cards > div h2 {
+  font-size: 45px;
+  margin: 0 0 35px;
+  color: var(--purple-primary);
+}
+
+.cards > div p {
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.cards > div button {
+  outline: none;
+  margin: 10px 0;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s;
+  font-weight: 500;
+  padding: 1rem 2rem;
+  border-radius: 20px;
+  font-family: inherit;
+  background-color: #fff;
+  color: var(--dark-primary);
+  border: 1px solid var(--dark-primary);
+}
+
+.cards > div button:hover {
+  color: #fff;
+  transition: 0.3s;
+  background-color: var(--dark-primary);
+}
+
+.cards .card-img {
+  max-width: 85%;
+  margin: 30px 0 10px;
+}
+
+.cards .card-swipe {
+  margin: auto;
+  display: flex;
+  max-width: 72px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cards ul {
+  padding: 0;
+  margin-top: 40px;
+  text-align: left;
+  list-style-type: none;
+}
+
+.cards ul li {
+  display: flex;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  margin-bottom: 14px;
+  align-items: flex-start;
+  color: var(--dark-primary);
+}
+
+.cards ul li.not-avail {
+  color: #c4c4c4;
+  font-weight: normal;
+}
+
+.cards ul li img {
+  top: 2px;
+  width: 18px;
+  position: relative;
+  margin-right: 14px;
+}
+
+
+/* FAQ's */
+
+.faqs {
+  margin: 14rem 0rem;
+}
+
+.faqs .title p {
+  max-width: 60%;
+  font-size: 18px;
+}
+
+.faq {
+  max-width: 70%;
+  margin: 70px auto;
+}
+
+.faq > div {
+  width: 100%;
+  padding: 25px;
+  display: flex;
+  overflow: hidden;
+  max-height: 22px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  background-color: #fff;
+  color: var(--dark-primary);
+  transition: all 0.4s ease-in-out;
+  box-shadow: 0 25px 50px rgba(22, 25, 79, 0.05);
+}
+
+.faq > div > div:first-child {
+  padding-right: 20px;
+}
+
+.faq > div h4 {
+  margin: 0;
+  font-weight: 500;
+}
+
+.faq > div img {
+  width: 24px;
+  cursor: pointer;
+}
+
+.faq > div p {
+  color: #fff;
+  font-size: 16px;
+  padding-top: 2px;
+  margin: 10px 0 0 0;
 }

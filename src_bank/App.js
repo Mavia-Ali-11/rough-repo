@@ -4,6 +4,7 @@ import CardSection from './components/card-section';
 import ChartsSection from './components/charts-section'; 
 import MessagingSection from './components/messaging-section'; 
 import Packages from './components/packages'; 
+import FAQ from './components/faq'; 
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <ChartsSection />
       <MessagingSection />
       <Packages />
+      <FAQ />
     </div>
   );
 }
