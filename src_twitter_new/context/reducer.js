@@ -1,7 +1,5 @@
 export let data = {
     authUser: {},
-    fetchedTweets: [],
-    tweetsCount: {},
 }
 
 export function reducer(state, action) {

@@ -73,7 +73,7 @@ function Feeds(props) {
 
     let decider = (likedData, id) => {
         let thisTweet = fetchedReactions.find(element => element.tweet_id == id);
-        if (likedData.includes(true)) {
+        if (likedData.includes(true) && thisTweet != undefined) {
             return (
                 <div className="reactions">
                     <div>
@@ -95,19 +95,19 @@ function Feeds(props) {
                     <div>
                         <div className="likes liked" id={id} onClick={() => {
                             let tweetID = document.getElementById(id);
+                            let likesCount = document.querySelectorAll("#" + id + " .like-count")[0];
                             if (tweetID.classList.contains("liked")) {
                                 deleteReaction(id);
-                                tweetID.classList.add("neutral");
                                 tweetID.classList.remove("liked");
+                                likesCount.innerHTML = Number(likesCount.innerHTML) - 1;
                             } else {
                                 addLike(id);
                                 tweetID.classList.add("liked");
-                                tweetID.classList.remove("neutral");
+                                likesCount.innerHTML = Number(likesCount.innerHTML) + 1;
                             }
                         }}>
                             <div className="like-icon">
-                                {/* <svg id="neutral" style={{display: "none"}} viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 21.638h-.014C9.403 21.59 1.95 14.856 1.95 8.478c0-3.064 2.525-5.754 5.403-5.754 2.29 0 3.83 1.58 4.646 2.73.814-1.148 2.354-2.73 4.645-2.73 2.88 0 5.404 2.69 5.404 5.755 0 6.376-7.454 13.11-10.037 13.157H12zM7.354 4.225c-2.08 0-3.903 1.988-3.903 4.255 0 5.74 7.034 11.596 8.55 11.658 1.518-.062 8.55-5.917 8.55-11.658 0-2.267-1.823-4.255-3.903-4.255-2.528 0-3.94 2.936-3.952 2.965-.23.562-1.156.562-1.387 0-.014-.03-1.425-2.965-3.954-2.965z"></path></g></svg> */}
-                                <svg id="liked" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 21.638h-.014C9.403 21.59 1.95 14.856 1.95 8.478c0-3.064 2.525-5.754 5.403-5.754 2.29 0 3.83 1.58 4.646 2.73.814-1.148 2.354-2.73 4.645-2.73 2.88 0 5.404 2.69 5.404 5.755 0 6.376-7.454 13.11-10.037 13.157H12z"></path></g></svg>
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 21.638h-.014C9.403 21.59 1.95 14.856 1.95 8.478c0-3.064 2.525-5.754 5.403-5.754 2.29 0 3.83 1.58 4.646 2.73.814-1.148 2.354-2.73 4.645-2.73 2.88 0 5.404 2.69 5.404 5.755 0 6.376-7.454 13.11-10.037 13.157H12z"></path></g></svg>
                             </div>
                             <span className="like-count">{thisTweet.likes_count}</span>
                         </div>
@@ -121,8 +121,7 @@ function Feeds(props) {
                     </div>
                 </div>
             )
-        } else {
-            let thisTweet = { likes_count: 0 }
+        } else if (thisTweet != undefined) {
             return (
                 <div className="reactions">
                     <div>
@@ -144,21 +143,21 @@ function Feeds(props) {
                     <div>
                         <div className="likes" id={id} onClick={() => {
                             let tweetID = document.getElementById(id);
+                            let likesCount = document.querySelectorAll("#" + id + " .like-count")[0];
                             if (tweetID.classList.contains("liked")) {
                                 deleteReaction(id);
-                                tweetID.classList.add("neutral");
                                 tweetID.classList.remove("liked");
+                                likesCount.innerHTML = Number(likesCount.innerHTML) - 1;
                             } else {
                                 addLike(id);
                                 tweetID.classList.add("liked");
-                                tweetID.classList.remove("neutral");
+                                likesCount.innerHTML = Number(likesCount.innerHTML) + 1;
                             }
                         }}>
                             <div className="like-icon">
-                                <svg id="neutral" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 21.638h-.014C9.403 21.59 1.95 14.856 1.95 8.478c0-3.064 2.525-5.754 5.403-5.754 2.29 0 3.83 1.58 4.646 2.73.814-1.148 2.354-2.73 4.645-2.73 2.88 0 5.404 2.69 5.404 5.755 0 6.376-7.454 13.11-10.037 13.157H12zM7.354 4.225c-2.08 0-3.903 1.988-3.903 4.255 0 5.74 7.034 11.596 8.55 11.658 1.518-.062 8.55-5.917 8.55-11.658 0-2.267-1.823-4.255-3.903-4.255-2.528 0-3.94 2.936-3.952 2.965-.23.562-1.156.562-1.387 0-.014-.03-1.425-2.965-3.954-2.965z"></path></g></svg>
-                                {/* <svg id="liked" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 21.638h-.014C9.403 21.59 1.95 14.856 1.95 8.478c0-3.064 2.525-5.754 5.403-5.754 2.29 0 3.83 1.58 4.646 2.73.814-1.148 2.354-2.73 4.645-2.73 2.88 0 5.404 2.69 5.404 5.755 0 6.376-7.454 13.11-10.037 13.157H12z"></path></g></svg> */}
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 21.638h-.014C9.403 21.59 1.95 14.856 1.95 8.478c0-3.064 2.525-5.754 5.403-5.754 2.29 0 3.83 1.58 4.646 2.73.814-1.148 2.354-2.73 4.645-2.73 2.88 0 5.404 2.69 5.404 5.755 0 6.376-7.454 13.11-10.037 13.157H12z"></path></g></svg>
                             </div>
-                            <span className="like-count">0</span>
+                            <span className="like-count">{thisTweet.likes_count}</span>
                         </div>
                     </div>
                     <div>
@@ -291,7 +290,7 @@ function Feeds(props) {
                                         let date = (months[dt.getMonth()]) + " " + dt.getDate() + ", " + dt.getFullYear();
                                         let time = dt.getHours() + ":" + dt.getMinutes();
 
-                                        await addDoc(collection(db, "tweets"), {
+                                        let docRef = await addDoc(collection(db, "tweets"), {
                                             tweet_date: date,
                                             tweet_time: time,
                                             tweet_text: tweet,
@@ -300,6 +299,10 @@ function Feeds(props) {
                                             tweet_from: state.authUser.email,
                                             tweet_by: state.authUser.username,
                                             tweet_counter: tweetsCounter.data().counter,
+                                        });
+
+                                        setDoc(doc(db, "reactions", docRef.id), {
+                                            likes_count: 0,
                                         });
 
                                         await setDoc(doc(db, "tweets_counter", "home_count"), {
@@ -319,7 +322,6 @@ function Feeds(props) {
                 {
                     fetchedTweets.map((tweet, index) => {
                         let likedData = [];
-                        let dislikedData = [];
                         return (
                             <div key={index}>
                                 <div className="post-data">
