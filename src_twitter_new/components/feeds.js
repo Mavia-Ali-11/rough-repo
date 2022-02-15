@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { GlobalContext } from '../context/context';
 import { Link } from 'react-router-dom';
-import { db, doc, addDoc, setDoc, getDoc, updateDoc, collection, onSnapshot, query, orderBy, deleteField, increment } from '../config/firebase';
+import { db, doc, addDoc, setDoc, getDoc, updateDoc, collection, onSnapshot, query, orderBy, deleteField, increment, storage, ref, uploadBytes, getDownloadURL, arrayUnion } from '../config/firebase';
 import Picker from 'emoji-picker-react';
 import CircularStatic from '../components/tweet-length';
 
@@ -14,14 +14,13 @@ function Feeds(props) {
     const [isDisbaled, handleDisability] = useState(true);
     const [btnAccess, handleBtnAccess] = useState(0.5);
     const [showEmojis, setShowEmojis] = useState(true);
+    const [postImages, handlePostImages] = useState([]);
 
     let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
     const onEmojiClick = (event, emojiObject) => {
         handleTweet(tweet + emojiObject.emoji);
     };
-
-    const hello = () => alert("I'm working");
 
     useEffect(async () => {
         let tweetsClone = fetchedTweets.slice(0);
@@ -37,6 +36,11 @@ function Feeds(props) {
                         let tweetData = change.doc.data();
                         tweetData.tweet_id = change.doc.id;
                         tweetsClone.push(tweetData);
+                    } else if (change.type == "modified") {
+                        console.log("modification done");
+                        let tweetData = change.doc.data();
+                        tweetData.tweet_id = change.doc.id;
+                        tweetsClone.push(tweetData);
                     }
                 });
                 handleFetchedTweets(tweetsClone);
@@ -47,11 +51,6 @@ function Feeds(props) {
             onSnapshot(qr, (snapshot) => {
                 snapshot.docChanges().forEach((change) => {
                     if (change.type == "added") {
-                        let tweetsReaction = change.doc.data();
-                        tweetsReaction.tweet_id = change.doc.id;
-                        tweetsReactionsClone.push(tweetsReaction);
-                    }
-                    if (change.type === "modified") {
                         let tweetsReaction = change.doc.data();
                         tweetsReaction.tweet_id = change.doc.id;
                         tweetsReactionsClone.push(tweetsReaction);
@@ -238,31 +237,66 @@ function Feeds(props) {
                                 <svg viewBox="0 0 24 24" aria-hidden="true" ><g><path d="M19.75 2H4.25C3.01 2 2 3.01 2 4.25v15.5C2 20.99 3.01 22 4.25 22h15.5c1.24 0 2.25-1.01 2.25-2.25V4.25C22 3.01 20.99 2 19.75 2zM4.25 3.5h15.5c.413 0 .75.337.75.75v9.676l-3.858-3.858c-.14-.14-.33-.22-.53-.22h-.003c-.2 0-.393.08-.532.224l-4.317 4.384-1.813-1.806c-.14-.14-.33-.22-.53-.22-.193-.03-.395.08-.535.227L3.5 17.642V4.25c0-.413.337-.75.75-.75zm-.744 16.28l5.418-5.534 6.282 6.254H4.25c-.402 0-.727-.322-.744-.72zm16.244.72h-2.42l-5.007-4.987 3.792-3.85 4.385 4.384v3.703c0 .413-.337.75-.75.75z"></path><circle cx="8.868" cy="8.309" r="1.542"></circle></g></svg>
                                 <input type="file" accept='image/*' id="post-imgs-inp" multiple onChange={(e) => {
                                     if (e.target.files.length > 0) {
-                                        console.log(e.target.files);
+
+                                        let filesClone = postImages.slice(0);
                                         let postImgs = document.getElementById("post-imgs");
+
                                         for (var x = 0; x < e.target.files.length; x++) {
+                                            let uniqueRand = Math.floor((Math.random() * 100000000) * (Math.random() * 100000000))
+                                            filesClone.push({ [uniqueRand]: e.target.files[x] });
+
                                             postImgs.innerHTML +=
-                                                `<div class="post-img" style="background-image: url(${URL.createObjectURL(e.target.files[x])})">
+                                                `<div id="pi${uniqueRand}" style="background-image: url(${URL.createObjectURL(e.target.files[x])})">
                                                     <img src="${URL.createObjectURL(e.target.files[x])}" />
-                                                    <div class="del-icon" onclick="hello()">
-                                                        <svg viewBox="0 0 24 24" aria-hidden="true"><g><path d="M13.414 12l5.793-5.793c.39-.39.39-1.023 0-1.414s-1.023-.39-1.414 0L12 10.586 6.207 4.793c-.39-.39-1.023-.39-1.414 0s-.39 1.023 0 1.414L10.586 12l-5.793 5.793c-.39.39-.39 1.023 0 1.414.195.195.45.293.707.293s.512-.098.707-.293L12 13.414l5.793 5.793c.195.195.45.293.707.293s.512-.098.707-.293c.39-.39.39-1.023 0-1.414L13.414 12z"></path></g></svg>
+                                                    <div class="del-icon" id="${uniqueRand}">
+                                                        <svg id="${uniqueRand}" viewBox="0 0 24 24" aria-hidden="true"><g id="${uniqueRand}"><path id="${uniqueRand}" d="M13.414 12l5.793-5.793c.39-.39.39-1.023 0-1.414s-1.023-.39-1.414 0L12 10.586 6.207 4.793c-.39-.39-1.023-.39-1.414 0s-.39 1.023 0 1.414L10.586 12l-5.793 5.793c-.39.39-.39 1.023 0 1.414.195.195.45.293.707.293s.512-.098.707-.293L12 13.414l5.793 5.793c.195.195.45.293.707.293s.512-.098.707-.293c.39-.39.39-1.023 0-1.414L13.414 12z"></path></g></svg>
                                                     </div>
                                                 </div>`
-                                            let allPostImgs = document.getElementsByClassName("post-img");
+
+                                            let allPostImgs = document.querySelectorAll("#post-imgs > div");
+                                            let delIcon = document.getElementsByClassName("del-icon");
                                             if (allPostImgs.length == 1) {
-                                                for(var i = 0; i < allPostImgs.length; i++) {
+                                                for (var i = 0; i < allPostImgs.length; i++) {
                                                     allPostImgs[i].style.maxHeight = "670px";
+                                                    delIcon[i].onclick = (e) => {
+                                                        document.getElementById("pi" + e.target.id).remove();
+
+                                                        for (var j = 0; j < filesClone.length; j++) {
+                                                            if (e.target.id in filesClone[j]) {
+                                                                filesClone.splice(j, 1)
+                                                            }
+                                                        }
+                                                    }
                                                 }
                                             } else if (allPostImgs.length == 2) {
-                                                for(var i = 0; i < allPostImgs.length; i++) {
+                                                for (var i = 0; i < allPostImgs.length; i++) {
                                                     allPostImgs[i].style.maxHeight = "280px";
+                                                    delIcon[i].onclick = (e) => {
+                                                        document.getElementById("pi" + e.target.id).remove();
+
+                                                        for (var j = 0; j < filesClone.length; j++) {
+                                                            if (e.target.id in filesClone[j]) {
+                                                                filesClone.splice(j, 1)
+                                                            }
+                                                        }
+                                                    }
                                                 }
                                             } else if (allPostImgs.length > 2) {
-                                                for(var i = 0; i < allPostImgs.length; i++) {
+                                                for (var i = 0; i < allPostImgs.length; i++) {
                                                     allPostImgs[i].style.maxHeight = "150px";
+                                                    delIcon[i].onclick = (e) => {
+                                                        document.getElementById("pi" + e.target.id).remove();
+
+                                                        for (var j = 0; j < filesClone.length; j++) {
+                                                            if (e.target.id in filesClone[j]) {
+                                                                filesClone.splice(j, 1)
+                                                            }
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }
+                                        handlePostImages(filesClone);
                                     }
                                 }} />
                             </div>
@@ -327,20 +361,53 @@ function Feeds(props) {
                                         let date = (months[dt.getMonth()]) + " " + dt.getDate() + ", " + dt.getFullYear();
                                         let time = dt.getHours() + ":" + dt.getMinutes();
 
-                                        let docRef = await addDoc(collection(db, "tweets"), {
-                                            tweet_date: date,
-                                            tweet_time: time,
-                                            tweet_text: tweet,
-                                            uid: state.authUser.uid,
-                                            tweet_avatar: state.authUser.avatar,
-                                            tweet_from: state.authUser.email,
-                                            tweet_by: state.authUser.username,
-                                            tweet_counter: tweetsCounter.data().counter,
-                                        });
+                                        // let docRef = await addDoc(collection(db, "tweets"), {
+                                        //     posts_images: [],
+                                        //     tweet_time: time,
+                                        //     tweet_date: date,
+                                        //     tweet_text: tweet,
+                                        //     uid: state.authUser.uid,
+                                        //     tweet_from: state.authUser.email,
+                                        //     tweet_by: state.authUser.username,
+                                        //     tweet_avatar: state.authUser.avatar,
+                                        //     tweet_counter: tweetsCounter.data().counter,
+                                        // });
 
-                                        setDoc(doc(db, "reactions", docRef.id), {
-                                            likes_count: 0,
-                                        });
+                                        if (postImages.length > 0) {
+                                            let holdImages = [];
+                                            for (var i = 0; i < postImages.length; i++) {
+                                                let postImg = postImages[i][Object.keys(postImages[i])[0]];
+                                                let imageRef = ref(storage, `images/posts-images/${state.authUser.uid}/${postImg.name}`)
+                                                uploadBytes(imageRef, postImg).then(async () => {
+                                                    await getDownloadURL(imageRef)
+                                                        .then(async (url) => {
+                                                            holdImages.push(url);
+
+                                                            if(i == postImages.length){
+                                                                let docRef = await addDoc(collection(db, "tweets"), {
+                                                                    posts_images: holdImages,
+                                                                    tweet_time: time,
+                                                                    tweet_date: date,
+                                                                    tweet_text: tweet,
+                                                                    uid: state.authUser.uid,
+                                                                    tweet_from: state.authUser.email,
+                                                                    tweet_by: state.authUser.username,
+                                                                    tweet_avatar: state.authUser.avatar,
+                                                                    tweet_counter: tweetsCounter.data().counter,
+                                                                });
+                    
+                                                                await setDoc(doc(db, "reactions", docRef.id), {
+                                                                    likes_count: 0,
+                                                                });
+                                                            }
+                                                        })
+                                                });
+                                            }
+
+                                            
+                                        }
+
+                                        
 
                                         await setDoc(doc(db, "tweets_counter", "home_count"), {
                                             counter: tweetsCounter.data().counter + 1
@@ -365,6 +432,7 @@ function Feeds(props) {
                                     <div>
                                         <img src={tweet.tweet_avatar} />
                                     </div>
+
                                     <div>
                                         <div className='tweet-meta'>
                                             <div>
@@ -383,15 +451,43 @@ function Feeds(props) {
                                                         return (<p>{tweet.tweet_date}</p>)
                                                     }
                                                 })()}
-
                                             </div>
                                             <div>
                                                 <svg focusable="false" viewBox="0 0 24 24" aria-hidden="true" data-testid="MoreHorizIcon"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path></svg>
                                             </div>
                                         </div>
+
                                         <div className="text">
                                             <p>{tweet.tweet_text}</p>
                                         </div>
+
+                                        <div className="posters">
+                                            {(() => {
+                                                let images = [];
+                                                if (tweet.posts_images.length > 0) {
+                                                    tweet.posts_images.map((img) => {
+                                                        images.push(img);
+                                                    });
+                                                    return (
+                                                        <>
+                                                            <div style={{ backgroundImage: `url(${images[0]})` }}>
+                                                                <img src={images[0]} />
+                                                            </div>
+                                                            <div style={{ backgroundImage: `url(${images[1]})` }}>
+                                                                <img src={images[1]} />
+                                                            </div>
+                                                            <div style={{ backgroundImage: `url(${images[2]})` }}>
+                                                                <img src={images[2]} />
+                                                            </div>
+                                                            <div style={{ backgroundImage: `url(${images[3]})` }}>
+                                                                <img src={images[3]} />
+                                                            </div>
+                                                        </>
+                                                    )
+                                                }
+                                            })()}
+                                        </div>
+
                                         {fetchedReactions.map((reaction) => {
                                             if (tweet.tweet_id == reaction.tweet_id && reaction[state.authUser.uid] == "liked") {
                                                 likedData.push(true);

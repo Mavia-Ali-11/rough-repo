@@ -1011,7 +1011,7 @@ aside.emoji-picker-react .content-wrapper:before {
   margin-left: 12px;
 }
 
-.post-data img {
+.post-data> div:first-child img {
   width: 50px;
   height: 50px;
   border-radius: 100%;
@@ -1160,6 +1160,30 @@ aside.emoji-picker-react .content-wrapper:before {
   color: #f91880;
 }
 
+
+.posters {
+  width: 100%;  
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.posters > div {
+  width: 49%;
+  height: auto;
+  flex: 2 1 auto;
+  margin-top: 5px;
+  margin-right: 5px;
+  position: relative;
+  border-radius: 16px;
+  background-size: cover;
+}
+
+.posters > div img {
+  width: 100%;
+  height: 100%;
+  visibility: hidden;
+}
 
 @media screen and (max-width: 1400px) {
   .mainHome > div:last-child {

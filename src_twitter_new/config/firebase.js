@@ -26,6 +26,7 @@ import {
     updateDoc, 
     deleteField,
     increment,
+    arrayUnion
 } from "firebase/firestore";
 
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -68,6 +69,7 @@ export {
     updateDoc,
     deleteField,
     increment,
+    arrayUnion,
 
     storage,
     ref,
