@@ -242,7 +242,7 @@ function Feeds(props) {
                                         let postImgs = document.getElementById("post-imgs");
 
                                         for (var x = 0; x < e.target.files.length; x++) {
-                                            let uniqueRand = Math.floor((Math.random() * 100000000) * (Math.random() * 100000000))
+                                            let uniqueRand = Math.floor((Math.random() * 100000000) * (Math.random() * 100000000));
                                             filesClone.push({ [uniqueRand]: e.target.files[x] });
 
                                             postImgs.innerHTML +=
@@ -372,42 +372,39 @@ function Feeds(props) {
                                         //     tweet_avatar: state.authUser.avatar,
                                         //     tweet_counter: tweetsCounter.data().counter,
                                         // });
-
+                                        
                                         if (postImages.length > 0) {
                                             let holdImages = [];
-                                            for (var i = 0; i < postImages.length; i++) {
-                                                let postImg = postImages[i][Object.keys(postImages[i])[0]];
-                                                let imageRef = ref(storage, `images/posts-images/${state.authUser.uid}/${postImg.name}`)
-                                                uploadBytes(imageRef, postImg).then(async () => {
-                                                    await getDownloadURL(imageRef)
-                                                        .then(async (url) => {
-                                                            holdImages.push(url);
+                                            for (var i = 0; i <= postImages.length; i++) {
+                                                if (i < postImages.length) {
+                                                    let uniqueness = Math.floor((Math.random() * 245789) * (Math.random() * 987542));
+                                                    let postImg = postImages[i][Object.keys(postImages[i])[0]].name;
+                                                    let imageRef = ref(storage, `images/posts-images/${state.authUser.uid}/${uniqueness}/${postImg}`)
+                                                    await uploadBytes(imageRef, postImg).then(async () => {
+                                                        await getDownloadURL(imageRef)
+                                                            .then(async (url) => {
+                                                                holdImages.push(url);
+                                                            })
+                                                    });
+                                                } else if(i == postImages.length) {
+                                                    let docRef = await addDoc(collection(db, "tweets"), {
+                                                        tweet_time: time,
+                                                        tweet_date: date,
+                                                        tweet_text: tweet,
+                                                        uid: state.authUser.uid,
+                                                        posts_images: holdImages,
+                                                        tweet_from: state.authUser.email,
+                                                        tweet_by: state.authUser.username,
+                                                        tweet_avatar: state.authUser.avatar,
+                                                        tweet_counter: tweetsCounter.data().counter,
+                                                    });
 
-                                                            if(i == postImages.length){
-                                                                let docRef = await addDoc(collection(db, "tweets"), {
-                                                                    posts_images: holdImages,
-                                                                    tweet_time: time,
-                                                                    tweet_date: date,
-                                                                    tweet_text: tweet,
-                                                                    uid: state.authUser.uid,
-                                                                    tweet_from: state.authUser.email,
-                                                                    tweet_by: state.authUser.username,
-                                                                    tweet_avatar: state.authUser.avatar,
-                                                                    tweet_counter: tweetsCounter.data().counter,
-                                                                });
-                    
-                                                                await setDoc(doc(db, "reactions", docRef.id), {
-                                                                    likes_count: 0,
-                                                                });
-                                                            }
-                                                        })
-                                                });
+                                                    await setDoc(doc(db, "reactions", docRef.id), {
+                                                        likes_count: 0,
+                                                    });
+                                                }
                                             }
-
-                                            
                                         }
-
-                                        
 
                                         await setDoc(doc(db, "tweets_counter", "home_count"), {
                                             counter: tweetsCounter.data().counter + 1
