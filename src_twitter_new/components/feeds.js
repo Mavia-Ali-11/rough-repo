@@ -37,10 +37,10 @@ function Feeds(props) {
                         tweetData.tweet_id = change.doc.id;
                         tweetsClone.push(tweetData);
                     } else if (change.type == "modified") {
-                        console.log("modification done");
                         let tweetData = change.doc.data();
                         tweetData.tweet_id = change.doc.id;
                         tweetsClone.push(tweetData);
+                        handleTweet("555")
                     }
                 });
                 handleFetchedTweets(tweetsClone);
@@ -185,6 +185,66 @@ function Feeds(props) {
             [state.authUser.uid]: deleteField(),
             likes_count: increment(-1)
         });
+    }
+
+    let displayImages = (postImgs) => {
+        let images = [];
+        if (postImgs.length > 0) {
+            postImgs.map((img) => {
+                images.push(img);
+            });
+            {
+                    if (images.length == 1) {
+                        return (
+                            <div style={{ backgroundImage:`url(${images[0]})`, maxHeight:"670px", borderRadius:"16px" }}>
+                                <img src={images[0]} />
+                            </div>
+                        )
+                    } else if (images.length == 2) {
+                        return (
+                            <>
+                                <div style={{ backgroundImage:`url(${images[0]})`, maxHeight:"280px", borderRadius:"16px 0 0 0" }}>
+                                    <img src={images[0]} />
+                                </div>
+                                <div style={{ backgroundImage:`url(${images[1]})`, maxHeight:"280px", borderRadius:"0 16px 0 0" }}>
+                                    <img src={images[1]} />
+                                </div>
+                            </>
+                        )
+                    } else if (images.length == 3) {
+                        return (
+                            <>
+                                <div style={{ backgroundImage:`url(${images[0]})`, maxHeight:"150px", borderRadius:"16px 0 0 0" }}>
+                                    <img src={images[0]} />
+                                </div>
+                                <div style={{ backgroundImage:`url(${images[1]})`, maxHeight:"150px", borderRadius:"0 16px 0 0" }}>
+                                    <img src={images[1]} />
+                                </div>
+                                <div style={{ backgroundImage:`url(${images[2]})`, maxHeight:"150px", borderRadius:"0 0 16px 16px" }}>
+                                    <img src={images[2]} />
+                                </div>
+                            </>
+                        )
+                    } else if (images.length == 4) {
+                        return (
+                            <>
+                                <div style={{ backgroundImage:`url(${images[0]})`, maxHeight:"150px", borderRadius:"16px 0 0 0" }}>
+                                    <img src={images[0]} />
+                                </div>
+                                <div style={{ backgroundImage:`url(${images[1]})`, maxHeight:"150px", borderRadius:"0 16px 0 0" }}>
+                                    <img src={images[1]} />
+                                </div>
+                                <div style={{ backgroundImage:`url(${images[2]})`, maxHeight:"150px", borderRadius:"0 0 0 16px" }}>
+                                    <img src={images[2]} />
+                                </div>
+                                <div style={{ backgroundImage:`url(${images[3]})`, maxHeight:"150px", borderRadius:"0 0 16px 0" }}>
+                                    <img src={images[3]} />
+                                </div>
+                            </>
+                        )
+                    }
+            }
+        }
     }
 
     return (
@@ -361,32 +421,21 @@ function Feeds(props) {
                                         let date = (months[dt.getMonth()]) + " " + dt.getDate() + ", " + dt.getFullYear();
                                         let time = dt.getHours() + ":" + dt.getMinutes();
 
-                                        // let docRef = await addDoc(collection(db, "tweets"), {
-                                        //     posts_images: [],
-                                        //     tweet_time: time,
-                                        //     tweet_date: date,
-                                        //     tweet_text: tweet,
-                                        //     uid: state.authUser.uid,
-                                        //     tweet_from: state.authUser.email,
-                                        //     tweet_by: state.authUser.username,
-                                        //     tweet_avatar: state.authUser.avatar,
-                                        //     tweet_counter: tweetsCounter.data().counter,
-                                        // });
-                                        
                                         if (postImages.length > 0) {
                                             let holdImages = [];
+                                            let uniqueness = new Date().getTime();
+                                            let imageDir = `images/posts-images/${state.authUser.uid}/${uniqueness}/`;
                                             for (var i = 0; i <= postImages.length; i++) {
                                                 if (i < postImages.length) {
-                                                    let uniqueness = Math.floor((Math.random() * 245789) * (Math.random() * 987542));
-                                                    let postImg = postImages[i][Object.keys(postImages[i])[0]].name;
-                                                    let imageRef = ref(storage, `images/posts-images/${state.authUser.uid}/${uniqueness}/${postImg}`)
+                                                    let postImg = postImages[i][Object.keys(postImages[i])[0]];
+                                                    let imageRef = ref(storage, `${imageDir} ${postImg.name}`)
                                                     await uploadBytes(imageRef, postImg).then(async () => {
                                                         await getDownloadURL(imageRef)
                                                             .then(async (url) => {
                                                                 holdImages.push(url);
                                                             })
                                                     });
-                                                } else if(i == postImages.length) {
+                                                } else if (i == postImages.length) {
                                                     let docRef = await addDoc(collection(db, "tweets"), {
                                                         tweet_time: time,
                                                         tweet_date: date,
@@ -459,30 +508,7 @@ function Feeds(props) {
                                         </div>
 
                                         <div className="posters">
-                                            {(() => {
-                                                let images = [];
-                                                if (tweet.posts_images.length > 0) {
-                                                    tweet.posts_images.map((img) => {
-                                                        images.push(img);
-                                                    });
-                                                    return (
-                                                        <>
-                                                            <div style={{ backgroundImage: `url(${images[0]})` }}>
-                                                                <img src={images[0]} />
-                                                            </div>
-                                                            <div style={{ backgroundImage: `url(${images[1]})` }}>
-                                                                <img src={images[1]} />
-                                                            </div>
-                                                            <div style={{ backgroundImage: `url(${images[2]})` }}>
-                                                                <img src={images[2]} />
-                                                            </div>
-                                                            <div style={{ backgroundImage: `url(${images[3]})` }}>
-                                                                <img src={images[3]} />
-                                                            </div>
-                                                        </>
-                                                    )
-                                                }
-                                            })()}
+                                            {displayImages(tweet.posts_images)}
                                         </div>
 
                                         {fetchedReactions.map((reaction) => {

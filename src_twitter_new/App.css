@@ -763,7 +763,7 @@ body {
   width: 100%;
   border: none;
   resize: none;
-  font-size: 20px;
+  font-size: 18px;
   overflow: hidden;
   font-weight: 300;
   line-height: 26px;
@@ -789,18 +789,13 @@ body {
 }
 
 #post-imgs > div {
-  width: 49%;
+  width: 48%;
   height: auto;
   flex: 2 1 auto;
-  margin-top: 15px;
   position: relative;
   border-radius: 16px;
+  margin: 12px 10px 0 0;
   background-size: cover;
-}
-
-#post-imgs > div:nth-child(1),
-#post-imgs > div:nth-child(3) {
-  margin-right: 10px;
 }
 
 #post-imgs > div img {
@@ -1041,9 +1036,9 @@ aside.emoji-picker-react .content-wrapper:before {
 }
 
 .text p {
-  margin-top: -8px;
+  margin-top: -6px;
   font-weight: 300;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .tweet-meta span {
@@ -1172,11 +1167,11 @@ aside.emoji-picker-react .content-wrapper:before {
   width: 49%;
   height: auto;
   flex: 2 1 auto;
-  margin-top: 5px;
-  margin-right: 5px;
+  margin-right: 2px;
+  margin-bottom: 2px;
   position: relative;
-  border-radius: 16px;
   background-size: cover;
+  background-position: center;
 }
 
 .posters > div img {
