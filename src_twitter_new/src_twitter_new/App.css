@@ -238,7 +238,7 @@ body {
   opacity: 1;
 }
 
-#imageUpload, #imageUpload1 {
+#imageUpload, #post-imgs-inp {
   display: none;
 }
 
@@ -563,11 +563,13 @@ body {
   padding: 6px;
   cursor: pointer;
   fill: #536471;
+  transition: 0.3s;
 }
 
 .widgets .widget .trend > div:last-child svg:hover,
 .tweet-meta > div svg:hover {
   fill: #1d9bf0;
+  transition: 0.3s;
   border-radius: 100%;
   background-color: rgba(29, 155, 240, 0.1);
 }
@@ -764,8 +766,8 @@ body {
   border: none;
   resize: none;
   font-size: 18px;
-  font-weight: 300;
   overflow: hidden;
+  font-weight: 300;
   line-height: 26px;
   padding: 10px 6px;
   font-family: Archivo;
@@ -781,6 +783,54 @@ body {
   border-color: #eff3f4;
 }
 
+.tweet-maker #post-imgs {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+#post-imgs > div {
+  width: 48%;
+  height: auto;
+  flex: 2 1 auto;
+  position: relative;
+  border-radius: 16px;
+  margin: 12px 10px 0 0;
+  background-size: cover;
+}
+
+#post-imgs > div img {
+  width: 100%;
+  height: 100%;
+  visibility: hidden;
+}
+
+#post-imgs .del-icon {
+  top: 4px;
+  left: 4px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  cursor: pointer;
+  position: absolute;
+  align-items: center;
+  border-radius: 100%;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+  background-color: rgba(15, 20, 25, 0.75);
+}
+
+#post-imgs .del-icon svg {
+  width: 18px;
+  height: 18px;
+  fill: #fff;
+}
+
+#post-imgs .del-icon:hover {
+  background-color: rgba(39, 44, 48, 0.75);
+}
+
 .tweet-maker > div .tweet-extras {
   display: flex;
   margin-left: -3px;
@@ -790,17 +840,23 @@ body {
   justify-content: space-between;
 }
 
+.tweet-extras > div:first-child {
+  display: flex;
+}
+
 .tweet-extras > div:first-child > div {
-  width: 45px;
-  height: 45px;
-  padding: 8px;
-  display: inline;
-  text-align: center;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  transition: 0.3s;
   border-radius: 100%;
+  align-items: center;
+  justify-content: center;
 }
 
 .tweet-extras > div:first-child > div:hover {
   cursor: pointer;
+  transition: 0.3s;
   background-color: rgba(29, 155, 240, 0.1);
 }
 
@@ -814,7 +870,7 @@ body {
 .tweet-extras > div:first-child svg {
   width: 20px;
   fill: #1d9bf0;
-  margin-top: -2px;
+  margin-right: 1px;
 }
 
 .tweet-extras > .tweetValidator {
@@ -878,12 +934,32 @@ aside.emoji-picker-react .content-wrapper:before {
   max-width: 150px;
 }
 
-.hiddenDOM {
+.hiddenDOM, .loader {
   left: 0;
-  z-index: 1;
+  z-index: 11;
   width: 100%;
   height: 100%;
   position: absolute;
+}
+
+.loader {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.loader svg {
+  color: #1d9bf0;
+  margin-bottom: 20px;
+  transform: scale(1.5);
+}
+
+.loader h6 {
+  color: #536471;
+  margin-top: 25px;
+  font-family: Archivo;
 }
 
 .tweetValidator > div:first-child {
@@ -953,7 +1029,7 @@ aside.emoji-picker-react .content-wrapper:before {
   margin-left: 12px;
 }
 
-.post-data img {
+.post-data> div:first-child img {
   width: 50px;
   height: 50px;
   border-radius: 100%;
@@ -983,9 +1059,13 @@ aside.emoji-picker-react .content-wrapper:before {
 }
 
 .text p {
-  margin-top: -8px;
+  color: #000;
+  font-size: 15px;
+  margin-top: -5px;
   font-weight: 300;
-  margin-bottom: 8px;
+  line-height: 20px;
+  margin-bottom: 12px;
+  word-break: break-word;
 }
 
 .tweet-meta span {
@@ -1102,11 +1182,31 @@ aside.emoji-picker-react .content-wrapper:before {
   color: #f91880;
 }
 
-/* .like-icon svg.unlike {
-  fill: transparent;
-  stroke: #536471;
-} */
+.posters {
+  width: 100%;  
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+  border-radius: 16px;
+  border: 1px solid #cfd9de;
+  background-color: #f7f9f9;
+  justify-content: space-between;
+}
 
+.posters > div {
+  width: 49%;
+  height: auto;
+  flex: 2 1 auto;
+  position: relative;
+  background-size: cover;
+  background-position: center;
+}
+
+.posters > div img {
+  width: 100%;
+  height: 100%;
+  visibility: hidden;
+}
 
 @media screen and (max-width: 1400px) {
   .mainHome > div:last-child {
