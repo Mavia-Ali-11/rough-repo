@@ -7,7 +7,9 @@ import CircularStatic from '../components/tweet-length';
 import { ToastContainer, toast } from 'react-toastify';
 import Stack from '@mui/material/Stack';
 import CircularProgress from '@mui/material/CircularProgress';
-import Box from '@mui/material/Box';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import CloseIcon from '@mui/icons-material/Close';
 
 function Feeds(props) {
 
@@ -23,8 +25,11 @@ function Feeds(props) {
     const [imgInpDisable, handleImgInpDisability] = useState(false);
     const [showEmojis, setShowEmojis] = useState(true);
     const [showLoader, setShowLoader] = useState(true);
-    const [showPreloader, setShowPreloader] = useState(true);
     const [progress, setProgress] = useState(0);
+    const [imagesStack, handleImagesStack] = useState([]);
+    const [currentImage, handleCurrentImage] = useState("");
+    const [slideNavPrev, handleSlideNavPrev] = useState({});
+    const [slideNavNext, handleSlideNavNext] = useState({});
 
     let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
@@ -68,8 +73,6 @@ function Feeds(props) {
                 });
                 handleFetchedReactions(tweetsReactionsClone);
             });
-
-            // setShowPreloader(true)
         }
 
         if (state.authUser.uid == undefined) {
@@ -80,7 +83,6 @@ function Feeds(props) {
                 }
             }, 1000);
         } else {
-            setShowPreloader(false)
             dataFetcher();
         }
     }, []);
@@ -210,7 +212,8 @@ function Feeds(props) {
                 if (images.length == 1) {
                     return (
                         <div className='posters' style={{ minHeight: "343px" }} >
-                            <div style={{ backgroundImage: `url(${images[0]})`, maxHeight: "670px", borderRadius: "16px" }}>
+                            <div style={{ backgroundImage: `url(${images[0]})`, maxHeight: "670px", borderRadius: "16px" }}
+                                onClick={(e) => targetedPost(e, "0")}>
                                 <img src={images[0]} />
                             </div>
                         </div>
@@ -218,10 +221,12 @@ function Feeds(props) {
                 } else if (images.length == 2) {
                     return (
                         <div className='posters' style={{ minHeight: "280px" }}>
-                            <div style={{ backgroundImage: `url(${images[0]})`, maxHeight: "280px", margin: "0 2px 0 0", borderRadius: "16px 0 0 16px" }}>
+                            <div style={{ backgroundImage: `url(${images[0]})`, maxHeight: "280px", margin: "0 2px 0 0", borderRadius: "16px 0 0 16px" }}
+                                onClick={(e) => targetedPost(e, "0")}>
                                 <img src={images[0]} />
                             </div>
-                            <div style={{ backgroundImage: `url(${images[1]})`, maxHeight: "280px", borderRadius: "0 16px 16px 0" }}>
+                            <div style={{ backgroundImage: `url(${images[1]})`, maxHeight: "280px", borderRadius: "0 16px 16px 0" }}
+                                onClick={(e) => targetedPost(e, "1")}>
                                 <img src={images[1]} />
                             </div>
                         </div>
@@ -229,13 +234,16 @@ function Feeds(props) {
                 } else if (images.length == 3) {
                     return (
                         <div className='posters' style={{ minHeight: "302px" }}>
-                            <div style={{ backgroundImage: `url(${images[0]})`, maxHeight: "150px", margin: "0 2px 2px 0", borderRadius: "16px 0 0 0" }}>
+                            <div style={{ backgroundImage: `url(${images[0]})`, maxHeight: "150px", margin: "0 2px 2px 0", borderRadius: "16px 0 0 0" }}
+                                onClick={(e) => targetedPost(e, "0")}>
                                 <img src={images[0]} />
                             </div>
-                            <div style={{ backgroundImage: `url(${images[1]})`, maxHeight: "150px", margin: "0 0 2px 0", borderRadius: "0 16px 0 0" }}>
+                            <div style={{ backgroundImage: `url(${images[1]})`, maxHeight: "150px", margin: "0 0 2px 0", borderRadius: "0 16px 0 0" }}
+                                onClick={(e) => targetedPost(e, "1")}>
                                 <img src={images[1]} />
                             </div>
-                            <div style={{ backgroundImage: `url(${images[2]})`, maxHeight: "150px", borderRadius: "0 0 16px 16px" }}>
+                            <div style={{ backgroundImage: `url(${images[2]})`, maxHeight: "150px", borderRadius: "0 0 16px 16px" }}
+                                onClick={(e) => targetedPost(e, "2")}>
                                 <img src={images[2]} />
                             </div>
                         </div>
@@ -243,16 +251,20 @@ function Feeds(props) {
                 } else if (images.length == 4) {
                     return (
                         <div className='posters' style={{ minHeight: "302px" }}>
-                            <div style={{ backgroundImage: `url(${images[0]})`, maxHeight: "150px", margin: "0 2px 2px 0", borderRadius: "16px 0 0 0" }}>
+                            <div style={{ backgroundImage: `url(${images[0]})`, maxHeight: "150px", margin: "0 2px 2px 0", borderRadius: "16px 0 0 0" }}
+                                onClick={(e) => targetedPost(e, "0")}>
                                 <img src={images[0]} />
                             </div>
-                            <div style={{ backgroundImage: `url(${images[1]})`, maxHeight: "150px", margin: "0 0 2px 0", borderRadius: "0 16px 0 0" }}>
+                            <div style={{ backgroundImage: `url(${images[1]})`, maxHeight: "150px", margin: "0 0 2px 0", borderRadius: "0 16px 0 0" }}
+                                onClick={(e) => targetedPost(e, "1")}>
                                 <img src={images[1]} />
                             </div>
-                            <div style={{ backgroundImage: `url(${images[2]})`, maxHeight: "150px", margin: "0 2px 0 0", borderRadius: "0 0 0 16px" }}>
+                            <div style={{ backgroundImage: `url(${images[2]})`, maxHeight: "150px", margin: "0 2px 0 0", borderRadius: "0 0 0 16px" }}
+                                onClick={(e) => targetedPost(e, "2")}>
                                 <img src={images[2]} />
                             </div>
-                            <div style={{ backgroundImage: `url(${images[3]})`, maxHeight: "150px", borderRadius: "0 0 16px 0" }}>
+                            <div style={{ backgroundImage: `url(${images[3]})`, maxHeight: "150px", borderRadius: "0 0 16px 0" }}
+                                onClick={(e) => targetedPost(e, "3")}>
                                 <img src={images[3]} />
                             </div>
                         </div>
@@ -262,14 +274,53 @@ function Feeds(props) {
         }
     }
 
+    let targetedPost = async (e, i) => {
+        let selectedImages = imagesStack.slice(0);
+        let clickedImage = e.target.parentNode.children;
+        for (var x = 0; x < clickedImage.length; x++) {
+            selectedImages.push(clickedImage[x].style.backgroundImage.slice(5, -2));
+        };
+        handleImagesStack(selectedImages);
+
+        await showLightbox(e, i);
+    }
+
+    let showLightbox = (e, i) => {
+        var lightbox = document.getElementById("lightbox");
+        var modalImg = document.getElementById("modal-img");
+        modalImg.src = e.target.parentNode.children[i].style.backgroundImage.slice(5, -2);
+        lightbox.style.animationName = "slidein";
+        lightbox.style.display = "block";
+
+        trackSliderNavBtn(e, i);
+        handleCurrentImage(i);
+    }
+
+    let trackSliderNavBtn = (e, i) => {
+        let clikedImg = e.target.parentNode.children.length;
+        if (i == (clikedImg - 1) && i != 0) {
+            handleSlideNavNext({ visibility: "hidden", pointerEvents: "none" });
+            handleSlideNavPrev({ visibility: "visible", pointerEvents: "auto" });
+        } else if (i == 0 && clikedImg > 1) {
+            handleSlideNavPrev({ visibility: "hidden", pointerEvents: "none" });
+            handleSlideNavNext({ visibility: "visible", pointerEvents: "auto" });
+        } else if (i == 0) {
+            handleSlideNavPrev({ visibility: "hidden", pointerEvents: "none" });
+            handleSlideNavNext({ visibility: "hidden", pointerEvents: "none" });;
+        } else {
+            handleSlideNavPrev({ visibility: "visible", pointerEvents: "auto" });
+            handleSlideNavNext({ visibility: "visible", pointerEvents: "auto" });
+        }
+    }
+
     return (
         <div className='feeds'>
             <div className='hiddenDOM' onClick={() => { setShowEmojis(true) }} hidden={showEmojis}></div>
             <div className='loader' hidden={showLoader}>
-                    <Stack spacing={2} direction="row">
-                        <CircularProgress variant="determinate" value={progress} />
-                    </Stack>
-                    <h6>publishing your tweet...</h6>
+                <Stack spacing={2} direction="row">
+                    <CircularProgress variant="determinate" value={progress} />
+                </Stack>
+                <h6>publishing your tweet...</h6>
             </div>
 
             <div className='header' onClick={() => { document.getElementsByClassName('feeds')[0].scrollTop = 0 }}>
@@ -316,7 +367,7 @@ function Feeds(props) {
                                 document.getElementById("post-imgs-inp").click();
                             }}>
                                 <svg viewBox="0 0 24 24" aria-hidden="true" ><g><path d="M19.75 2H4.25C3.01 2 2 3.01 2 4.25v15.5C2 20.99 3.01 22 4.25 22h15.5c1.24 0 2.25-1.01 2.25-2.25V4.25C22 3.01 20.99 2 19.75 2zM4.25 3.5h15.5c.413 0 .75.337.75.75v9.676l-3.858-3.858c-.14-.14-.33-.22-.53-.22h-.003c-.2 0-.393.08-.532.224l-4.317 4.384-1.813-1.806c-.14-.14-.33-.22-.53-.22-.193-.03-.395.08-.535.227L3.5 17.642V4.25c0-.413.337-.75.75-.75zm-.744 16.28l5.418-5.534 6.282 6.254H4.25c-.402 0-.727-.322-.744-.72zm16.244.72h-2.42l-5.007-4.987 3.792-3.85 4.385 4.384v3.703c0 .413-.337.75-.75.75z"></path><circle cx="8.868" cy="8.309" r="1.542"></circle></g></svg>
-                                <input type="file" accept='image/*' id="post-imgs-inp" multiple disabled={imgInpDisable} onChange={(e) => {
+                                <input type="file" ccept="audio/*,video/*,image/*" id="post-imgs-inp" multiple disabled={imgInpDisable} onChange={(e) => {
 
                                     if (postImages.length == 0 && e.target.files.length > 4) {
                                         toast.error("You can upload a maximum of 4 media files");
@@ -458,13 +509,13 @@ function Feeds(props) {
                                 <button onClick={
                                     async () => {
                                         setProgress(20);
-                                        
+
                                         setShowLoader(false);
                                         handleDisability(true);
                                         handleBtnAccess(0.5);
 
                                         const tweetsCounter = await getDoc(doc(db, "tweets_counter", "home_count"));
-                                        
+
                                         setProgress(40);
 
                                         let dt = new Date();
@@ -594,16 +645,59 @@ function Feeds(props) {
                     })
                 }
             </div>
-            <ToastContainer 
-            position="bottom-right"
-            autoClose={5000}
-            hideProgressBar
-            newestOnTop
-            closeOnClick
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="dark" />
+            <>
+                <ToastContainer
+                    position="bottom-right"
+                    autoClose={5000}
+                    hideProgressBar
+                    newestOnTop
+                    closeOnClick
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="dark" />
+
+                <div id="lightbox">
+                    <div>
+                        <div className="close" onClick={async () => {
+                            document.getElementById("lightbox").style.animationName = "slideup";
+                            document.getElementById("lightbox").style.animationDuration = "0.6s";
+                            await setTimeout(() => {
+                                document.getElementById("lightbox").style.display = "none";
+                                handleImagesStack([]);
+                            }, 550)
+                        }}>
+                            <CloseIcon />
+                        </div>
+
+                        <div style={slideNavPrev} onClick={async () => {
+                            var modalImg = document.getElementById("modal-img");
+                            modalImg.style.animationName = "fadein";
+                            await setTimeout(() => {
+                                modalImg.style.animationName = "fadeout";
+                                modalImg.src = imagesStack[Number(currentImage) - 1];
+                                handleCurrentImage(Number(currentImage) - 1);
+                            }, 350);
+                        }}>
+                            <ArrowBackIosNewIcon />
+                        </div>
+
+                        <img id="modal-img" />
+
+                        <div onClick={async () => {
+                            var modalImg = document.getElementById("modal-img");
+                            modalImg.style.animationName = "fadeout";
+                            await setTimeout(() => {
+                                modalImg.style.animationName = "fadein";
+                                modalImg.src = imagesStack[Number(currentImage) + 1];
+                                handleCurrentImage(Number(currentImage) + 1);
+                            }, 350);
+                        }} style={slideNavNext}>
+                            <ArrowForwardIosIcon />
+                        </div>
+                    </div>
+                </div>
+            </>
         </div>
     )
 }
