@@ -267,6 +267,7 @@ body {
 .sidebar ul a > div {
   width: fit-content;
   border-radius: 25px;
+  margin-bottom: 8px;
   padding: 6px 18px 6px 16px;
 }
 
@@ -284,7 +285,7 @@ body {
 
 .sidebar ul svg path {
   stroke: #000;
-  stroke-width: 28px;
+  stroke-width: 23px;
   color: transparent;
 }
 
@@ -563,11 +564,13 @@ body {
   padding: 6px;
   cursor: pointer;
   fill: #536471;
+  transition: 0.3s;
 }
 
 .widgets .widget .trend > div:last-child svg:hover,
 .tweet-meta > div svg:hover {
   fill: #1d9bf0;
+  transition: 0.3s;
   border-radius: 100%;
   background-color: rgba(29, 155, 240, 0.1);
 }
@@ -846,6 +849,7 @@ body {
   width: 36px;
   height: 36px;
   display: flex;
+  transition: 0.3s;
   border-radius: 100%;
   align-items: center;
   justify-content: center;
@@ -931,12 +935,32 @@ aside.emoji-picker-react .content-wrapper:before {
   max-width: 150px;
 }
 
-.hiddenDOM {
+.hiddenDOM, .loader {
   left: 0;
-  z-index: 1;
+  z-index: 11;
   width: 100%;
   height: 100%;
   position: absolute;
+}
+
+.loader {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.loader svg {
+  color: #1d9bf0;
+  margin-bottom: 20px;
+  transform: scale(1.5);
+}
+
+.loader h6 {
+  color: #536471;
+  margin-top: 25px;
+  font-family: Archivo;
 }
 
 .tweetValidator > div:first-child {
@@ -1036,9 +1060,13 @@ aside.emoji-picker-react .content-wrapper:before {
 }
 
 .text p {
-  margin-top: -6px;
+  color: #000;
+  font-size: 15px;
+  margin-top: -5px;
   font-weight: 300;
-  margin-bottom: 10px;
+  line-height: 20px;
+  margin-bottom: 12px;
+  word-break: break-word;
 }
 
 .tweet-meta span {
@@ -1155,11 +1183,14 @@ aside.emoji-picker-react .content-wrapper:before {
   color: #f91880;
 }
 
-
 .posters {
   width: 100%;  
   display: flex;
   flex-wrap: wrap;
+  margin-bottom: 10px;
+  border-radius: 16px;
+  border: 1px solid #cfd9de;
+  background-color: #f7f9f9;
   justify-content: space-between;
 }
 
@@ -1167,8 +1198,6 @@ aside.emoji-picker-react .content-wrapper:before {
   width: 49%;
   height: auto;
   flex: 2 1 auto;
-  margin-right: 2px;
-  margin-bottom: 2px;
   position: relative;
   background-size: cover;
   background-position: center;
@@ -1184,4 +1213,79 @@ aside.emoji-picker-react .content-wrapper:before {
   .mainHome > div:last-child {
     width: 72%;
   }
+  .sidebar ul a > div {
+    margin-bottom: 0px;
+  }
+}
+
+#lightbox {
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: none;
+  overflow: auto;
+  position: fixed;
+  animation-duration: 0.3s;
+  background-color: rgba(50, 50, 50, 0.9);
+}
+
+#lightbox > div {
+  width: 96%;
+  height: 100%;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#lightbox > div > div {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  cursor: pointer;
+  transition: 0.2s;
+  visibility: hidden;
+  align-items: center;
+  border-radius: 100%;
+  justify-content: center;
+  background-color: #313232;
+}
+
+#lightbox > div > div:first-child {
+  visibility: visible;
+}
+
+#lightbox > div > div:hover {
+  transition: 0.2s;
+  transform: scale(1.15);
+}
+
+#lightbox > div svg {
+  width: 22px;
+  height: 22px;
+  color: #fff;
+  cursor: pointer;
+}
+
+#lightbox > div img {
+  max-width: 50%;
+}
+
+@keyframes slidein {
+  from {width: 0%;} 
+  to {width: 100%;}
+}
+
+@keyframes slideup {
+  from {height: 100%;} 
+  to {height: 0%;}
+}
+
+#lightbox .close {
+  top: 16px;
+  right: 32px;
+  cursor: pointer;
+  position: absolute;
 }

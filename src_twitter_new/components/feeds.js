@@ -4,6 +4,12 @@ import { Link } from 'react-router-dom';
 import { db, doc, addDoc, setDoc, getDoc, updateDoc, collection, onSnapshot, query, orderBy, deleteField, increment, storage, ref, uploadBytes, getDownloadURL, arrayUnion } from '../config/firebase';
 import Picker from 'emoji-picker-react';
 import CircularStatic from '../components/tweet-length';
+import { ToastContainer, toast } from 'react-toastify';
+import Stack from '@mui/material/Stack';
+import CircularProgress from '@mui/material/CircularProgress';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import CloseIcon from '@mui/icons-material/Close';
 
 function Feeds(props) {
 
@@ -13,8 +19,16 @@ function Feeds(props) {
     const [fetchedReactions, handleFetchedReactions] = useState([]);
     const [isDisbaled, handleDisability] = useState(true);
     const [btnAccess, handleBtnAccess] = useState(0.5);
-    const [showEmojis, setShowEmojis] = useState(true);
     const [postImages, handlePostImages] = useState([]);
+    const [imgInpAccess, handleImgInpAccess] = useState(1);
+    const [imgInpPointer, handleImgInpPointer] = useState("auto");
+    const [imgInpDisable, handleImgInpDisability] = useState(false);
+    const [showEmojis, setShowEmojis] = useState(true);
+    const [showLoader, setShowLoader] = useState(true);
+    const [progress, setProgress] = useState(0);
+    const [imagesStack, handleImagesStack] = useState([]);
+    const [slideNavPrev, handleSlideNavPrev] = useState({});
+    const [slideNavNext, handleSlideNavNext] = useState({});
 
     let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
@@ -94,9 +108,9 @@ function Feeds(props) {
                         </div>
                     </div>
                     <div>
-                        <div className="likes liked" id={id} onClick={() => {
-                            let tweetID = document.getElementById(id);
-                            let likesCount = document.querySelectorAll("#" + id + " .like-count")[0];
+                        <div className="likes liked" id={"m" + id} onClick={() => {
+                            let tweetID = document.getElementById("m" + id);
+                            let likesCount = document.querySelectorAll("#m" + id + " .like-count")[0];
                             if (tweetID.classList.contains("liked")) {
                                 deleteReaction(id);
                                 tweetID.classList.remove("liked");
@@ -142,9 +156,9 @@ function Feeds(props) {
                         </div>
                     </div>
                     <div>
-                        <div className="likes" id={id} onClick={() => {
-                            let tweetID = document.getElementById(id);
-                            let likesCount = document.querySelectorAll("#" + id + " .like-count")[0];
+                        <div className="likes" id={"m" + id} onClick={() => {
+                            let tweetID = document.getElementById("m" + id);
+                            let likesCount = document.querySelectorAll("#m" + id + " .like-count")[0];
                             if (tweetID.classList.contains("liked")) {
                                 deleteReaction(id);
                                 tweetID.classList.remove("liked");
@@ -194,62 +208,117 @@ function Feeds(props) {
                 images.push(img);
             });
             {
-                    if (images.length == 1) {
-                        return (
-                            <div style={{ backgroundImage:`url(${images[0]})`, maxHeight:"670px", borderRadius:"16px" }}>
+                if (images.length == 1) {
+                    return (
+                        <div className='posters' style={{ minHeight: "343px" }} >
+                            <div style={{ backgroundImage: `url(${images[0]})`, maxHeight: "670px", borderRadius: "16px" }}
+                                onClick={(e) => targetedPost(e, "0")}>
                                 <img src={images[0]} />
                             </div>
-                        )
-                    } else if (images.length == 2) {
-                        return (
-                            <>
-                                <div style={{ backgroundImage:`url(${images[0]})`, maxHeight:"280px", borderRadius:"16px 0 0 0" }}>
-                                    <img src={images[0]} />
-                                </div>
-                                <div style={{ backgroundImage:`url(${images[1]})`, maxHeight:"280px", borderRadius:"0 16px 0 0" }}>
-                                    <img src={images[1]} />
-                                </div>
-                            </>
-                        )
-                    } else if (images.length == 3) {
-                        return (
-                            <>
-                                <div style={{ backgroundImage:`url(${images[0]})`, maxHeight:"150px", borderRadius:"16px 0 0 0" }}>
-                                    <img src={images[0]} />
-                                </div>
-                                <div style={{ backgroundImage:`url(${images[1]})`, maxHeight:"150px", borderRadius:"0 16px 0 0" }}>
-                                    <img src={images[1]} />
-                                </div>
-                                <div style={{ backgroundImage:`url(${images[2]})`, maxHeight:"150px", borderRadius:"0 0 16px 16px" }}>
-                                    <img src={images[2]} />
-                                </div>
-                            </>
-                        )
-                    } else if (images.length == 4) {
-                        return (
-                            <>
-                                <div style={{ backgroundImage:`url(${images[0]})`, maxHeight:"150px", borderRadius:"16px 0 0 0" }}>
-                                    <img src={images[0]} />
-                                </div>
-                                <div style={{ backgroundImage:`url(${images[1]})`, maxHeight:"150px", borderRadius:"0 16px 0 0" }}>
-                                    <img src={images[1]} />
-                                </div>
-                                <div style={{ backgroundImage:`url(${images[2]})`, maxHeight:"150px", borderRadius:"0 0 0 16px" }}>
-                                    <img src={images[2]} />
-                                </div>
-                                <div style={{ backgroundImage:`url(${images[3]})`, maxHeight:"150px", borderRadius:"0 0 16px 0" }}>
-                                    <img src={images[3]} />
-                                </div>
-                            </>
-                        )
-                    }
+                        </div>
+                    )
+                } else if (images.length == 2) {
+                    return (
+                        <div className='posters' style={{ minHeight: "280px" }}>
+                            <div style={{ backgroundImage: `url(${images[0]})`, maxHeight: "280px", margin: "0 2px 0 0", borderRadius: "16px 0 0 16px" }}
+                                onClick={(e) => targetedPost(e, "0")}>
+                                <img src={images[0]} />
+                            </div>
+                            <div style={{ backgroundImage: `url(${images[1]})`, maxHeight: "280px", borderRadius: "0 16px 16px 0" }}
+                                onClick={(e) => targetedPost(e, "1")}>
+                                <img src={images[1]} />
+                            </div>
+                        </div>
+                    )
+                } else if (images.length == 3) {
+                    return (
+                        <div className='posters' style={{ minHeight: "302px" }}>
+                            <div style={{ backgroundImage: `url(${images[0]})`, maxHeight: "150px", margin: "0 2px 2px 0", borderRadius: "16px 0 0 0" }}
+                                onClick={(e) => targetedPost(e, "0")}>
+                                <img src={images[0]} />
+                            </div>
+                            <div style={{ backgroundImage: `url(${images[1]})`, maxHeight: "150px", margin: "0 0 2px 0", borderRadius: "0 16px 0 0" }}
+                                onClick={(e) => targetedPost(e, "1")}>
+                                <img src={images[1]} />
+                            </div>
+                            <div style={{ backgroundImage: `url(${images[2]})`, maxHeight: "150px", borderRadius: "0 0 16px 16px" }}
+                                onClick={(e) => targetedPost(e, "2")}>
+                                <img src={images[2]} />
+                            </div>
+                        </div>
+                    )
+                } else if (images.length == 4) {
+                    return (
+                        <div className='posters' style={{ minHeight: "302px" }}>
+                            <div style={{ backgroundImage: `url(${images[0]})`, maxHeight: "150px", margin: "0 2px 2px 0", borderRadius: "16px 0 0 0" }}
+                                onClick={(e) => targetedPost(e, "0")}>
+                                <img src={images[0]} />
+                            </div>
+                            <div style={{ backgroundImage: `url(${images[1]})`, maxHeight: "150px", margin: "0 0 2px 0", borderRadius: "0 16px 0 0" }}
+                                onClick={(e) => targetedPost(e, "1")}>
+                                <img src={images[1]} />
+                            </div>
+                            <div style={{ backgroundImage: `url(${images[2]})`, maxHeight: "150px", margin: "0 2px 0 0", borderRadius: "0 0 0 16px" }}
+                                onClick={(e) => targetedPost(e, "2")}>
+                                <img src={images[2]} />
+                            </div>
+                            <div style={{ backgroundImage: `url(${images[3]})`, maxHeight: "150px", borderRadius: "0 0 16px 0" }}
+                                onClick={(e) => targetedPost(e, "3")}>
+                                <img src={images[3]} />
+                            </div>
+                        </div>
+                    )
+                }
             }
+        }
+    }
+
+    let targetedPost = async (e, i) => {
+        let selectedImages = imagesStack.slice(0);
+        let clickedImage = e.target.parentNode.children;
+        for (var x = 0; x < clickedImage.length; x++) {
+            selectedImages.push(clickedImage[x].style.backgroundImage.slice(5, -2));
+        };
+        handleImagesStack(selectedImages);
+
+        await showLightbox(e, i);
+    }
+
+    let showLightbox = async (e, i) => {
+        var lightbox = document.getElementById("lightbox");
+        var modalImg = document.getElementById("modal-img");
+        modalImg.src = e.target.parentNode.children[i].style.backgroundImage.slice(5, -2);
+        lightbox.style.animationName = "slidein";
+        lightbox.style.display = "block";
+        trackSliderNavBtn(e, i);
+    }
+
+    let trackSliderNavBtn = (e, i) => {
+        let clikedImg = e.target.parentNode.children.length;
+        if (i == (clikedImg - 1) && i != 0) {
+            handleSlideNavNext({ visibility: "hidden", pointerEvents: "none" });
+            handleSlideNavPrev({ visibility: "visible", pointerEvents: "auto" });
+        } else if (i == 0 && clikedImg > 1) {
+            handleSlideNavPrev({ visibility: "hidden", pointerEvents: "none" });
+            handleSlideNavNext({ visibility: "visible", pointerEvents: "auto" });
+        } else if (i == 0) {
+            handleSlideNavPrev({ visibility: "hidden", pointerEvents: "none" });
+            handleSlideNavNext({ visibility: "hidden", pointerEvents: "none" });;
+        } else {
+            handleSlideNavPrev({ visibility: "visible", pointerEvents: "auto" });
+            handleSlideNavNext({ visibility: "visible", pointerEvents: "auto" });
         }
     }
 
     return (
         <div className='feeds'>
             <div className='hiddenDOM' onClick={() => { setShowEmojis(true) }} hidden={showEmojis}></div>
+            <div className='loader' hidden={showLoader}>
+                <Stack spacing={2} direction="row">
+                    <CircularProgress variant="determinate" value={progress} />
+                </Stack>
+                <h6>publishing your tweet...</h6>
+            </div>
 
             <div className='header' onClick={() => { document.getElementsByClassName('feeds')[0].scrollTop = 0 }}>
                 <h4>{props.scrName}</h4>
@@ -270,18 +339,18 @@ function Feeds(props) {
                             rows="1" cols="35"
                             value={tweet}
                             onChange={(e) => {
-                                handleTweet(e.target.value);
                                 e.target.style.height = "5px";
                                 e.target.style.height = (e.target.scrollHeight) + 1 + "px";
 
-                                if (e.target.value.length != 0 && e.target.value.trim().length != 0 && e.target.value.length < 280) {
+                                if (e.target.value.length != 0 && e.target.value.trim().length != 0 && e.target.value.length <= 280) {
+                                    handleTweet(e.target.value);
                                     handleDisability(false);
                                     handleBtnAccess(1);
-                                } else if (e.target.value.length == 0 || e.target.value.trim().length == 0 || e.target.value.length > 280) {
-                                    handleBtnAccess(0.5);
-                                    handleDisability(true);
-                                    if (e.target.value.length > 280) {
-                                        handleTweet(tweet);
+                                } else if ((e.target.value.length == 0 || e.target.value.trim().length == 0)) {
+                                    handleTweet(e.target.value);
+                                    if (postImages.length == 0) {
+                                        handleBtnAccess(0.5);
+                                        handleDisability(true);
                                     }
                                 }
                             }} />
@@ -291,13 +360,21 @@ function Feeds(props) {
 
                     <div className="tweet-extras">
                         <div>
-                            <div title="Media" onClick={() => {
+                            <div title="Media" style={{ pointerEvents: imgInpPointer, opacity: imgInpAccess }} onClick={() => {
                                 document.getElementById("post-imgs-inp").click();
                             }}>
                                 <svg viewBox="0 0 24 24" aria-hidden="true" ><g><path d="M19.75 2H4.25C3.01 2 2 3.01 2 4.25v15.5C2 20.99 3.01 22 4.25 22h15.5c1.24 0 2.25-1.01 2.25-2.25V4.25C22 3.01 20.99 2 19.75 2zM4.25 3.5h15.5c.413 0 .75.337.75.75v9.676l-3.858-3.858c-.14-.14-.33-.22-.53-.22h-.003c-.2 0-.393.08-.532.224l-4.317 4.384-1.813-1.806c-.14-.14-.33-.22-.53-.22-.193-.03-.395.08-.535.227L3.5 17.642V4.25c0-.413.337-.75.75-.75zm-.744 16.28l5.418-5.534 6.282 6.254H4.25c-.402 0-.727-.322-.744-.72zm16.244.72h-2.42l-5.007-4.987 3.792-3.85 4.385 4.384v3.703c0 .413-.337.75-.75.75z"></path><circle cx="8.868" cy="8.309" r="1.542"></circle></g></svg>
-                                <input type="file" accept='image/*' id="post-imgs-inp" multiple onChange={(e) => {
-                                    if (e.target.files.length > 0) {
+                                <input type="file" ccept="audio/*,video/*,image/*" id="post-imgs-inp" multiple disabled={imgInpDisable} onChange={(e) => {
 
+                                    if (postImages.length == 0 && e.target.files.length > 4) {
+                                        toast.error("You can upload a maximum of 4 media files");
+                                    } else if (postImages.length == 1 && e.target.files.length > 3) {
+                                        toast.error("You can upload a maximum of 4 media files");
+                                    } else if (postImages.length == 2 && e.target.files.length > 2) {
+                                        toast.error("You can upload a maximum of 4 media files");
+                                    } else if (postImages.length == 3 && e.target.files.length > 1) {
+                                        toast.error("You can upload a maximum of 4 media files");
+                                    } else {
                                         let filesClone = postImages.slice(0);
                                         let postImgs = document.getElementById("post-imgs");
 
@@ -320,10 +397,10 @@ function Feeds(props) {
                                                     allPostImgs[i].style.maxHeight = "670px";
                                                     delIcon[i].onclick = (e) => {
                                                         document.getElementById("pi" + e.target.id).remove();
-
                                                         for (var j = 0; j < filesClone.length; j++) {
                                                             if (e.target.id in filesClone[j]) {
-                                                                filesClone.splice(j, 1)
+                                                                filesClone.splice(j, 1);
+                                                                handleAcessOfInput();
                                                             }
                                                         }
                                                     }
@@ -333,10 +410,10 @@ function Feeds(props) {
                                                     allPostImgs[i].style.maxHeight = "280px";
                                                     delIcon[i].onclick = (e) => {
                                                         document.getElementById("pi" + e.target.id).remove();
-
                                                         for (var j = 0; j < filesClone.length; j++) {
                                                             if (e.target.id in filesClone[j]) {
-                                                                filesClone.splice(j, 1)
+                                                                filesClone.splice(j, 1);
+                                                                handleAcessOfInput();
                                                             }
                                                         }
                                                     }
@@ -346,17 +423,38 @@ function Feeds(props) {
                                                     allPostImgs[i].style.maxHeight = "150px";
                                                     delIcon[i].onclick = (e) => {
                                                         document.getElementById("pi" + e.target.id).remove();
-
                                                         for (var j = 0; j < filesClone.length; j++) {
                                                             if (e.target.id in filesClone[j]) {
-                                                                filesClone.splice(j, 1)
+                                                                filesClone.splice(j, 1);
+                                                                handleAcessOfInput();
                                                             }
                                                         }
                                                     }
                                                 }
+                                                if (allPostImgs.length == 4) {
+                                                    handleImgInpAccess(0.5);
+                                                    handleImgInpPointer("none");
+                                                    handleImgInpDisability(true);
+                                                }
                                             }
                                         }
+
                                         handlePostImages(filesClone);
+                                        handleDisability(false);
+                                        handleBtnAccess(1);
+
+                                        let handleAcessOfInput = () => {
+                                            document.getElementById("post-imgs-inp").value = null;
+                                            let checkText = document.getElementsByTagName("textarea");
+                                            if (filesClone.length == 0 && checkText[0].innerHTML.length == 0) {
+                                                handleBtnAccess(0.5);
+                                                handleDisability(true);
+                                            } else if (filesClone.length < 4) {
+                                                handleImgInpAccess(1);
+                                                handleImgInpPointer("auto");
+                                                handleImgInpDisability(false);
+                                            }
+                                        }
                                     }
                                 }} />
                             </div>
@@ -391,35 +489,56 @@ function Feeds(props) {
 
                         <div className="tweetValidator">
                             <div>
-                                {
-                                    (() => {
-                                        if (tweet.length > 0) {
-                                            return (<CircularStatic chars={tweet} />);
-                                        }
-                                    })()
-                                }
+                                {(() => {
+                                    if (tweet.length > 0) {
+                                        return (<CircularStatic chars={tweet} />);
+                                    }
+                                })()}
                             </div>
 
-                            {
-                                (() => {
-                                    if (tweet.length > 0) {
-                                        return (<div className='seperator'></div>);
-                                    }
-                                })()
-                            }
+                            {(() => {
+                                if (tweet.length > 0) {
+                                    return (<div className='seperator'></div>);
+                                }
+                            })()}
 
                             <div>
                                 <button onClick={
                                     async () => {
+                                        setProgress(20);
+
+                                        setShowLoader(false);
                                         handleDisability(true);
                                         handleBtnAccess(0.5);
 
                                         const tweetsCounter = await getDoc(doc(db, "tweets_counter", "home_count"));
 
+                                        setProgress(40);
+
                                         let dt = new Date();
                                         let months = ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
                                         let date = (months[dt.getMonth()]) + " " + dt.getDate() + ", " + dt.getFullYear();
                                         let time = dt.getHours() + ":" + dt.getMinutes();
+
+                                        let publishTweet = async (imgsArr) => {
+                                            let docRef = await addDoc(collection(db, "tweets"), {
+                                                tweet_time: time,
+                                                tweet_date: date,
+                                                tweet_text: tweet,
+                                                posts_images: imgsArr,
+                                                uid: state.authUser.uid,
+                                                tweet_from: state.authUser.email,
+                                                tweet_by: state.authUser.username,
+                                                tweet_avatar: state.authUser.avatar,
+                                                tweet_counter: tweetsCounter.data().counter,
+                                            });
+
+                                            await setDoc(doc(db, "reactions", docRef.id), {
+                                                likes_count: 0,
+                                            });
+                                        }
+
+                                        setProgress(70);
 
                                         if (postImages.length > 0) {
                                             let holdImages = [];
@@ -436,23 +555,13 @@ function Feeds(props) {
                                                             })
                                                     });
                                                 } else if (i == postImages.length) {
-                                                    let docRef = await addDoc(collection(db, "tweets"), {
-                                                        tweet_time: time,
-                                                        tweet_date: date,
-                                                        tweet_text: tweet,
-                                                        uid: state.authUser.uid,
-                                                        posts_images: holdImages,
-                                                        tweet_from: state.authUser.email,
-                                                        tweet_by: state.authUser.username,
-                                                        tweet_avatar: state.authUser.avatar,
-                                                        tweet_counter: tweetsCounter.data().counter,
-                                                    });
-
-                                                    await setDoc(doc(db, "reactions", docRef.id), {
-                                                        likes_count: 0,
-                                                    });
+                                                    publishTweet(holdImages);
+                                                    setProgress(100);
                                                 }
                                             }
+                                        } else {
+                                            publishTweet([]);
+                                            setProgress(100);
                                         }
 
                                         await setDoc(doc(db, "tweets_counter", "home_count"), {
@@ -460,6 +569,15 @@ function Feeds(props) {
                                         });
 
                                         handleTweet("");
+                                        handlePostImages([]);
+                                        handleImgInpAccess(1);
+                                        handleImgInpPointer("auto");
+                                        handleImgInpDisability(false);
+                                        document.getElementById("post-imgs").innerHTML = "";
+                                        document.getElementsByTagName("textarea")[0].style.height = "47px";
+                                        setShowLoader(true);
+                                        setProgress(0);
+                                        toast.success("Your tweet has been published.");
                                     }
                                 } disabled={isDisbaled} style={{ opacity: btnAccess }}>Tweet</button>
                             </div>
@@ -507,9 +625,7 @@ function Feeds(props) {
                                             <p>{tweet.tweet_text}</p>
                                         </div>
 
-                                        <div className="posters">
-                                            {displayImages(tweet.posts_images)}
-                                        </div>
+                                        {displayImages(tweet.posts_images)}
 
                                         {fetchedReactions.map((reaction) => {
                                             if (tweet.tweet_id == reaction.tweet_id && reaction[state.authUser.uid] == "liked") {
@@ -526,6 +642,42 @@ function Feeds(props) {
                     })
                 }
             </div>
+            <>
+                <ToastContainer
+                    position="bottom-right"
+                    autoClose={5000}
+                    hideProgressBar
+                    newestOnTop
+                    closeOnClick
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="dark" />
+
+                <div id="lightbox">
+                    <div>
+                        <div className="close" onClick={async () => {
+                                document.getElementById("lightbox").style.animationName = "slideup";
+                                document.getElementById("lightbox").style.animationDuration = "0.6s";
+                                await setTimeout(() => {
+                                    document.getElementById("lightbox").style.display = "none";
+                                    handleImagesStack([]);
+                                }, 550)
+                            }}>
+                            <CloseIcon />
+                        </div>
+                        <div style={slideNavPrev}>
+                            <ArrowBackIosNewIcon />
+                        </div>
+                        <img id="modal-img" />
+                        <div onClick={() => {
+                                console.log(imagesStack)
+                        }} style={slideNavNext}>
+                            <ArrowForwardIosIcon />
+                        </div>
+                    </div>
+                </div>
+            </>
         </div>
     )
 }
