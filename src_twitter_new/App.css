@@ -1227,15 +1227,18 @@ aside.emoji-picker-react .content-wrapper:before {
   display: none;
   overflow: auto;
   position: fixed;
-  animation-duration: 0.3s;
-  background-color: rgba(50, 50, 50, 0.9);
+  overflow: hidden;
+  animation-duration: 0.4s;
+  animation-fill-mode: forwards;
+  background-color: rgb(10, 20, 50, 0.9);
 }
 
 #lightbox > div {
-  width: 96%;
   height: 100%;
   margin: auto;
   display: flex;
+  padding: 0 32px;
+  overflow: hidden;
   align-items: center;
   justify-content: space-between;
 }
@@ -1247,10 +1250,10 @@ aside.emoji-picker-react .content-wrapper:before {
   cursor: pointer;
   transition: 0.2s;
   visibility: hidden;
-  align-items: center;
   border-radius: 100%;
+  align-items: center;
   justify-content: center;
-  background-color: #313232;
+  background-color: #0a1432;
 }
 
 #lightbox > div > div:first-child {
@@ -1271,16 +1274,7 @@ aside.emoji-picker-react .content-wrapper:before {
 
 #lightbox > div img {
   max-width: 50%;
-}
-
-@keyframes slidein {
-  from {width: 0%;} 
-  to {width: 100%;}
-}
-
-@keyframes slideup {
-  from {height: 100%;} 
-  to {height: 0%;}
+  animation-duration: 0.3s;
 }
 
 #lightbox .close {
@@ -1288,4 +1282,29 @@ aside.emoji-picker-react .content-wrapper:before {
   right: 32px;
   cursor: pointer;
   position: absolute;
+}
+
+@keyframes slidein {
+  from {transform: translateY(-100vh);} 
+  to {transform: translateY(0%);}
+}
+@keyframes slideback {
+  from {transform: translateY(0%);}
+  to {transform: translateY(100vh);}
+}
+@keyframes nextleft {
+  from {transform: translateX(0%);} 
+  to {transform: translateX(-100vw);}
+}
+@keyframes nextright {
+  from {transform: translateX(100vw);} 
+  to {transform: translateX(0%);}
+}
+@keyframes prevright {
+  from {transform: translateX(0%);} 
+  to {transform: translateX(100vw);} 
+}
+@keyframes prevleft {
+  from {transform: translateX(-100vw);}
+  to {transform: translateX(0%);}
 }

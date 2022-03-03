@@ -27,6 +27,7 @@ function Feeds(props) {
     const [showLoader, setShowLoader] = useState(true);
     const [progress, setProgress] = useState(0);
     const [imagesStack, handleImagesStack] = useState([]);
+    const [currentImage, handleCurrentImage] = useState("");
     const [slideNavPrev, handleSlideNavPrev] = useState({});
     const [slideNavNext, handleSlideNavNext] = useState({});
 
@@ -284,13 +285,15 @@ function Feeds(props) {
         await showLightbox(e, i);
     }
 
-    let showLightbox = async (e, i) => {
+    let showLightbox = (e, i) => {
         var lightbox = document.getElementById("lightbox");
         var modalImg = document.getElementById("modal-img");
         modalImg.src = e.target.parentNode.children[i].style.backgroundImage.slice(5, -2);
         lightbox.style.animationName = "slidein";
         lightbox.style.display = "block";
+
         trackSliderNavBtn(e, i);
+        handleCurrentImage(i);
     }
 
     let trackSliderNavBtn = (e, i) => {
@@ -656,23 +659,50 @@ function Feeds(props) {
 
                 <div id="lightbox">
                     <div>
-                        <div className="close" onClick={async () => {
-                                document.getElementById("lightbox").style.animationName = "slideup";
-                                document.getElementById("lightbox").style.animationDuration = "0.6s";
-                                await setTimeout(() => {
-                                    document.getElementById("lightbox").style.display = "none";
-                                    handleImagesStack([]);
-                                }, 550)
-                            }}>
+                        <div className="close" onClick={() => {
+                            document.getElementById("lightbox").style.animationName = "slideback";
+                                handleImagesStack([]);
+                                handleSlideNavPrev({visibility: "hidden"});
+                                handleSlideNavNext({visibility: "hidden"});
+                        }}>
                             <CloseIcon />
                         </div>
-                        <div style={slideNavPrev}>
+
+                        <div style={slideNavPrev} onClick={async () => {
+                            if(Number(currentImage) - 1  == 0) {
+                                handleSlideNavPrev({visibility: "hidden", pointerEvents: "none"});
+                                handleSlideNavNext({visibility: "visible", pointerEvents: "auto"});
+                            } else {
+                                handleSlideNavNext({visibility: "visible", pointerEvents: "auto"});
+                            }
+                            var modalImg = document.getElementById("modal-img");
+                            modalImg.style.animationName = "prevright";
+                            await setTimeout(() => {
+                                modalImg.style.animationName = "prevleft";
+                                modalImg.src = imagesStack[Number(currentImage) - 1];
+                                handleCurrentImage(Number(currentImage) - 1);
+                            }, 250);
+                        }}>
                             <ArrowBackIosNewIcon />
                         </div>
+
                         <img id="modal-img" />
-                        <div onClick={() => {
-                                console.log(imagesStack)
-                        }} style={slideNavNext}>
+
+                        <div style={slideNavNext} onClick={async () => {
+                            if(Number(currentImage) + 1  ==  imagesStack.length - 1) {
+                                handleSlideNavNext({visibility: "hidden", pointerEvents: "none"});
+                                handleSlideNavPrev({visibility: "visible", pointerEvents: "auto"});
+                            } else {
+                                handleSlideNavPrev({visibility: "visible", pointerEvents: "auto"});
+                            }
+                            var modalImg = document.getElementById("modal-img");
+                            modalImg.style.animationName = "nextleft";
+                            await setTimeout(() => {
+                                modalImg.style.animationName = "nextright";
+                                modalImg.src = imagesStack[Number(currentImage) + 1];
+                                handleCurrentImage(Number(currentImage) + 1);
+                            }, 250);
+                        }}>
                             <ArrowForwardIosIcon />
                         </div>
                     </div>
