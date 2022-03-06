@@ -5,7 +5,7 @@ import Feeds from "../components/feeds";
 
 function MyTweets() {
     return (
-        <div className="mainHome">
+        <div className="mainParent">
                 <Sidebar scrIndex="1" scrName="My tweets" />
             <div>
                 <Feeds scrName="My tweets" />

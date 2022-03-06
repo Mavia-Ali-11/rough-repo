@@ -4,9 +4,8 @@ import Widgets from "../components/widgets";
 import Feeds from "../components/feeds";
 
 function Home() {
-    
     return (
-        <div className="mainHome">
+        <div className="mainParent">
                 <Sidebar scrIndex="0" scrName="Home" />
             <div>
                 <Feeds scrName="Home" />

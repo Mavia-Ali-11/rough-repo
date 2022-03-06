@@ -17,6 +17,7 @@ function Feeds(props) {
     const [tweet, handleTweet] = useState("");
     const [fetchedTweets, handleFetchedTweets] = useState([]);
     const [fetchedReactions, handleFetchedReactions] = useState([]);
+    const [fetchedUsers, handleFetchedUsers] = useState([]);
     const [isDisbaled, handleDisability] = useState(true);
     const [btnAccess, handleBtnAccess] = useState(0.5);
     const [postImages, handlePostImages] = useState([]);
@@ -38,6 +39,19 @@ function Feeds(props) {
     };
 
     useEffect(async () => {
+
+        let usersClone = fetchedUsers.slice(0);
+        const qu = query(collection(db, "users"));
+        onSnapshot(qu, (snapshot) => {
+            snapshot.docChanges().forEach((change) => {
+                if (change.type == "added") {
+                    let userData = change.doc.data();
+                    usersClone.push(userData);
+                }
+            });
+            handleFetchedUsers(usersClone);
+        });
+
         let tweetsClone = fetchedTweets.slice(0);
         let dataFetcher = async () => {
             const q = query(collection(db, "tweets"), orderBy("tweet_counter"));
@@ -55,7 +69,7 @@ function Feeds(props) {
                         let tweetData = change.doc.data();
                         tweetData.tweet_id = change.doc.id;
                         tweetsClone.push(tweetData);
-                        handleTweet("555")
+                        handleTweet("update");
                     }
                 });
                 handleFetchedTweets(tweetsClone);
@@ -530,9 +544,6 @@ function Feeds(props) {
                                                 tweet_text: tweet,
                                                 posts_images: imgsArr,
                                                 uid: state.authUser.uid,
-                                                tweet_from: state.authUser.email,
-                                                tweet_by: state.authUser.username,
-                                                tweet_avatar: state.authUser.avatar,
                                                 tweet_counter: tweetsCounter.data().counter,
                                             });
 
@@ -593,18 +604,19 @@ function Feeds(props) {
                 {
                     fetchedTweets.map((tweet, index) => {
                         let likedData = [];
+                        let userObj = fetchedUsers.find(obj => obj.uid == tweet.uid);
                         return (
                             <div key={index}>
                                 <div className="post-data">
                                     <div>
-                                        <img src={tweet.tweet_avatar} />
+                                        <img src={userObj.avatar} />
                                     </div>
 
                                     <div>
                                         <div className='tweet-meta'>
                                             <div>
-                                                <h6>{tweet.tweet_by}</h6>
-                                                <p>{"@" + tweet.tweet_from.slice(0, tweet.tweet_from.indexOf("@"))}</p>
+                                                <h6>{userObj.username}</h6>
+                                                <p>{"@" + userObj.email.slice(0, userObj.email.indexOf("@"))}</p>
                                                 <span>.</span>
 
                                                 {(() => {
