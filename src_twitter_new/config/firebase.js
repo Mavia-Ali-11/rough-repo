@@ -8,7 +8,10 @@ import {
     onAuthStateChanged,
     updateEmail,
     sendEmailVerification,
-    updatePassword
+    updatePassword,
+    sendPasswordResetEmail,
+    reauthenticateWithCredential,
+    EmailAuthProvider
 } from "firebase/auth";
 
 import { 
@@ -47,6 +50,7 @@ const storage = getStorage();
 
 export { 
     auth,
+    getAuth,
     createUserWithEmailAndPassword, 
     signInWithEmailAndPassword, 
     signOut, 
@@ -54,6 +58,9 @@ export {
     updateEmail,
     sendEmailVerification,
     updatePassword,
+    sendPasswordResetEmail,
+    reauthenticateWithCredential,
+    EmailAuthProvider,
 
     db,
     doc,

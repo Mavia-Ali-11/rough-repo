@@ -16,7 +16,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 
 import { GlobalContext } from '../context/context';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { auth, signOut } from '../config/firebase';
 import Popover from '@mui/material/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
@@ -29,6 +29,7 @@ const drawerWidth = 260;
 function Sidebar(props) {
 
     const history = useHistory();
+    const location = useLocation();
     const { state } = useContext(GlobalContext);
     const [crrUser, handleCrrUser] = useState({});
 
@@ -90,7 +91,14 @@ function Sidebar(props) {
                             </ListItem>
                         </Link>
                     ))}
-                    <Button variant="contained" className="tweetSidebar">Tweet</Button>
+                    <Button variant="contained" className="tweetSidebar" onClick={async ()=> {
+                        if(location.pathname == "/profile") {
+                            await history.push("/home");
+                            document.querySelectorAll("textarea")[0].focus();
+                        } else {
+                            document.querySelectorAll("textarea")[0].focus();
+                        }
+                    }}>Tweet</Button>
                 </List>
             </div>
             <div className="signOut">

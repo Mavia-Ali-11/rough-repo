@@ -200,7 +200,7 @@ function Widgets() {
                     <div><p>Cookie Policy</p></div>
                     <div><p>Ads info</p></div>
                     <div><p>More</p> <span>...</span></div>
-                    <div><p>&copy; 2021 Twitter, Inc.</p></div>
+                    <div><p>&copy; {new Date().getFullYear()} Twitter, Inc.</p></div>
                 </div>
 
             </div>

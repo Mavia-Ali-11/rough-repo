@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import { GlobalContext } from "../context/context";
-import { useHistory } from 'react-router-dom';
-import { auth, updateEmail, sendEmailVerification, updatePassword, signOut, db, doc, updateDoc, setDoc, storage, ref, uploadBytes, getDownloadURL } from '../config/firebase';
+import { useHistory, Link } from 'react-router-dom';
+import { auth, updateEmail, sendEmailVerification, updatePassword, reauthenticateWithCredential, EmailAuthProvider, signOut, db, doc, updateDoc, setDoc, storage, ref, uploadBytes, getDownloadURL } from '../config/firebase';
 import CameraIcon from '@mui/icons-material/CameraAlt';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -17,8 +17,8 @@ import { ToastContainer, toast } from 'react-toastify';
 
 function UserInfo(props) {
 
-    const { state } = useContext(GlobalContext);
     const history = useHistory();
+    const { state } = useContext(GlobalContext);
     const [crrUser, handleCrrUser] = useState({});
     const [crrEmail, handleCrrEmail] = useState("");
     const [crrPassword, handleCrrPassword] = useState("");
@@ -35,6 +35,7 @@ function UserInfo(props) {
             handleCrrEmail(state.authUser.email);
             handleCrrPassword(state.authUser.password);
         }
+
 
         if (state.authUser.uid == undefined) {
             let detectData = setInterval(() => {
@@ -111,7 +112,7 @@ function UserInfo(props) {
                     return (
                         <div className="user-info">
 
-                            {/* Avatar */}
+                            {/* Change avatar */}
 
                             <div>
                                 <h4>Profile picture</h4>
@@ -164,22 +165,24 @@ function UserInfo(props) {
 
                             <div>
                                 <h4>Email address</h4>
-                                <h6 style={{marginBottom: 30}}>{crrEmail}</h6>
-                                <button onClick={handleClickOpen}>Change email</button>
+                                <h6>{crrEmail}</h6>
+                                <Link to="#" onClick={handleClickOpen}>Change email</Link>
                             </div>
 
                             {/* Password changer */}
 
                             <div>
                                 <h4>Password</h4>
-                                <h6>{crrPassword.replace(/./g, '*')}</h6>
-                                <button onClick={handleClickOpen1}>Change password</button>
+                                <h6 style={{ marginBottom: 15 }}>{crrPassword.replace(/./g, '*')}</h6>
+                                <Link to="#" onClick={handleClickOpen1}>Change password</Link>
                             </div>
                         </div>
                     )
                 }
                 return null;
             })()}
+
+            {/* Email change dialog */}
 
             <div>
                 <Dialog className="changing-dialog" open={open} onClose={handleClose}>
@@ -213,36 +216,45 @@ function UserInfo(props) {
                                 toast.error("Please enter your correct password first to proceed.");
                             } else if (newEmail.value == "") {
                                 toast.error("Please enter the new email address.");
-                            } else if (checkPassword.value != crrPassword) {
-                                toast.error("Password is incorrrect! Please enter your correct password to proceed.");
                             } else if (newEmail.value == crrEmail) {
                                 toast.error("This is your current email address. Please try another one.");
                             } else {
-                                updateEmail(auth.currentUser, newEmail.value)
-                                    .then(async () => {
-                                        handleClose();
-                                        handleLoaderText("updating your email address...");
-                                        setShowLoader(false);
+                                const credential = EmailAuthProvider.credential(crrEmail, checkPassword.value);
+                                reauthenticateWithCredential(auth.currentUser, credential).then(() => {
+                                    updateEmail(auth.currentUser, newEmail.value)
+                                        .then(async () => {
+                                            handleClose();
+                                            handleLoaderText("updating your email address...");
+                                            setShowLoader(false);
 
-                                        await updateDoc(doc(db, "users", crrUser.uid), {
-                                            email: newEmail.value
+                                            await updateDoc(doc(db, "users", crrUser.uid), {
+                                                email: newEmail.value
+                                            });
+
+                                            await sendEmailVerification(auth.currentUser)
+
+                                            handleCrrEmail(newEmail.value);
+                                            state.authUser.email = newEmail.value;
+                                            setShowLoader(true);
+                                            toast.success("Email address was updated successfuly!");
+                                        })
+                                        .catch((error) => {
+                                            toast.error(error.message);
                                         });
-
-                                        await sendEmailVerification(auth.currentUser)
-
-                                        handleCrrEmail(newEmail.value);
-                                        state.authUser.email = newEmail.value;
-                                        setShowLoader(true);
-                                        toast.success("Email address was updated successfuly!");
-                                    })
-                                    .catch((error) => {
+                                }).catch((error) => {
+                                    if (checkPassword.value != crrPassword) {
+                                        toast.error("Password is incorrrect. Please enter correct password to proceed.");
+                                    } else {
                                         toast.error(error.message);
-                                    });
+                                    }
+                                });
                             }
                         }}>Update</Button>
                     </DialogActions>
                 </Dialog>
             </div>
+
+            {/* Password change dialog */}
 
             <div>
                 <Dialog className="changing-dialog" open={open1} onClose={handleClose1}>
@@ -286,41 +298,42 @@ function UserInfo(props) {
                                 toast.error("Please enter the new password.");
                             } else if (confirmPassword.value == "") {
                                 toast.error("Please confirm the new password.");
-                            } else if (currentPassword.value != crrPassword) {
-                                toast.error("Password is incorrrect! Please enter your correct current password to proceed.");
-                            } else if (newPassword.value == crrPassword) {
-                                toast.error("This is your current password. Please try another one.");
                             } else if (newPassword.value != confirmPassword.value) {
                                 toast.error("Confirmation password didn't match.");
+                            } else if (newPassword.value == crrPassword) {
+                                toast.error("New password is your current password. Please try another one.");
                             } else {
-                                if (newPassword.value == crrPassword) {
-                                    toast.error("This is your current password. Please try different one to change!");
-                                } else if (newPassword.value == "") {
-                                    toast.error("Passowrd can't be empty!");
-                                } else {
+                                const credential = EmailAuthProvider.credential(crrEmail, currentPassword.value);
+                                reauthenticateWithCredential(auth.currentUser, credential).then(() => {
                                     updatePassword(auth.currentUser, newPassword.value)
-                                    .then(async () => {
-                                        handleClose1();
-                                        handleLoaderText("updating your password...");
-                                        setShowLoader(false);
+                                        .then(async () => {
+                                            handleClose1();
+                                            handleLoaderText("updating your password...");
+                                            setShowLoader(false);
 
-                                        await updateDoc(doc(db, "users", crrUser.uid), {
-                                            password: newPassword.value
-                                        });
+                                            await updateDoc(doc(db, "users", crrUser.uid), {
+                                                password: newPassword.value
+                                            });
 
-                                        handleCrrPassword(newPassword.value);
+                                            handleCrrPassword(newPassword.value);
+                                            setShowLoader(true);
 
-                                        await signOut(auth).then(() => {
-                                            history.push("/");
-                                        }).catch((error) => {
+                                            await signOut(auth).then(() => {
+                                                history.push("/");
+                                            }).catch((error) => {
+                                                toast.error(error.message);
+                                            });
+                                        })
+                                        .catch((error) => {
                                             toast.error(error.message);
                                         });
-                                        setShowLoader(true);
-                                    })
-                                    .catch((error) => {
+                                }).catch((error) => {
+                                    if (currentPassword.value != crrPassword) {
+                                         toast.error("Current password is incorrrect. Please enter correct password to proceed.");
+                                    } else {
                                         toast.error(error.message);
-                                    });
-                                }
+                                    }
+                                });
                             }
                         }}>Update</Button>
                     </DialogActions>

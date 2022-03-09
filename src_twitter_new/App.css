@@ -107,17 +107,17 @@ body {
   font-weight: 700;
 }
 
-.signin input {
+.signin label, .signin input {
   font-family: Archivo;
 }
 
 .signin #authBtn,
-.signin #gotoBtn {
+.signin #gotoBtn,
+.signin #forgotPassword {
   width: 350px;
   font-size: 16px;
   box-shadow: none;
   margin-top: 20px;
-  font-weight: 700;
   border-radius: 30px;
   text-transform: none;
   font-family: Archivo;
@@ -126,6 +126,14 @@ body {
 
 .signin #authBtn:hover {
   background-color: rgba(26, 140, 216);
+}
+
+.signin #forgotPassword {
+  background-color: #272c30;
+}
+
+.signin #forgotPassword:hover {
+  opacity: 0.94;
 }
 
 .signin #tc {
@@ -176,6 +184,10 @@ body {
   border-top: 1px solid #eff3f4;
 }
 
+.user-info > div:last-child {
+  margin-bottom: 30px;
+}
+
 .user-info > div h4 {
   font-size: 24px;
   font-weight: 700;
@@ -183,7 +195,7 @@ body {
 }
 
 .user-info h6 {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 400;
   color: #536471;
   margin: 30px 0 20px;
@@ -193,7 +205,7 @@ body {
 .user-info .username p {
   color: red;
   margin: auto;
-  max-width: 82%;
+  max-width: 50%;
   font-size: 14px;
   font-family: Archivo;
 }
@@ -252,6 +264,16 @@ body {
   background-color: #1d9bf0;
 }
 
+.user-info a {
+  color: #1d9bf0;
+  font-family: Archivo;
+  text-decoration: none;
+}
+
+.user-info a:hover {
+  text-decoration: underline;
+}
+
 .changing-dialog button {
   font-size: 14px;
   padding: 6px 18px 5px;
@@ -261,7 +283,7 @@ body {
 
 .user-info button:hover,
 .changing-dialog button:hover {
-  opacity: 0.8;
+  opacity: 0.94;
   transition: 0.3s;
   background-color: #1d9bf0;
 }
@@ -420,6 +442,8 @@ body {
 }
 
 .accDetails img {
+  width: 40px;
+  height: 40px;
   border-radius: 100%;
 }
 
@@ -787,13 +811,14 @@ body {
 
 .tweet-maker {
   display: flex;
-  padding: 10px 16px;
+  padding: 16px;
   justify-content: space-between;
   border-bottom: 1px solid #eff3f4;
 }
 
 .tweet-maker > .avatar-feed img {
   width: 50px;
+  height: 50px;
   cursor: pointer;
   transition: 0.3s;
   border-radius: 100%;
@@ -1060,6 +1085,10 @@ aside.emoji-picker-react .content-wrapper:before {
   cursor: pointer;
   padding: 10px 16px 8px;
   border-bottom: 1px solid #eff3f4;
+}
+
+.posts > div:first-child {
+  margin-bottom: 30px;
 }
 
 .posts > div:hover {

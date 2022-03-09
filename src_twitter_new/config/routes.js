@@ -19,14 +19,14 @@ function Routes() {
     useEffect(() => {
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                let fetchUser;
+                let currentUser;
                 const q = query(collection(db, "users"), where("uid", "==", user.uid));
                 const querySnapshot = await getDocs(q);
                 querySnapshot.forEach((doc) => {
-                    fetchUser = doc.data();
-                    return fetchUser;
+                    currentUser = doc.data();
+                    return currentUser;
                 });
-                dispatch({ type: "CURRENT_USER", payload: fetchUser });
+                dispatch({ type: "CURRENT_USER", payload: currentUser });
             } else if(!user && (window.location.pathname != "/" && window.location.pathname != "/signup")) {
                 dispatch({ type: "CURRENT_USER", payload: {} });
                 window.location.replace("/");

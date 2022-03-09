@@ -1,11 +1,16 @@
 import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { auth, signInWithEmailAndPassword } from "../config/firebase";
+import { auth, getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, db, doc, updateDoc } from "../config/firebase";
 
 import TwitterIcon from '@mui/icons-material/Twitter';
 import { alpha, styled } from '@mui/material/styles';
 import { TextField, Button } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 const RedditTextField = styled((props) => (
   <TextField InputProps={{ disableUnderline: true }} {...props} />
@@ -38,6 +43,16 @@ function SignIn() {
   const history = useHistory();
   const [email, handleEmail] = useState("");
   const [password, handlePassword] = useState("");
+  const [open, setOpen] = React.useState(false);
+  const [sendToEmail, handleSendToEmail] = useState("");
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <div className="container-fluid signin">
@@ -63,7 +78,9 @@ function SignIn() {
                 label="Email address"
                 variant="filled"
                 style={{ marginTop: 20 }}
-                value={email} onChange={(e) => { handleEmail(e.target.value) }}
+                value={email} onChange={(e) => {
+                  handleEmail(e.target.value);
+                }}
               />
             </div>
             <div>
@@ -77,50 +94,97 @@ function SignIn() {
             </div>
             <div>
               <Button variant="contained" id="authBtn" onClick={
-                 () => {
-                  if(email != "" && password != "") {
+                () => {
+                  if (email != "" && password != "") {
                     signInWithEmailAndPassword(auth, email, password)
-                      .then(() => {
+                      .then(async (userCredential) => {
                         handleEmail("");
                         handlePassword("");
+                        await updateDoc(doc(db, "users", userCredential.user.uid), {
+                          password: password
+                        });
                         toast.success("Sign in successfully.");
-                        setTimeout(()=> {
+                        setTimeout(() => {
                           history.push("/home");
-                        }, 1000)
+                        }, 1000);
                       })
                       .catch((error) => {
                         toast.error(error.message);
                       });
-                  } else if(email == "") {
+                  } else if (email == "") {
                     toast.error("Email address is required to sign in.");
-                  } else if(password == "") {
+                  } else if (password == "") {
                     toast.error("Password is required to sign in.");
                   }
                 }
               }>Sign in</Button>
-            </div>
-            <p id="tc"></p>
+
+              <Button variant="contained" id="forgotPassword" 
+              onClick={()=>{
+                handleClickOpen();
+                handleSendToEmail(email);
+              }}>Forgot password</Button>
           </div>
-          <div>
-            <h6>Not have an account?</h6>
-            <Link to="/signup" style={{ textDecoration: "none" }}>
-              <Button variant="outlined" id="gotoBtn">
-                Sign up</Button>
-            </Link>
-          </div>
-          <ToastContainer 
-            position="bottom-right"
-            autoClose={5000}
-            hideProgressBar
-            newestOnTop
-            closeOnClick
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="dark" />
+          <p id="tc"></p>
         </div>
+        <div>
+          <h6>Not have an account?</h6>
+          <Link to="/signup" style={{ textDecoration: "none" }}>
+            <Button variant="outlined" id="gotoBtn">
+              Sign up</Button>
+          </Link>
+        </div>
+
+        <div>
+          <Dialog className="changing-dialog" open={open} onClose={handleClose}>
+            <DialogTitle>Reset password</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                Please enter your application associated email address where you will recieve a link to reset the password.
+              </DialogContentText>
+              <RedditTextField
+                type="email"
+                label="Email address"
+                variant="filled"
+                style={{ marginTop: 20 }}
+                value={sendToEmail} onChange={(e) => { handleSendToEmail(e.target.value) }}
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button className="cancelBtn" onClick={handleClose}>Cancel</Button>
+              <Button onClick={() => {
+                if (sendToEmail == "") {
+                  toast.error("Please enter your application associated email address to proceed.");
+                } else {
+                  const auth = getAuth();
+                  sendPasswordResetEmail(auth, sendToEmail)
+                    .then(async () => {
+                      handleClose();
+                      handleSendToEmail("");
+                      toast.success("Password reset link was sent to your email. Follow the instructions there.");
+                    })
+                    .catch((error) => {
+                      toast.error(error.message);
+                    });
+                }
+              }}>Send</Button>
+            </DialogActions>
+          </Dialog>
+        </div>
+
+        <ToastContainer
+          position="bottom-right"
+          autoClose={5000}
+          hideProgressBar
+          newestOnTop
+          closeOnClick
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark" />
       </div>
     </div>
+    </div >
   )
 }
 
