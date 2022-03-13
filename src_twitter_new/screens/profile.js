@@ -9,7 +9,7 @@ function Profile() {
             <Sidebar scrIndex="2" scrName="Profile" />
             <div>
                 <UserInfo scrName="Profile" />
-                <Widgets />
+                <Widgets scrName="Profile" />
             </div>
         </div>
     )

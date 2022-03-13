@@ -36,7 +36,6 @@ function UserInfo(props) {
             handleCrrPassword(state.authUser.password);
         }
 
-
         if (state.authUser.uid == undefined) {
             let detectData = setInterval(() => {
                 if (state.authUser.uid != undefined) {

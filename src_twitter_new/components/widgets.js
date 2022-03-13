@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useContext, useState, useEffect } from "react";
+import { GlobalContext } from "../context/context";
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import { Link } from 'react-router-dom';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import { db, collection, query, where, getDocs, limit } from '../config/firebase';
 
 import news1 from "../images/news-1.jpg";
 import news2 from "../images/news-2.jpg";
@@ -51,7 +53,34 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 
-function Widgets() {
+function Widgets(props) {
+
+    const { state } = useContext(GlobalContext);
+    const [allUsers, handleAllUsers] = useState([]);
+
+    useEffect(async () => {
+        let dataFetcher = async () => {
+            let allUsersClone = allUsers.slice(0);
+            const q = query(collection(db, "users"), where("uid", "!=", state.authUser.uid), limit(6));
+            const querySnapshot = await getDocs(q);
+            await querySnapshot.forEach((doc) => {
+                allUsersClone.push(doc.data());
+            });
+            handleAllUsers(allUsersClone);
+        }
+
+        if (state.authUser.uid == undefined) {
+            let detectData = setInterval(() => {
+                if (state.authUser.uid != undefined) {
+                    clearInterval(detectData);
+                    dataFetcher();
+                }
+            }, 1000);
+        } else {
+            dataFetcher();
+        }
+    }, []);
+
     return (
         <div className="widgets">
             <div>
@@ -76,71 +105,112 @@ function Widgets() {
             </div>
 
             <div>
-                <div className="widget">
-                    <h4>What's happening</h4>
+                {(() => {
+                    if (props.scrName != "Profile") {
+                        return (
+                            <div className="widget">
+                                <h4>What's happening</h4>
 
-                    <div className="news">
-                        <div>
-                            <span>Cricket&nbsp; · &nbsp;LIVE</span>
-                            <p>
-                                New Zealand spinner Ajaz Patel makes history after picking all 10 wickets in a single Test inning&nbsp;
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36"><path fill="#D99E82" d="M35.538 26.679s1.328 2.214-2.658 6.201c-3.987 3.986-6.201 2.658-6.201 2.658L7.185 16.046s.977-2.748 3.544-5.316c2.568-2.567 5.316-3.544 5.316-3.544l19.493 19.493z" /><path fill="#C1694F" d="M13.388 9.844c.979.979 4.522 6.109 3.544 7.088-.979.978-6.109-2.565-7.088-3.544l-8.86-8.86C.006 3.549.006 1.963.984.984c.979-.978 2.565-.978 3.544 0l8.86 8.86z" /><path fill="#292F33" d="M.983 4.528L4.528.984 9.844 6.3 6.3 9.844z" /><circle fill="#BE1931" cx="19" cy="31" r="5" /><path fill="#662113" d="M19 36c-.552 0-1-.447-1-1v-8c0-.553.448-1 1-1 .553 0 1 .447 1 1v8c0 .553-.447 1-1 1z" /></svg>
-                            </p>
-                            <span>Trending with <Link to="#">Ajaz Patel</Link></span>
-                        </div>
-                        <div>
-                            <img src={news1} />
-                        </div>
-                    </div>
+                                <div className="news">
+                                    <div>
+                                        <span>Cricket&nbsp; · &nbsp;LIVE</span>
+                                        <p>
+                                            New Zealand spinner Ajaz Patel makes history after picking all 10 wickets in a single Test inning&nbsp;
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36"><path fill="#D99E82" d="M35.538 26.679s1.328 2.214-2.658 6.201c-3.987 3.986-6.201 2.658-6.201 2.658L7.185 16.046s.977-2.748 3.544-5.316c2.568-2.567 5.316-3.544 5.316-3.544l19.493 19.493z" /><path fill="#C1694F" d="M13.388 9.844c.979.979 4.522 6.109 3.544 7.088-.979.978-6.109-2.565-7.088-3.544l-8.86-8.86C.006 3.549.006 1.963.984.984c.979-.978 2.565-.978 3.544 0l8.86 8.86z" /><path fill="#292F33" d="M.983 4.528L4.528.984 9.844 6.3 6.3 9.844z" /><circle fill="#BE1931" cx="19" cy="31" r="5" /><path fill="#662113" d="M19 36c-.552 0-1-.447-1-1v-8c0-.553.448-1 1-1 .553 0 1 .447 1 1v8c0 .553-.447 1-1 1z" /></svg>
+                                        </p>
+                                        <span>Trending with <Link to="#">Ajaz Patel</Link></span>
+                                    </div>
+                                    <div>
+                                        <img src={news1} />
+                                    </div>
+                                </div>
 
-                    <div className="news trend">
-                        <div>
-                            <span>Politics&nbsp; · &nbsp;Trending</span>
-                            <p style={{ lineHeight: "14px" }}>Pakistan</p>
-                            <span>118K Tweets</span>
-                        </div>
-                        <div>
-                            <MoreHorizIcon />
-                        </div>
-                    </div>
+                                <div className="news trend">
+                                    <div>
+                                        <span>Politics&nbsp; · &nbsp;Trending</span>
+                                        <p style={{ lineHeight: "14px" }}>Pakistan</p>
+                                        <span>118K Tweets</span>
+                                    </div>
+                                    <div>
+                                        <MoreHorizIcon />
+                                    </div>
+                                </div>
 
-                    <div className="news trend">
-                        <div>
-                            <span>Trending in New Zealand</span>
-                            <p style={{ lineHeight: "14px" }}>Neon</p>
-                            <span>24.4K Tweets</span>
-                        </div>
-                        <div>
-                            <MoreHorizIcon />
-                        </div>
-                    </div>
+                                <div className="news trend">
+                                    <div>
+                                        <span>Trending in New Zealand</span>
+                                        <p style={{ lineHeight: "14px" }}>Neon</p>
+                                        <span>24.4K Tweets</span>
+                                    </div>
+                                    <div>
+                                        <MoreHorizIcon />
+                                    </div>
+                                </div>
 
-                    <div className="news">
-                        <div>
-                            <span><span>Auto racing</span>&nbsp; · &nbsp;Yesterday</span>
-                            <p>Chaz Mostert and Lee Holdsworth win the 2021 Bathurst 1000</p>
-                            <span>Trending with <Link to="#">#bathurst1000</Link><img src={trophy} style={{ width: "18px", marginTop: "-7px" }} /></span>
-                        </div>
-                        <div>
-                            <img src={news2} />
-                        </div>
-                    </div>
+                                <div className="news">
+                                    <div>
+                                        <span><span>Auto racing</span>&nbsp; · &nbsp;Yesterday</span>
+                                        <p>Chaz Mostert and Lee Holdsworth win the 2021 Bathurst 1000</p>
+                                        <span>Trending with <Link to="#">#bathurst1000</Link><img src={trophy} style={{ width: "18px", marginTop: "-7px" }} /></span>
+                                    </div>
+                                    <div>
+                                        <img src={news2} />
+                                    </div>
+                                </div>
 
-                    <div className="news trend">
-                        <div>
-                            <span>Trending in Actors</span>
-                            <p style={{ lineHeight: "14px" }}>Jennifer Lawrence</p>
-                            <span>9,833 Tweets</span>
-                        </div>
-                        <div>
-                            <MoreHorizIcon />
-                        </div>
-                    </div>
+                                <div className="news trend">
+                                    <div>
+                                        <span>Trending in Actors</span>
+                                        <p style={{ lineHeight: "14px" }}>Jennifer Lawrence</p>
+                                        <span>9,833 Tweets</span>
+                                    </div>
+                                    <div>
+                                        <MoreHorizIcon />
+                                    </div>
+                                </div>
 
-                    <div className="news show-more">
-                        <Link to="#">Show more</Link>
-                    </div>
-                </div>
+                                <div className="news show-more">
+                                    <Link to="#">Show more</Link>
+                                </div>
+                            </div>
+                        )
+                    } else {
+                        return (
+                            <div className="widget">
+                                <h4>People you might now</h4>
+
+                                <div className="profiles">
+
+                                    {
+                                        allUsers.map((user) => {
+                                            console.log(user)
+                                            return (
+                                                <div>
+                                                    <div>
+                                                        <img src={user.avatar} />
+                                                    </div>
+                                                    <div>
+                                                        <div>
+                                                            <p>{user.username}</p>
+                                                            <span>{"@" + user.email.slice(0, user.email.indexOf("@"))}</span>
+                                                        </div>
+                                                        <div>
+                                                            <button>Follow</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            )
+                                        })
+                                    }
+
+                                    <div className="news show-more">
+                                        <Link to="#">Show more</Link>
+                                    </div>
+                                </div>
+                            </div>
+                        )
+                    }
+                })()}
 
                 <div className="widget">
                     <h4>Who to follow</h4>
@@ -191,8 +261,6 @@ function Widgets() {
                         <Link to="#">Show more</Link>
                     </div>
                 </div>
-
-
 
                 <div className='footer'>
                     <div><p>Terms of Service</p></div>

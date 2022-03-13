@@ -9,7 +9,7 @@ function MyTweets() {
                 <Sidebar scrIndex="1" scrName="My tweets" />
             <div>
                 <Feeds scrName="My tweets" />
-                <Widgets />
+                <Widgets scrName="My tweets" />
             </div>
         </div>
     )

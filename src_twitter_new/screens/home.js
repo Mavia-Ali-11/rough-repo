@@ -9,7 +9,7 @@ function Home() {
                 <Sidebar scrIndex="0" scrName="Home" />
             <div>
                 <Feeds scrName="Home" />
-                <Widgets />
+                <Widgets scrName="Home"  />
             </div>
         </div>
     )
