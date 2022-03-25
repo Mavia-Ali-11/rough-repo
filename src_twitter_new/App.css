@@ -154,7 +154,7 @@ body {
 }
 
 .signin #gotoBtn {
-  color: #000;
+  color: #1d9bf0;
   margin: 0 0 50px 0;
   border-color: #cfd9de;
   background-color: #fff;
@@ -411,6 +411,25 @@ body {
   background-color: rgba(26, 140, 216);
 }
 
+.sidebar .tweetSidebarIcon {
+  width: 52px;
+  height: 52px;
+  display: none;
+  align-items: center;
+  border-radius: 100%;
+  justify-content: center;
+  background-color: #1d9bf0;
+}
+
+.sidebar .tweetSidebarIcon svg {
+  width: 25px;
+  fill: #fff;
+}
+
+.sidebar .tweetSidebarIcon path {
+  stroke-width: 0;
+}
+
 .sidebar .signOut button {
   width: 95%;
   padding: 12px;
@@ -507,6 +526,7 @@ body {
 
 #screenTitle {
   font-weight: 700;
+  font-family: Archivo;
 }
 
 /* Widgets */
@@ -675,7 +695,6 @@ body {
   display: flex;
   cursor: pointer;
   padding: 12px 16px;
-  align-items: center;
   justify-content: space-between;
 }
 
@@ -1388,6 +1407,83 @@ aside.emoji-picker-react .content-wrapper:before {
   }
 }
 
+@media screen and (max-width: 1280px) {
+  .mainParent > div:last-child {
+    width: 88%;
+  }
+  .mainParent .feeds {
+    width: 188%;
+  }
+  .mainSidebar nav {
+    max-width: 80px;
+  }
+  .mainSidebar nav > div > div {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+  .sidebar {
+    text-align: center;
+  }
+  .sidebar ul a > div > div:nth-child(2) {
+    display: none;
+  }
+  .sidebar ul a > div {
+    padding: 0;
+    width: 46px;
+    height: 46px;
+    margin: auto;
+    display: flex;
+    margin-bottom: 4px;
+    align-items: center;
+    justify-content: center;
+  }
+  .sidebar ul a > div > div:first-child {
+    min-width: 0px;
+  }
+  .sidebar .tweetSidebar {
+    display: none;
+  }
+  .sidebar .tweetSidebarIcon {
+    display: flex;
+    margin: auto;
+  }
+  .accDetails > div > div:nth-child(2),
+  .accDetails svg {
+    display: none;
+  }
+  .accDetails.onPopover > div > div:nth-child(2),
+  .accDetails.onPopover svg {
+    display: block !important;
+  }
+  .widgets {
+    padding-left: 18px;
+  }
+  .widgets .profiles > div > div:last-child {
+    width: 78%;
+  }
+  .sidebar .signOut > div {
+    padding: 0;
+    width: 56px;
+    height: 56px;
+    margin: auto;
+    display: flex;
+    margin-bottom: 4px;
+    border-radius: 100%;
+    align-items: center;
+    justify-content: center;
+  }
+  .sidebar .signOut > div:hover {
+    background: rgba(15, 20, 25, 0.1);
+  }
+  .sidebar .signOut button {
+    margin-bottom: 0; 
+  }
+  .sidebar .signOut button:hover {
+    margin: 0;
+    background: transparent;
+  }
+}
+
 @media only screen and (max-width: 992px) {
   .signin .row {
     height: auto;
@@ -1406,9 +1502,11 @@ aside.emoji-picker-react .content-wrapper:before {
   .signin .row > div:first-child svg {
     padding: 70px 0px;
   }
+
+  
 }
 
-@media only screen and (max-width: 450px) {
+@media only screen and (max-width: 480px) {
   .signin .row h2 {
     font-size: 45px;
   }

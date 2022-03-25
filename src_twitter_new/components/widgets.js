@@ -182,10 +182,9 @@ function Widgets(props) {
                                 <div className="profiles">
 
                                     {
-                                        allUsers.map((user) => {
-                                            console.log(user)
+                                        allUsers.map((user, index) => {
                                             return (
-                                                <div>
+                                                <div key={index}>
                                                     <div>
                                                         <img src={user.avatar} />
                                                     </div>
