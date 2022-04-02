@@ -24,9 +24,10 @@ body {
   width: 162%;
   overflow: auto;
   scroll-behavior: smooth;
+  border-right: 1px solid #eff3f4;
 }
 
-.mainParent > div:last-child > div:last-child {
+.mainParent .widgets {
   overflow: auto;
 }
 
@@ -383,6 +384,7 @@ body {
 }
 
 .mainSidebar > div {
+  width: 100%;
   display: none;
   background-color: #fff;
   border-bottom: 1px solid #eff3f4;
@@ -524,9 +526,35 @@ body {
   text-decoration: none;
 }
 
-#screenTitle {
+#screen-title {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+#screen-title h4 {
   font-weight: 700;
   font-family: Archivo;
+}
+
+#screen-title > div:last-child {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  transition: 0.3s;
+  align-items: center;
+  border-radius: 100%;
+  justify-content: center;
+}
+
+#screen-title > div:last-child:hover {
+  transition: 0.3s;
+  background-color: rgba(15, 20, 25, 0.1);
+}
+
+#screen-title > div:last-child svg {
+  width: 20px;
+  height: 20px;
 }
 
 /* Widgets */
@@ -535,7 +563,6 @@ body {
   width: 100%;
   padding-left: 30px;
   font-family: Archivo;
-  border-left: 1px solid #eff3f4;
 }
 
 .widgets > div:first-child {
@@ -927,6 +954,7 @@ body {
 
 .tweet-maker > div .tweet-extras {
   display: flex;
+  flex-wrap: wrap;
   margin-left: -3px;
   position: relative;
   align-items: center;
@@ -1136,6 +1164,7 @@ aside.emoji-picker-react .content-wrapper:before {
 
 .post-data .tweet-meta {
   display: flex;
+  margin-bottom: 10px;
   justify-content: space-between;
 }
 
@@ -1310,7 +1339,7 @@ aside.emoji-picker-react .content-wrapper:before {
 #lightbox {
   top: 0;
   left: 0;
-  z-index: 1;
+  z-index: 99;
   width: 100%;
   height: 100%;
   display: none;
@@ -1444,8 +1473,8 @@ aside.emoji-picker-react .content-wrapper:before {
     display: none;
   }
   .sidebar .tweetSidebarIcon {
-    display: flex;
     margin: auto;
+    display: flex;
   }
   .accDetails > div > div:nth-child(2),
   .accDetails svg {
@@ -1502,11 +1531,12 @@ aside.emoji-picker-react .content-wrapper:before {
   .signin .row > div:first-child svg {
     padding: 70px 0px;
   }
-
-  
+  .mainParent .widgets {
+    display: none;
+  }
 }
 
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 599px) {
   .signin .row h2 {
     font-size: 45px;
   }
@@ -1516,4 +1546,119 @@ aside.emoji-picker-react .content-wrapper:before {
   .MuiFormControl-root, .MuiButton-root {
     max-width: 100%;
   }
+  .feeds .header {
+    display: none !important;
+  }
+  .mainParent {
+    display: block;
+    overflow: auto;
+  }
+  .mainSidebar {
+    top: 0;
+    z-index: 99;
+    width: 100%;
+    position: sticky;
+  }
+  .mainSidebar > div {
+    display: flex;
+  }
+  .mainParent > div:last-child {
+    width: 100%;
+  }
+  .sidebar > div > a svg {
+    top: 4px;
+    right: 34%;
+    position: relative;
+  }
+  .sidebar ul a > div > div:nth-child(2) {
+    display: block;
+  }
+  .sidebar ul a > div {
+    width: 92%;
+    margin: 6px 0 0 6px;
+    padding: 6px 0 6px 18px;
+  }
+  .sidebar ul a > div > div:first-child {
+    min-width: 40px;
+  }
+  .sidebar .tweetSidebar {
+    display: block;
+    margin: 20px auto;
+  }
+  .sidebar .tweetSidebarIcon {
+    display: none;
+  }
+  .sidebar .signOut > div {
+    width: 100%;
+    margin-bottom: 0px;
+    border-radius: 0px;
+  }
+  .accDetails > div > div:nth-child(2), 
+  .accDetails svg {
+    display: block;
+  }
+  .tweet-meta > div:first-child {
+    flex-wrap: wrap;
+  }
+  .user-info h6 {
+    margin: 30px 0 16px;
+  }
+  .user-info .username p {
+    max-width: 86%;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .tweet-extras > div:first-child{
+    width: 100%;
+  }
+  .tweet-extras > .tweetValidator {
+    margin-top: 12px;
+  }
+  .tweet-meta > div:first-child {
+    margin-top: 0;
+  }
+  .tweet-extras > .tweetValidator button {
+    min-height: 32px;
+    padding: 5px 18px 4px 16px;
+  }
+  .tweet-maker > div .tweet-extras {
+    padding-top: 6px;
+  }
+  .tweet-extras > div:first-child > span {
+    top: 120px;
+    left: -56px;
+  }
+  .tweet-extras > div:first-child > span aside {
+    width: 280px;
+  }
+  .post-data> div:first-child img {
+    width: 40px;
+    height: 40px;
+  }
+  .reactions svg {
+    width: 1.15rem;
+  }
+  #lightbox > div {
+    padding: 0;
+    justify-content: space-around;
+  }
+  #lightbox > div img {
+    max-width: 70%;
+  }
+  #lightbox > div > div {
+    width: 34px;
+    height: 34px;
+  }
+  #lightbox > div > div svg {
+    width: 18px;
+    height: 18px;
+  }
+  .changing-dialog > div:nth-child(3) > div h2,
+  .changing-dialog > div:nth-child(3) > div > .css-ypiqx9-MuiDialogContent-root {
+    padding: inherit;
+  } 
+  .changing-dialog > div:nth-child(3) > div > .css-ypiqx9-MuiDialogContent-root {
+    padding-top: 0;
+  } 
 }

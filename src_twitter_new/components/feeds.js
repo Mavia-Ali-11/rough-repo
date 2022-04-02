@@ -5,8 +5,8 @@ import { db, doc, addDoc, setDoc, getDoc, updateDoc, collection, onSnapshot, que
 import Picker from 'emoji-picker-react';
 import CircularStatic from '../components/tweet-length';
 import { ToastContainer, toast } from 'react-toastify';
-import Stack from '@mui/material/Stack';
 import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import CloseIcon from '@mui/icons-material/Close';
@@ -26,7 +26,6 @@ function Feeds(props) {
     const [imgInpDisable, handleImgInpDisability] = useState(false);
     const [showEmojis, setShowEmojis] = useState(true);
     const [showLoader, setShowLoader] = useState(true);
-    const [progress, setProgress] = useState(0);
     const [imagesStack, handleImagesStack] = useState([]);
     const [currentImage, handleCurrentImage] = useState("");
     const [slideNavPrev, handleSlideNavPrev] = useState({});
@@ -35,11 +34,22 @@ function Feeds(props) {
     let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
     const onEmojiClick = (event, emojiObject) => {
-        handleTweet(tweet + emojiObject.emoji);
+        if (tweet.length < "280") {
+            handleTweet(tweet + emojiObject.emoji);
+        }
+        handleDisability(false);
+        handleBtnAccess(1);
     };
 
-    useEffect(async () => {
+    window.onclick = function(event) {
+        if (!event.target.matches('.emojiBtn')) {
+            if (showEmojis == false) {
+                setShowEmojis(true);
+            }
+        }
+    }
 
+    useEffect(async () => {
         let usersClone = fetchedUsers.slice(0);
         const qu = query(collection(db, "users"));
         onSnapshot(qu, (snapshot) => {
@@ -329,11 +339,10 @@ function Feeds(props) {
 
     return (
         <div className='feeds'>
-            <div className='hiddenDOM' onClick={() => { setShowEmojis(true) }} hidden={showEmojis}></div>
             <div className='loader' hidden={showLoader}>
-                <Stack spacing={2} direction="row">
-                    <CircularProgress variant="determinate" value={progress} />
-                </Stack>
+                <Box sx={{ display: 'flex' }}>
+                    <CircularProgress />
+                </Box>
                 <h6>publishing your tweet...</h6>
             </div>
 
@@ -484,15 +493,15 @@ function Feeds(props) {
                                 <svg viewBox="0 0 24 24" aria-hidden="true"><g><path d="M20.222 9.16h-1.334c.015-.09.028-.182.028-.277V6.57c0-.98-.797-1.777-1.778-1.777H3.5V3.358c0-.414-.336-.75-.75-.75s-.75.336-.75.75V20.83c0 .415.336.75.75.75s.75-.335.75-.75v-1.434h10.556c.98 0 1.778-.797 1.778-1.777v-2.313c0-.095-.014-.187-.028-.278h4.417c.98 0 1.778-.798 1.778-1.778v-2.31c0-.983-.797-1.78-1.778-1.78zM17.14 6.293c.152 0 .277.124.277.277v2.31c0 .154-.125.28-.278.28H3.5V6.29h13.64zm-2.807 9.014v2.312c0 .153-.125.277-.278.277H3.5v-2.868h10.556c.153 0 .277.126.277.28zM20.5 13.25c0 .153-.125.277-.278.277H3.5V10.66h16.722c.153 0 .278.124.278.277v2.313z"></path></g></svg>
                             </div>
 
-                            <span hidden={showEmojis}>
+                            <span className='emojiPanel' hidden={showEmojis}>
                                 <Picker onEmojiClick={onEmojiClick} />
                             </span>
 
-                            <div title="Emoji" onClick={() => {
+                            <div className='emojiBtn' title="Emoji" onClick={() => {
                                 setShowEmojis(!showEmojis);
                                 document.getElementsByClassName("emoji-search")[0].setAttribute("placeholder", "Search emoji");
                             }}>
-                                <svg viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 22.75C6.072 22.75 1.25 17.928 1.25 12S6.072 1.25 12 1.25 22.75 6.072 22.75 12 17.928 22.75 12 22.75zm0-20C6.9 2.75 2.75 6.9 2.75 12S6.9 21.25 12 21.25s9.25-4.15 9.25-9.25S17.1 2.75 12 2.75z"></path><path d="M12 17.115c-1.892 0-3.633-.95-4.656-2.544-.224-.348-.123-.81.226-1.035.348-.226.812-.124 1.036.226.747 1.162 2.016 1.855 3.395 1.855s2.648-.693 3.396-1.854c.224-.35.688-.45 1.036-.225.35.224.45.688.226 1.036-1.025 1.594-2.766 2.545-4.658 2.545z"></path><circle cx="14.738" cy="9.458" r="1.478"></circle><circle cx="9.262" cy="9.458" r="1.478"></circle></g></svg>
+                                <svg className='emojiBtn' viewBox="0 0 24 24" aria-hidden="true"><g className='emojiBtn'><path className='emojiBtn' d="M12 22.75C6.072 22.75 1.25 17.928 1.25 12S6.072 1.25 12 1.25 22.75 6.072 22.75 12 17.928 22.75 12 22.75zm0-20C6.9 2.75 2.75 6.9 2.75 12S6.9 21.25 12 21.25s9.25-4.15 9.25-9.25S17.1 2.75 12 2.75z"></path><path className='emojiBtn' d="M12 17.115c-1.892 0-3.633-.95-4.656-2.544-.224-.348-.123-.81.226-1.035.348-.226.812-.124 1.036.226.747 1.162 2.016 1.855 3.395 1.855s2.648-.693 3.396-1.854c.224-.35.688-.45 1.036-.225.35.224.45.688.226 1.036-1.025 1.594-2.766 2.545-4.658 2.545z"></path><circle className='emojiBtn' cx="14.738" cy="9.458" r="1.478"></circle><circle className='emojiBtn' cx="9.262" cy="9.458" r="1.478"></circle></g></svg>
                             </div>
 
                             <div title="Schedule">
@@ -522,15 +531,12 @@ function Feeds(props) {
                             <div>
                                 <button onClick={
                                     async () => {
-                                        setProgress(20);
 
                                         setShowLoader(false);
                                         handleDisability(true);
                                         handleBtnAccess(0.5);
 
                                         const tweetsCounter = await getDoc(doc(db, "tweets_counter", "home_count"));
-
-                                        setProgress(40);
 
                                         let dt = new Date();
                                         let months = ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -552,8 +558,6 @@ function Feeds(props) {
                                             });
                                         }
 
-                                        setProgress(70);
-
                                         if (postImages.length > 0) {
                                             let holdImages = [];
                                             let uniqueness = new Date().getTime();
@@ -570,12 +574,10 @@ function Feeds(props) {
                                                     });
                                                 } else if (i == postImages.length) {
                                                     publishTweet(holdImages);
-                                                    setProgress(100);
                                                 }
                                             }
                                         } else {
                                             publishTweet([]);
-                                            setProgress(100);
                                         }
 
                                         await setDoc(doc(db, "tweets_counter", "home_count"), {
@@ -590,7 +592,6 @@ function Feeds(props) {
                                         document.getElementById("post-imgs").innerHTML = "";
                                         document.getElementsByTagName("textarea")[0].style.height = "47px";
                                         setShowLoader(true);
-                                        setProgress(0);
                                         toast.success("Your tweet has been published.");
                                     }
                                 } disabled={isDisbaled} style={{ opacity: btnAccess }}>Tweet</button>
@@ -673,19 +674,19 @@ function Feeds(props) {
                     <div>
                         <div className="close" onClick={() => {
                             document.getElementById("lightbox").style.animationName = "slideback";
-                                handleImagesStack([]);
-                                handleSlideNavPrev({visibility: "hidden"});
-                                handleSlideNavNext({visibility: "hidden"});
+                            handleImagesStack([]);
+                            handleSlideNavPrev({ visibility: "hidden" });
+                            handleSlideNavNext({ visibility: "hidden" });
                         }}>
                             <CloseIcon />
                         </div>
 
                         <div style={slideNavPrev} onClick={async () => {
-                            if(Number(currentImage) - 1  == 0) {
-                                handleSlideNavPrev({visibility: "hidden", pointerEvents: "none"});
-                                handleSlideNavNext({visibility: "visible", pointerEvents: "auto"});
+                            if (Number(currentImage) - 1 == 0) {
+                                handleSlideNavPrev({ visibility: "hidden", pointerEvents: "none" });
+                                handleSlideNavNext({ visibility: "visible", pointerEvents: "auto" });
                             } else {
-                                handleSlideNavNext({visibility: "visible", pointerEvents: "auto"});
+                                handleSlideNavNext({ visibility: "visible", pointerEvents: "auto" });
                             }
                             var modalImg = document.getElementById("modal-img");
                             modalImg.style.animationName = "prevright";
@@ -701,11 +702,11 @@ function Feeds(props) {
                         <img id="modal-img" />
 
                         <div style={slideNavNext} onClick={async () => {
-                            if(Number(currentImage) + 1  ==  imagesStack.length - 1) {
-                                handleSlideNavNext({visibility: "hidden", pointerEvents: "none"});
-                                handleSlideNavPrev({visibility: "visible", pointerEvents: "auto"});
+                            if (Number(currentImage) + 1 == imagesStack.length - 1) {
+                                handleSlideNavNext({ visibility: "hidden", pointerEvents: "none" });
+                                handleSlideNavPrev({ visibility: "visible", pointerEvents: "auto" });
                             } else {
-                                handleSlideNavPrev({visibility: "visible", pointerEvents: "auto"});
+                                handleSlideNavPrev({ visibility: "visible", pointerEvents: "auto" });
                             }
                             var modalImg = document.getElementById("modal-img");
                             modalImg.style.animationName = "nextleft";
